@@ -1,23 +1,27 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <!-- <img src="./assets/logo.png"> -->
+    <home/>
+    <router-view />
   </div>
 </template>
 
 <script>
+import home from "./pages/home/home";
 export default {
-  name: 'App'
-}
+  name: "App",
+  components: {
+    [home.name]: home
+  }
+};
 </script>
 
-<style>
+<style lang="scss">
+@import "assets/reset.scss";
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
 }
 </style>
+
