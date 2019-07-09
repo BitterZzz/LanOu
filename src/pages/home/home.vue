@@ -22,11 +22,21 @@
                     <el-menu :default-openeds="['1']">
                         <el-submenu index="1">
                             <template slot="title"><i class="el-icon-s-unfold"></i>系统菜单</template>
-                            <el-menu-item @click="homeAction()" >首页</el-menu-item>
-                            <el-menu-item >净水器管理</el-menu-item>
-                            <el-menu-item >账号管理</el-menu-item>
-                            <el-menu-item >用户管理</el-menu-item>
-                            <el-menu-item >操作日志</el-menu-item>
+                            <router-link to="homePage">
+                              <el-menu-item @click="homeAction()" >首页</el-menu-item>
+                            </router-link>
+                            <router-link to="waterPurifier">
+                              <el-menu-item >净水器管理</el-menu-item>
+                            </router-link>
+                            <router-link to="account">
+                              <el-menu-item >账号管理</el-menu-item>
+                            </router-link>
+                            <router-link to="user">
+                              <el-menu-item >用户管理</el-menu-item>
+                            </router-link>
+                            <router-link to="operationLog">
+                              <el-menu-item >操作日志</el-menu-item>
+                            </router-link>
                         </el-submenu>
                     </el-menu>
                 </el-aside>
