@@ -3,10 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import { Button, Select,Submenu,Icon,Menu,Aside,MenuItemGroup,MenuItem } from 'element-ui';
+import { Button, Select,Submenu,Icon,Menu,Aside,MenuItemGroup,MenuItem,Message } from 'element-ui';
 
 
-Vue.use(Button).use(Select).use(Submenu).use(Icon).use(Menu).use(Aside).use(MenuItemGroup)
+Vue.use(Button).use(Select).use(Submenu).use(Icon).use(Menu).use(Aside).use(MenuItemGroup).use(Message)
 Vue.use(MenuItem)
 
 Vue.config.productionTip = false

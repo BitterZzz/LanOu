@@ -20,15 +20,15 @@
             <img src="../../assets/img/pwd.png" alt class="pwdImg" />
           </div>
           <div class="body-button">
-            <button type="button" class="logoBtn" @click="login()">登录</button>
+            <button type="submit" class="logoBtn" @click="login()">登录</button>
           </div>
           <div class="forget-password clearfix">
             <span class="forget-title">忘记密码?</span>
           </div>
         </div>
       </div>
+           <el-button :plain="true" @click="open">打开消息提示</el-button>
     </div>
-    <el-button :plain="true" @click="openVn">VNode</el-button>
   </div>
 </template>
 <script>
@@ -43,20 +43,11 @@ export default {
     };
   },
   methods: {
-    login() {},
-    open() {
-      this.$message("这是一条消息提示");
-    },
+    login() {
+      // if(this.dom.userDom){
 
-    openVn() {
-      const h = this.$createElement;
-      this.$message({
-        message: h("p", null, [
-          h("span", null, "内容可以是 "),
-          h("i", { style: "color: teal" }, "VNode")
-        ])
-      });
-    }
+      // }
+    },
   },
   mounted() {
     this.dom.userDom = document.querySelector(".userInfo");
