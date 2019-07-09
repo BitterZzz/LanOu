@@ -6,9 +6,35 @@ Vue.use(Router)
 
 const routes = [
   {path:'/',
-  component:() => import('../pages/home/home.vue'),
-},
-{path:'/login',component:() => import('../pages/login/root.vue')}
+   component:() => import('../pages/home/home.vue'),
+    children:[
+        {
+          path:'homepage',
+          component:()=>import('../pages/home/children/homePage.vue')
+        },
+        {
+          path:'waterPurifier',
+          component:()=>import('../pages/home/children/waterPurifier.vue')
+        },
+        {
+          path:'account',
+          component:()=>import('../pages/home/children/account.vue')
+        },
+        {
+          path:'user',
+          component:()=>import('../pages/home/children/user.vue')
+        },
+        {
+          path:'operationLog',
+          component:()=>import('../pages/home/children/operationLog.vue')
+        },
+     
+    ]
+  },
+  {
+    path:'/login',
+    component:() => import('../pages/login/root.vue')
+  }
 
 ]
 

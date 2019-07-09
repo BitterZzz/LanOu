@@ -22,11 +22,21 @@
                     <el-menu :default-openeds="['1']">
                         <el-submenu index="1">
                             <template slot="title"><i class="el-icon-s-unfold"></i>系统菜单</template>
-                            <el-menu-item @click="homeAction()" >首页</el-menu-item>
-                            <el-menu-item >净水器管理</el-menu-item>
-                            <el-menu-item >账号管理</el-menu-item>
-                            <el-menu-item >用户管理</el-menu-item>
-                            <el-menu-item >操作日志</el-menu-item>
+                            <router-link to="homePage">
+                              <el-menu-item @click="homeAction()" >首页</el-menu-item>
+                            </router-link>
+                            <router-link to="waterPurifier">
+                              <el-menu-item >净水器管理</el-menu-item>
+                            </router-link>
+                            <router-link to="account">
+                              <el-menu-item >账号管理</el-menu-item>
+                            </router-link>
+                            <router-link to="user">
+                              <el-menu-item >用户管理</el-menu-item>
+                            </router-link>
+                            <router-link to="operationLog">
+                              <el-menu-item >操作日志</el-menu-item>
+                            </router-link>
                         </el-submenu>
                     </el-menu>
                 </el-aside>
@@ -153,86 +163,10 @@ export default {
  }
  .container{
     width: 1440px;
-    height: 112px;
-    background: #2488dd;
-    color: #fff;
-    padding-top: 22px;
-    box-sizing: border-box;
-    display: flex;
-    .logo {
-      width: 130px;
-      height: 67px;
-      margin-left: 30px;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    h2 {
-      width: 384px;
-      height: 45px;
-      font-size: 32px;
-      color: #ffffff;
-      margin: 0 460px 0 40px;
-      padding-top: 12px;
-    }
-    .user {
-      width: 338px;
-      padding-top: 20px;
-      color: #ffffff;
-      font-size: 18px;
-      display: flex;
-      justify-content: space-between;
-      li {
-        display: inline-block;
-        height: 42px;
-        // line-height: 42px;
+    height: 1024px;
+    margin: 0 auto;
 
-        padding-top: 2px;
-      }
-      .left {
-        position: relative;
-        padding-left: 40px;
-        img {
-          width: 28px;
-          height: 28px;
-          position: absolute;
-          top: 0px;
-          left: 0;
-        }
-        a {
-          color: #fff;
-          span {
-            color: #feff89;
-          }
-        }
-      }
-      .righ {
-      }
-    }
-  }
-  .nav {
-    width: 230px;
-    height: 912px;
-    background: burlywood;
-    color: #fff;
-    float: left;
-  }
-  .main {
-    width: 1210px;
-    height: 912px;
-    float: left;
-    background: #f7f7f7;
-    color: #2488dd;
-
-    padding: 54px 31px 30px 31px;
-    box-sizing: border-box;
-    .content {
-      width: 1148px;
-      height: 828px;
-      background: #fff;
-    }
-  }
+}
 
 </style>
 
