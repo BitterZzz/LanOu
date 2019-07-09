@@ -5,10 +5,11 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const routes = [
-    {
-         path:'home',
-         components:()=>import('../pages/home/home')
-    },
+  {path:'/',
+  component:() => import('../pages/home/home.vue'),
+},
+{path:'/login',component:() => import('../pages/login/root.vue')}
+
 ]
 
 const router = new Router({

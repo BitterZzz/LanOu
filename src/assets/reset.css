@@ -90,3 +90,9 @@ input {
   -webkit-transform: scaleY(0.5);
   transform: scaleY(0.5);
 }
+
+.container {
+  width: 1440px;
+  height: 1024px;
+  margin: 0 auto;
+}

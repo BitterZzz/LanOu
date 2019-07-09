@@ -1,25 +1,15 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <home/>
-    <router-view />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import home from "./pages/home/home";
 export default {
-<<<<<<< HEAD
   name: "App",
-  components: {
-    [home.name]: home
-  }
 };
-=======
-  name: 'App'
-  
-}
->>>>>>> 6ad490540f8ee9f1d9df0599c75a0101eb5004e9
 </script>
 
 <style lang="scss">
