@@ -31,10 +31,10 @@ const routes = [
      
     ]
   },
-  // {
-  //   path:'/login',
-  //   component:() => import('../pages/login/root.vue')
-  // }
+  {
+    path:'/login',
+    component:() => import('../pages/login/root.vue')
+  }
 
 ]
 
