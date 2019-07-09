@@ -22,20 +22,8 @@
                     <el-menu :default-openeds="['1']">
                         <el-submenu index="1">
                             <template slot="title"><i class="el-icon-s-unfold"></i>系统菜单</template>
-                            <router-link to="homePage">
-                              <el-menu-item @click="homeAction()" >首页</el-menu-item>
-                            </router-link>
-                            <router-link to="waterPurifier">
-                              <el-menu-item >净水器管理</el-menu-item>
-                            </router-link>
-                            <router-link to="account">
-                              <el-menu-item >账号管理</el-menu-item>
-                            </router-link>
-                            <router-link to="user">
-                              <el-menu-item >用户管理</el-menu-item>
-                            </router-link>
-                            <router-link to="operationLog">
-                              <el-menu-item >操作日志</el-menu-item>
+                            <router-link :to='item.path' v-for="item in list" :key="item.id">
+                              <el-menu-item  @click="homeAction()"><img  :src="item.url" alt="">{{item.name}}</el-menu-item>
                             </router-link>
                         </el-submenu>
                     </el-menu>
@@ -56,12 +44,19 @@ export default {
    name:'home',
    data(){
        return{
-
+               list:[
+                   {id:1,name:"首页",path:"homePage",url:'../../assets/img/shouye_1.png'},
+                   {id:2,name:"净水器管理",path:"waterPurifier"},
+                   {id:3,name:"账号管理",path:"account"},
+                   {id:4,name:"用户管理",path:"user"},
+                   {id:5,name:"操作日志",path:"operationLog"},
+               ]
        }
    },
    methods:{
        homeAction(){
            console.log(123)
+           
        }
    }
 }
@@ -142,7 +137,10 @@ export default {
          background: burlywood;
          color: #fff;
          float: left;
-       
+            img{
+                width:22px;
+                height: 22px;
+            }
      }
      .main{
          width: 1210px;
