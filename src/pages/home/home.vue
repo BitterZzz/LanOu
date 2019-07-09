@@ -1,164 +1,170 @@
 <template>
-  <div id="home" class="container">
-    <div class="header">
-      <p class="logo">
-        <img src="../../assets/img/LOGO.png" alt title="蓝鸥" />
-      </p>
-      <h2>广东蓝鸥净水设备管理系统</h2>
-      <div class="user">
-        <li class="left">
-          <img src="../../assets/img/user.png" alt srcset />
-          <a href="#">
-            欢迎
-            <span>管理员 !</span>
-          </a>
-        </li>
-        <li class="right">
-          <a href="#">注销</a> |
-          <a href="#">退出管理</a>
-        </li>
-      </div>
+    <div id="home" class="container">
+      <div class="header">
+           <p class="logo">
+               <img src="../../assets/img/LOGO.png" alt="" title="蓝鸥">
+           </p>
+           <h2>广东蓝鸥净水设备管理系统</h2>
+           <div class="user">
+               <li class="left">
+                   <img src="../../assets/img/user.png" alt="" srcset="">
+                   <a href="#">欢迎 <span>管理员 !</span></a>
+               </li>
+               <li class="right">
+                   <a href="#">注销</a> |
+                   <a href="#">退出管理</a>
+               </li>
+           </div>
+       </div> 
+       <div class="nav">
+           <el-container style="height: 500px; ">
+                <el-aside width="100%" >
+                    <el-menu :default-openeds="['1']">
+                        <el-submenu index="1">
+                            <template slot="title"><i class="el-icon-s-unfold"></i>系统菜单</template>
+                            <router-link :to='item.path' v-for="item in list" :key="item.id">
+                              <el-menu-item  @click="homeAction()"><img  :src="item.url" alt="">{{item.name}}</el-menu-item>
+                            </router-link>
+                        </el-submenu>
+                    </el-menu>
+                </el-aside>
+            </el-container>
+
+       </div>
+       <div class="main">
+           <div class="content">
+                 <router-view></router-view>
+           </div>
+       </div>
     </div>
-    <div class="nav">
-      <el-container style="height: 500px; ">
-        <el-aside width="100%">
-          <el-menu :default-openeds="['1']">
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-s-unfold"></i>系统菜单
-              </template>
-              <router-link :to="item.href" v-for="item in this.msg" :key="item.Id">
-                <el-menu-item @click="homeAction()">{{item.name}}</el-menu-item>
-              </router-link>
-            </el-submenu>
-          </el-menu>
-        </el-aside>
-      </el-container>
-    </div>
-    <div class="main">
-      <div class="content">
-        <router-view></router-view>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
 export default {
-  name: "home",
-  data() {
-    return {
-      msg:[
-        {Id:100,name:"首页",href:"homePage"},
-        {Id:101,name:"净水器管理",href:"waterPurifier"},
-        {Id:102,name:"账号管理",href:"account"},
-        {Id:103,name:"用户管理",href:"user"},
-        {Id:104,name:"操作日志",href:"homePage"},
-      ]
-    };
-  },
-  methods: {
-    homeAction() {
-      console.log(123);
-    }
-  }
-};
+   name:'home',
+   data(){
+       return{
+               list:[
+                   {id:1,name:"首页",path:"homePage",url:'../../assets/img/shouye_1.png'},
+                   {id:2,name:"净水器管理",path:"waterPurifier"},
+                   {id:3,name:"账号管理",path:"account"},
+                   {id:4,name:"用户管理",path:"user"},
+                   {id:5,name:"操作日志",path:"operationLog"},
+               ]
+       }
+   },
+   methods:{
+       homeAction(){
+           console.log(123)
+           
+       }
+   }
+}
 </script>
 
 <style lang="scss" scoped>
-#home {
-  position: relative;
-  //  margin: auto;
-  .header {
+ #home{
+     position: relative;
+    //  margin: auto;
+     .header{
+         width: 1440px;
+         height: 112px;
+         background: #2488DD;
+         color: #fff;
+         padding-top: 22px;
+         box-sizing: border-box;
+         display: flex;
+            .logo{
+                width: 130px;
+                height: 67px;
+                margin-left:30px;
+                  img{
+                      width: 100%;
+                      height: 100%;
+                  }
+            }
+            h2{
+                width: 384px;
+                height: 45px;
+                font-size: 32px;
+                color: #FFFFFF;
+                margin: 0 460px 0  40px;
+                padding-top: 12px;
+
+            }
+            .user{
+                 width: 338px;
+                 padding-top: 20px;
+                 color: #FFFFFF;
+                 font-size: 18px;
+                 display: flex;
+                 justify-content: space-between;
+                li{
+                    display: inline-block;
+                    height: 42px;
+                    // line-height: 42px;
+               
+                    padding-top: 2px;
+                }
+                .left{
+                     position: relative;
+                     padding-left: 40px;
+                   img{
+                        width: 28px;
+                        height: 28px;
+                        position: absolute;
+                        top: 0px;
+                        left: 0;
+                    }
+                    a{
+                        color: #fff;
+                        span{
+                            color: #FEFF89
+                      } 
+                    }
+                  }
+                .right{
+                    a{
+                        color: #ffffff;
+                    }
+                }
+
+            }
+     }
+     .nav{
+         width: 230px;
+         height: 912px;
+         background: burlywood;
+         color: #fff;
+         float: left;
+            img{
+                width:22px;
+                height: 22px;
+            }
+     }
+     .main{
+         width: 1210px;
+         height: 912px;
+         float: left;
+         background: #F7F7F7;
+         color: #2488DD;
+      
+ 
+         padding: 54px 31px 30px 31px;
+         box-sizing: border-box;
+            .content{
+                width: 1148px;
+                height: 828px;
+                background: #fff;
+            }
+     }
+ }
+ .container{
     width: 1440px;
-    height: 112px;
-    background: #2488dd;
-    color: #fff;
-    padding-top: 22px;
-    box-sizing: border-box;
-    display: flex;
-    .logo {
-      width: 130px;
-      height: 67px;
-      margin-left: 30px;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    h2 {
-      width: 384px;
-      height: 45px;
-      font-size: 32px;
-      color: #ffffff;
-      margin: 0 460px 0 40px;
-      padding-top: 12px;
-    }
-    .user {
-      width: 338px;
-      padding-top: 20px;
-      color: #ffffff;
-      font-size: 18px;
-      display: flex;
-      justify-content: space-between;
-      li {
-        display: inline-block;
-        height: 42px;
-        // line-height: 42px;
+    height: 1024px;
+    margin: 0 auto;
 
-        padding-top: 2px;
-      }
-      .left {
-        position: relative;
-        padding-left: 40px;
-        img {
-          width: 28px;
-          height: 28px;
-          position: absolute;
-          top: 0px;
-          left: 0;
-        }
-        a {
-          color: #fff;
-          span {
-            color: #feff89;
-          }
-        }
-      }
-      .right {
-        a {
-          color: #ffffff;
-        }
-      }
-    }
-  }
-  .nav {
-    width: 230px;
-    height: 912px;
-    background: burlywood;
-    color: #fff;
-    float: left;
-  }
-  .main {
-    width: 1210px;
-    height: 912px;
-    float: left;
-    background: #f7f7f7;
-    color: #2488dd;
+}
 
-    padding: 54px 31px 30px 31px;
-    box-sizing: border-box;
-    .content {
-      width: 1148px;
-      height: 828px;
-      background: #fff;
-    }
-  }
-}
-.container {
-  width: 1440px;
-  height: 1024px;
-  margin: 0 auto;
-}
 </style>
 
