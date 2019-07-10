@@ -9,23 +9,33 @@ const routes = [
    component:() => import('../pages/home/home.vue'),
     children:[
         {
+          path:"",
+          redirect:("homepage"),
+        },
+        {
           path:'homepage',
+          name:'首页',
           component:()=>import('../pages/home/children/homePage.vue')
+
         },
         {
           path:'waterPurifier',
+          name:'净水器管理',
           component:()=>import('../pages/home/children/waterPurifier.vue')
         },
         {
           path:'account',
+          name:'账号管理',
           component:()=>import('../pages/home/children/account.vue')
         },
         {
           path:'user',
+          name:"用户管理",
           component:()=>import('../pages/home/children/user.vue')
         },
         {
           path:'operationLog',
+          name:'操作日志',
           component:()=>import('../pages/home/children/operationLog.vue')
         },
      
@@ -33,8 +43,10 @@ const routes = [
   },
   {
     path:'/login',
-    component:() => import('../pages/login/root.vue')
-  }
+    component:() => import('../pages/login/root.vue'),
+    
+  },
+ 
 
 ]
 

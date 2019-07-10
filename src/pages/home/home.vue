@@ -22,14 +22,22 @@
                     <el-menu :default-openeds="['1']">
                         <el-submenu index="1">
                             <template slot="title"><i class="el-icon-s-unfold"></i>系统菜单</template>
-                            <router-link :to='item.path' v-for="item in list" :key="item.id">
-                              <el-menu-item  @click="homeAction()"><img  :src="item.url" alt="">{{item.name}}</el-menu-item>
-                            </router-link>
+                               
+                                    <el-menu-item  
+                                    v-for="item in list" 
+                                    :key="item.id"
+                                    @click="homeAction(item.name)"
+                                    >
+                                        <router-link :to='item.path'>
+                                            <img  :src="isSelect === item.name ? item.require : item.url" alt="item.title">
+                                            <a :class="isSelect === item.name ? 'active':''">{{item.name}}</a>
+                                        </router-link>
+                                    </el-menu-item>
+                                
                         </el-submenu>
                     </el-menu>
                 </el-aside>
             </el-container>
-
        </div>
        <div class="main">
            <div class="content">
@@ -44,21 +52,26 @@ export default {
    name:'home',
    data(){
        return{
+               isSelect:"首页",
                list:[
-                   {id:1,name:"首页",path:"homePage",url:'../../assets/img/shouye_1.png'},
-                   {id:2,name:"净水器管理",path:"waterPurifier"},
-                   {id:3,name:"账号管理",path:"account"},
-                   {id:4,name:"用户管理",path:"user"},
-                   {id:5,name:"操作日志",path:"operationLog"},
+                   {id:1,name:"首页",path:"homePage",url:require("../../assets/img/shouye.png"),require:require("../../assets/img/shouye_1.png")},
+                   {id:2,name:"净水器管理",path:"waterPurifier",url:require("../../assets/img/icon1.png"),require:require("../../assets/img/icon2.png")},
+                   {id:3,name:"账号管理",path:"account",url:require("../../assets/img/icon3.png"),require:require("../../assets/img/icon4.png")},
+                   {id:4,name:"用户管理",path:"user",url:require("../../assets/img/icon5.png"),require:require("../../assets/img/icon6.png")},
+                   {id:5,name:"操作日志",path:"operationLog",url:require("../../assets/img/icon7.png"),require:require("../../assets/img/icon8.png")},
                ]
        }
    },
    methods:{
-       homeAction(){
+       homeAction(name){
+           this.isSelect = name 
            console.log(123)
            
        }
-   }
+   },
+   mounted () { 
+       this.isSelect = this.$route.name
+   }, 
 }
 </script>
 
@@ -134,13 +147,30 @@ export default {
      .nav{
          width: 230px;
          height: 912px;
-         background: burlywood;
          color: #fff;
+         background: #fff;
          float: left;
             img{
                 width:22px;
                 height: 22px;
+                position: absolute;
+                left: 25px;
+                top: 14px;
+                z-index: 4;
             }
+            a{
+                display: inline-block;
+                position: absolute;
+                width: 100%;
+               
+                box-sizing: border-box;
+                left: 0;
+                padding-left: 70px;
+            }
+        .active{
+            color: #3999F9;
+            background: #ECF9FF;
+        }
      }
      .main{
          width: 1210px;
@@ -148,10 +178,9 @@ export default {
          float: left;
          background: #F7F7F7;
          color: #2488DD;
-      
- 
          padding: 54px 31px 30px 31px;
          box-sizing: border-box;
+         position: relative;
             .content{
                 width: 1148px;
                 height: 828px;
