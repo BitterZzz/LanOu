@@ -3,11 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import { Button, Select,Submenu,Icon,Menu,Aside,MenuItemGroup,MenuItem } from 'element-ui';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
-
-Vue.use(Button).use(Select).use(Submenu).use(Icon).use(Menu).use(Aside).use(MenuItemGroup)
-Vue.use(MenuItem)
+Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 
