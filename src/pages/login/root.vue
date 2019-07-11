@@ -27,7 +27,6 @@
           </div>
         </div>
       </div>
-           <el-button :plain="true" @click="open">打开消息提示</el-button>
     </div>
   </div>
 </template>
@@ -52,6 +51,7 @@ export default {
   mounted() {
     this.dom.userDom = document.querySelector(".userInfo");
     this.dom.pwdDom = document.querySelector(".password");
+    this.$message('hello')
   }
 };
 </script>
