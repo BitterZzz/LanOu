@@ -1,48 +1,54 @@
 <template>
-    <div id="home" class="container">
-      <div class="header">
-           <p class="logo">
-               <img src="../../assets/img/LOGO.png" alt="" title="蓝鸥">
-           </p>
-           <h2>广东蓝鸥净水设备管理系统</h2>
-           <div class="user">
-               <li class="left">
-                   <img src="../../assets/img/user.png" alt="" srcset="">
-                   <a href="#">欢迎 <span>管理员 !</span></a>
-               </li>
-               <li class="right">
-                   <a href="#">注销</a> |
-                   <a href="#">退出管理</a>
-               </li>
-           </div>
-       </div> 
-       <div class="nav">
-           <el-container style="height: 500px; ">
-                <el-aside width="100%" >
-                    <el-menu :default-openeds="['1']">
-                        <el-submenu index="1">
-                            <template slot="title"><i class="el-icon-s-unfold"></i>系统菜单</template>
-                               
-                                    <el-menu-item  
-                                    v-for="item in list" 
-                                    :key="item.id"
-                                    @click="homeAction(item.name)"
-                                    >
-                                        <router-link :to='item.path'>
-                                            <img  :src="isSelect === item.name ? item.require : item.url" alt="item.title">
-                                            <a :class="isSelect === item.name ? 'active':''">{{item.name}}</a>
-                                        </router-link>
-                                    </el-menu-item>
-                                
-                        </el-submenu>
-                    </el-menu>
-                </el-aside>
-            </el-container>
+    <div id="home">
+         
+            <div class="header ">
+                  <div class="">
+                        <p class="logo">
+                            <img src="../../assets/img/LOGO.png" alt="" title="蓝鸥">
+                        </p>
+                        <h2>广东蓝鸥净水设备管理系统</h2>
+                        <div class="user">
+                            <li class="left">
+                                <img src="../../assets/img/user.png" alt="" srcset="">
+                                <a href="#">欢迎 <span>管理员 !</span></a>
+                            </li>
+                            <li class="right">
+                                <a href="#">注销</a> |
+                                <a href="#">退出管理</a>
+                            </li>
+                        </div>
+                
+            </div> 
        </div>
-       <div class="main">
-           <div class="content">
-                 <router-view></router-view>
-           </div>
+       <div class="mainBox"> 
+            <div class="nav">
+                <el-container style="height: 500px; ">
+                        <el-aside width="100%" >
+                            <el-menu :default-openeds="['1']">
+                                <el-submenu index="1">
+                                    <template slot="title"><i class="el-icon-s-unfold"></i>系统菜单</template>
+                                    
+                                            <el-menu-item  
+                                            v-for="item in list" 
+                                            :key="item.id"
+                                            @click="homeAction(item.name)"
+                                            >
+                                                <router-link :to='item.path'>
+                                                    <img  :src="isSelect === item.name ? item.require : item.url" alt="item.title">
+                                                    <a :class="isSelect === item.name ? 'active':''">{{item.name}}</a>
+                                                </router-link>
+                                            </el-menu-item>
+                                        
+                                </el-submenu>
+                            </el-menu>
+                        </el-aside>
+                    </el-container>
+            </div>
+            <div class="main">
+                <div class="content">
+                        <router-view></router-view>
+                </div>
+            </div>
        </div>
     </div>
 </template>
@@ -75,125 +81,157 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
  #home{
      position: relative;
     //  margin: auto;
      .header{
-         width: 1440px;
+         width: 100%;
          height: 112px;
          background: #2488DD;
          color: #fff;
          padding-top: 22px;
          box-sizing: border-box;
-         display: flex;
-            .logo{
-                width: 130px;
-                height: 67px;
-                margin-left:30px;
-                  img{
-                      width: 100%;
-                      height: 100%;
-                  }
-            }
-            h2{
-                width: 384px;
-                height: 45px;
-                font-size: 32px;
-                color: #FFFFFF;
-                margin: 0 460px 0  40px;
-                padding-top: 12px;
+             
+                  .logo{
+                        width: 110px;
+                        height: 57px;
+                        margin-left:50px;
+                        float: left;
+                        img{
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    h2{
+                        width: 384px;
+                        height: 45px;
+                        font-size: 26px;
+                        color: #FFFFFF;
+                        margin-left:50px;
+                        padding-top: 12px;
+                        float: left;
+                    }
+                    .user{
+                        width: 338px;
+                        padding-top: 20px;
+                        color: #FFFFFF;
+                        font-size: 18px;
+                        display: flex;
+                        justify-content: space-between;
+                        float: right;
+                        margin-right: 30px;
+                        li{
+                            display: inline-block;
+                            height: 42px;
+                            // line-height: 42px;
+                    
+                            padding-top: 2px;
+                        }
+                        .left{
+                            position: relative;
+                            padding-left: 40px;
+                        img{
+                                width: 28px;
+                                height: 28px;
+                                position: absolute;
+                                top: 0px;
+                                left: 0;
+                            }
+                            a{
+                                color: #fff;
+                                span{
+                                    color: #FEFF89
+                            } 
+                            }
+                        }
+                        .right{
+                            a{
+                                color: #ffffff;
+                            }
+                        }
 
-            }
-            .user{
-                 width: 338px;
-                 padding-top: 20px;
-                 color: #FFFFFF;
-                 font-size: 18px;
-                 display: flex;
-                 justify-content: space-between;
-                li{
-                    display: inline-block;
-                    height: 42px;
-                    // line-height: 42px;
-               
-                    padding-top: 2px;
-                }
-                .left{
-                     position: relative;
-                     padding-left: 40px;
-                   img{
-                        width: 28px;
-                        height: 28px;
-                        position: absolute;
-                        top: 0px;
-                        left: 0;
-                    }
-                    a{
-                        color: #fff;
-                        span{
-                            color: #FEFF89
-                      } 
-                    }
-                  }
-                .right{
-                    a{
-                        color: #ffffff;
-                    }
-                }
-
-            }
-     }
-     .nav{
-         width: 230px;
-         height: 912px;
-         color: #fff;
-         background: #fff;
-         float: left;
-            img{
-                width:22px;
-                height: 22px;
-                position: absolute;
-                left: 25px;
-                top: 14px;
-                z-index: 4;
-            }
-            a{
-                display: inline-block;
-                position: absolute;
-                width: 100%;
-               
+              }
+           }
+        .mainBox{
+             width: 100%;
+             display: flex;
+        .nav{
+            width: 230px;
+            height: 912px;
+            color: #fff;
+            background: #fff;
+            float: left;
+            .el-submenu__title{
+                font-family: PingFangSC-Regular;
+                font-size: 18px;
+                color: #666666;
+                letter-spacing: 0;
+                padding-left: 27px !important;
                 box-sizing: border-box;
-                left: 0;
-                padding-left: 70px;
+                height: 54px;
+                border-left: none;
+                border-bottom: 0.1px solid #D9D9D9;
+                margin-bottom: 20px;
+                .el-submenu__icon-arrow{
+                    display: none;
+                }
+                .el-icon-s-unfold::before{
+                        width: 26px;
+                        height: 26px;
+                        margin-right: 40px;
+                        position: relative;
+                        top: -2px;
+                }
             }
-        .active{
-            color: #3999F9;
-            background: #ECF9FF;
+            .el-menu-item{
+                height: 68px;
+            }
+                img{
+                    width:22px;
+                    height: 22px;
+                    position: absolute;
+                    left: 25px;
+                    top: 24px;
+                    z-index: 4;
+                }
+                a{
+                    display: inline-block;
+                    position: absolute;
+                    height: 68px;
+                    line-height: 68px;
+                    width: 100%;
+                    font-family: PingFangSC-Regular;
+                    font-size: 16px;
+                    color: #333333;
+                    letter-spacing: 0;
+                    box-sizing: border-box;
+                    left: 0;
+                    padding-left: 70px;
+                }
+            .active{
+                color: #3999F9;
+                background: #ECF9FF;
+            }
         }
-     }
-     .main{
-         width: 1210px;
-         height: 912px;
-         float: left;
-         background: #F7F7F7;
-         color: #2488DD;
-         padding: 54px 31px 30px 31px;
-         box-sizing: border-box;
-         position: relative;
-            .content{
-                width: 1148px;
-                height: 828px;
-                background: #fff;
-            }
-     }
- }
- .container{
-    width: 1440px;
-    height: 1024px;
-    margin: 0 auto;
+        .main{
+            width: 100%;
+            height: 912px;
+            float: left;
+            background: #F7F7F7;
+            color: #2488DD;
+            padding: 54px 31px 30px 32px;
+            box-sizing: border-box;
+            position: relative;
+                .content{
+                    width: 100%;
+                    height: 828px;
+                    background: #fff;
+                }
+        }
+    }
+ } 
 
-}
 
 </style>
 
