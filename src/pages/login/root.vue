@@ -38,20 +38,38 @@ export default {
       dom: {
         userDom: "",
         pwdDom: ""
+      },
+      userMsg:{
+        phone:"",
+        pwd:""
       }
     };
   },
   methods: {
     login() {
-      // if(this.dom.userDom){
-
-      // }
-    },
+      var userVerity = /^[1][3,4,5,7,8][0-9]{9}$/;
+      var pwdVerity;
+      if (this.dom.userDom.value === "") {
+        this.$message({
+          message: "用户名不能为空",
+          type: "warning"
+        });
+        return;
+      }
+      if (this.dom.pwdDom.value === "") {
+        this.$message({
+          message: "密码不能为空",
+          type: "warninig"
+        });
+      }
+      if (userVerity.test(this.dom.userDom.value)) {
+        
+      }
+    }
   },
   mounted() {
     this.dom.userDom = document.querySelector(".userInfo");
     this.dom.pwdDom = document.querySelector(".password");
-    this.$message('hello')
   }
 };
 </script>
