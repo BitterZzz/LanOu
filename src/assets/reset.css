@@ -33,7 +33,6 @@ body,
 html {
   background: #F7F7F7;
   font-family: PingFangSC-Medium;
-  
 }
 
 h1,
@@ -90,10 +89,4 @@ input {
   transform-origin: 0 0;
   -webkit-transform: scaleY(0.5);
   transform: scaleY(0.5);
-}
-
-.container {
-  width: 1440px;
-  height: 1024px;
-  margin: 0 auto;
 }
