@@ -99,7 +99,6 @@ export default {
   methods: {
     homeAction(name) {
       this.isSelect = name;
-      console.log(123);
     }
   },
   mounted() {
