@@ -47,12 +47,16 @@
             <a>{{city.true}}</a>
             <a>{{city.phone}}</a>
             <a>{{city.position}}</a>
-            <a>{{city.ID}}</a>
-            <a>{{city.user}}</a>
-            <a>{{city.true}}</a>
-            <a>{{city.phone}}</a>
-            <a>{{city.position}}</a>
+            <a>{{city.work}}</a>
+            <a>{{city.facility}}</a>
+            <a>{{city.state}}</a>
+            <a>{{city.time}}</a>
+            <a >{{city.delete}}</a>
+            
           </el-checkbox>
+          <p>
+            <i v-for="i in 5" :key="i" @click="deleteAction()"></i>
+          </p>
         </el-checkbox-group>
       </ul>
     </div>
@@ -75,6 +79,42 @@ const cityOptions = [
   },
   {
     ID: "17002",
+    user: "ener门",
+    true: "天天",
+    phone: "15689742568",
+    position: "管理",
+     work:"深圳市宜居云科技有限公司",
+    facility:"LOSRO-2000-S(ADI)",
+    state:'可用',
+    time:'2019-03-14',
+    delete:'删除',
+  },
+  {
+    ID: "17003",
+    user: "ener门",
+    true: "天天",
+    phone: "15689742568",
+    position: "管理",
+     work:"深圳市宜居云科技有限公司",
+    facility:"LOSRO-2000-S(ADI)",
+    state:'可用',
+    time:'2019-03-14',
+    delete:'删除',
+  },
+  {
+    ID: "17004",
+    user: "ener门",
+    true: "天天",
+    phone: "15689742568",
+    position: "管理",
+     work:"深圳市宜居云科技有限公司",
+    facility:"LOSRO-2000-S(ADI)",
+    state:'可用',
+    time:'2019-03-14',
+    delete:'删除',
+  },
+  {
+    ID: "17005",
     user: "ener门",
     true: "天天",
     phone: "15689742568",
@@ -121,6 +161,9 @@ export default {
       this.checkAll = checkedCount === this.cities.length;
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.cities.length;
+    },
+    deleteAction(){
+      console.log("删除")
     }
   }
 };
@@ -159,9 +202,7 @@ export default {
       align-items: center;
       padding: 0 16px;
       box-sizing: border-box;
-    .box-nav{
-      border: 1px saddlebrown solid
-    }
+    
       p {
         float: left;
         width: 108px;
@@ -224,14 +265,30 @@ export default {
       height: 87.5px;
       border-bottom: 1px solid #cccccc;
       line-height: 87.5px;
-      // padding: 0 16px 0 24px;
       box-sizing: border-box;
       display: flex;
-      justify-content: space-around;
-      align-content: center;
+      padding-left: 12px;
+      box-sizing: border-box;
+
+      .box-nav{
+          // border: 1px saddlebrown solid;
+          width:100%;
+          display: flex;
+          a{
+            width: 10%;
+
+            text-align: center;
+            white-space:normal;
+            height: 100%; 
+          }
+          a:nth-child(7) {
+               width: 170px;
+            }
+        }
+     
       .el-checkbox {
         margin-right: 0;
-
+       
         .el-checkbox__input {
           .el-checkbox__inner {
             width: 18px;
@@ -249,81 +306,106 @@ export default {
         font-size: 16px;
         color: #333333;
         font-weight: 600;
-
-        // border: 1px solid red;
       }
 
-      // a:nth-child(2) {
-      //   margin: 0 23px 0 10px;
-      // }
-      // a:nth-child(3) {
-      //   margin-right: 24px;
-      // }
-      // a:nth-child(4) {
-      //   margin-right: 24px;
-      // }
-      // a:nth-child(5) {
-      //   margin-right: 37px;
-      // }
-      // a:nth-child(6) {
-      //   margin-right: 29px;
-      // }
-      // a:nth-child(7) {
-      //   margin-right: 79px;
-      // }
-      // a:nth-child(8) {
-      //   margin-right: 64px;
-      // }
-      // a:nth-child(9) {
-      //   margin-right: 22px;
-      // }
-      // a:nth-child(10) {
-      //   margin-right: 20px;
-      // }
     }
   }
   .table{
       .el-checkbox-group{
-          // padding-left: 24px;
           display: flex;
           flex-direction: column;
           padding-top: 20px;
           box-sizing: border-box;
           overflow: hidden;
+          border: 1px solid green;
+          position: relative;
+          p{
+              border: 1px solid royalblue;
+              width: 100%;
+              height: 89%;
+              position: absolute;
+              left: 1%;
+               padding-top: 16px;
+                i{
+                  display: block;
+                  position: relative;
+                  right: 0;
+                  width: 3%;
+                  height: 20px;
+                  // border: 1px solid forestgreen;
+                  margin-bottom: 48px;
+                  left:93.8%;
+                }
+            }
           .el-checkbox{
               display: block;
               margin-right: 0;
-              border: 1px solid red;
               height: 50px;
-              // line-height: 50px;
               margin-bottom:20px;
-              // padding-left: 20px;
               margin-left: 12px;
+              width: 100%;
               display: flex;
               flex: 1;
               box-sizing: border-box;
               float: left;
+              border: 1px solid red;
                  .el-checkbox__inner {
                         width: 18px;
                         height: 18px;
                          display: block;
                          float: left;
+                         position: relative;
+                         top: 16px;
+                        //  background: #D8D8D8;
+                         outline: none;
                     }
                     .el-checkbox__inner::after {
                         height: 10px;
                         left: 6px;
                         top: 1px;
                         width: 4px;
+                      //  color: red;
                     }
           }
           .el-checkbox__label{
-            padding-left: 20px;
             height: 100%;
             line-height: 50px;
-            border:1px solid blue;
+            padding: 0;
             display: flex;
             flex: 1;
-            justify-content: space-around;
+              a{
+                display: block;
+                width: 10%;
+                white-space:normal;
+                height: 100%;
+                line-height: 50px;
+                font-size: 16px;
+                text-align: center;
+                // border: 1px solid red;
+                
+              }
+              a:nth-child(5){
+                 padding-right: 4px;
+               }
+               a:nth-child(6){
+                 width: 130px;
+                 line-height: normal;
+                 text-align:initial;
+                 padding-left:8px;
+                 padding-right: 14px;
+                 padding-top: 4px;
+                 box-sizing: border-box;
+               }
+                a:nth-child(7){
+                 width: 170px;
+               }
+               a:nth-child(10){
+                 text-decoration:underline;
+                 color: #F64330;
+                 cursor: pointer;
+                // z-index: 6px;
+                // border: 1px solid red;
+               }
           }
       }
     }
