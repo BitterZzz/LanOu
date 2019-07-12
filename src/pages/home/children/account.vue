@@ -50,7 +50,6 @@ export default {
     }
   }
   #content {
-    width: 1100px;
     margin: 0 auto;
     margin-top: 8px;
     #content-header {

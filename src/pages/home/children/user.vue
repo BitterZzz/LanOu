@@ -210,7 +210,7 @@ export default {
       align-content: center;
       .el-checkbox {
         margin-right: 0;
-        
+
         .el-checkbox__input {
           .el-checkbox__inner {
             width: 18px;
@@ -261,28 +261,28 @@ export default {
       // }
     }
   }
-  .table{
-      .el-checkbox-group{
-          padding-left: 24px;
-          box-sizing: border-box;
-          .el-checkbox{
-              display: block;
-              border: 1px solid red;
-              height: 50px;
-              line-height: 50px;
-              margin: 20px 0;
-                 .el-checkbox__inner {
-                        width: 18px;
-                        height: 18px;
-                    }
-                    .el-checkbox__inner::after {
-                        height: 10px;
-                        left: 6px;
-                        top: 1px;
-                        width: 4px;
-                    }
-          }
+  .table {
+    .el-checkbox-group {
+      padding-left: 24px;
+      box-sizing: border-box;
+      .el-checkbox {
+        display: block;
+        border: 1px solid red;
+        height: 50px;
+        line-height: 50px;
+        margin: 20px 0;
+        .el-checkbox__inner {
+          width: 18px;
+          height: 18px;
+        }
+        .el-checkbox__inner::after {
+          height: 10px;
+          left: 6px;
+          top: 1px;
+          width: 4px;
+        }
       }
+    }
   }
 }
 </style>

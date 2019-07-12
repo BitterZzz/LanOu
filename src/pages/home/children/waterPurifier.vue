@@ -15,8 +15,8 @@
             <i class="el-icon-caret-bottom icon-bottom"></i>
           </div>
           <input type="text" class="search-value" placeholder="请输入内容" />
-          <button type="submit" class="search-btn">搜索</button>
         </div>
+        <button type="submit" class="search-btn">搜索</button>
       </div>
     </div>
   </div>
@@ -46,11 +46,44 @@ export default {};
     }
   }
   #content {
-    width: 1120px;
     margin: 0 auto;
     #search-box {
-      height: 60px;
-      
+      margin-left: 24px;
+      margin-top: 16px;
+      .search {
+        width: 680px;
+        height: 60px;
+        border: solid 1px #cccccc;
+        border-radius: 5px;
+        border-radius: 5px;
+        float: left;
+        .ckeck {
+          display: inline-block;
+          width: 100px;
+          height: 60px;
+          text-align: center;
+          color: #333333;
+        }
+        .search-value {
+          display: inline-block;
+          width: 552px;
+          height: 60px;
+          border: 0;
+          border-left: solid 1px #cccccc;
+          padding-left: 32px;
+          box-sizing: border-box;
+        }
+      }
+      .search-btn {
+        float: left;
+        width: 120px;
+        height: 60px;
+        border: 0;
+        background: #ffffff;
+        border: solid 1px #cccccc;
+        border-radius: 5px;
+        margin-left: 16px;
+      }
     }
   }
 }
