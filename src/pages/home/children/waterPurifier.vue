@@ -8,7 +8,7 @@
       </div>
     </div>
     <div id="content">
-      <div id="search-box">
+      <div id="search-box" class="clearfix">
         <div class="search">
           <div class="ckeck">
             <span>机器Id</span>
@@ -18,17 +18,80 @@
         </div>
         <button type="submit" class="search-btn">搜索</button>
       </div>
+      <div class="detalis">
+        <div class="table-box">
+          <table border="1" cellspacing="0" width="100%" class="table-style">
+            <tr class="tr-header" align="center">
+              <th>机器ID</th>
+              <th>机器状态</th>
+              <th>水质数据</th>
+              <th>安装地址</th>
+              <th>时间</th>
+              <th>用户</th>
+              <th>操作项</th>
+            </tr>
+            <tr class="tr-main" align="center" v-for="item in this.list" :key="item.Id">
+              <td>1</td>
+              <td>
+                <div>在线状态:在线</div>
+                <div>在线状态:在线</div>
+                <div>在线状态:在线</div>
+              </td>
+              <td>
+                <div class="msg">
+                  <div>水温 X℃</div>
+                  <div>TDS(ppm)原水:XX 纯水:XX</div>
+                  <div>TDS(ppm)原水:XX 纯水:XX</div>
+                  <div>TDS(ppm)原水:XX 纯水:XX</div>
+                  <div>TDS(ppm)原水:XX 纯水:XX</div>
+                  <div>余氧(mg/l)去除率:XX%</div>
+                </div>
+              </td>
+              <td>
+                <div class="addres">
+                  <div>深圳市宝安区高新奇工业园2期1号楼</div>
+                </div>
+              </td>
+              <td>
+                <div class="time">
+                  <div class="time-title">
+                    <span>安装时间:</span>
+                    <img src="../../../assets/img/time.png" alt="">
+                  </div>
+                  <div>2019-04-06</div>
+                  <div>14:23:12</div>
+                  <div class="time-title">
+                    <span>上传时间:</span>
+                    <img src="../../../assets/img/time.png" alt="">
+                  </div>
+                  <div>2019-04-06</div>
+                  <div>14:23:12</div>
+                </div>
+              </td>
+              <td>6</td>
+              <td>7</td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      list: [{ ID: 123 }, { ID: 123 }, { ID: 123 }]
+    };
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 #water {
   overflow: hidden;
+  height: 100%;
   #header {
     .header-title {
       color: #999999;
@@ -78,11 +141,66 @@ export default {};
         float: left;
         width: 120px;
         height: 60px;
-        border: 0;
         background: #ffffff;
         border: solid 1px #cccccc;
         border-radius: 5px;
         margin-left: 16px;
+      }
+    }
+    .detalis {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 0 24px;
+      padding-top: 16px;
+      .table-box {
+        .table-style {
+          // display: table-row-group;
+          font-family: PingFangSC-Regular;
+          border: 0;
+          border: solid 1px #cccccc;
+          border-collapse: collapse;
+          vertical-align: middle;
+          color: #333333;
+          .tr-header {
+            color: #333333;
+            font-size: 16px;
+            th {
+              padding: 16px 0;
+              background: #eeeeee;
+            }
+          }
+          .tr-main {
+            display: table-row;
+            color: #333333;
+            font-size: 14px;
+            td:nth-child(1) {
+              padding: 64px 0;
+              box-sizing: border-box;
+            }
+            td:nth-child(3) {
+              .msg {
+                width: 196px;
+                text-align: left;
+              }
+            }
+            td:nth-child(4){
+              .addres{
+                width: 92px;
+                text-align: left;
+              }
+            }
+            td:nth-child(5){
+              .time{
+                .time-title{
+                  img{
+                    vertical-align: middle;
+                    padding-bottom: 6px;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
