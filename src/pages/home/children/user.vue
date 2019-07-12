@@ -30,8 +30,11 @@
           v-model="checkAll"
           @change="handleCheckAllChange"
         ></el-checkbox>
+        <div class="box-nav">
         <a v-for=" item in list" :key="item.id">{{item.value}}</a>
+        </div>
       </ul>
+      
       <ul class="table">
         <el-checkbox-group
           v-model="checkedCities"
@@ -39,6 +42,11 @@
           @change="handleCheckedCitiesChange"
         >
           <el-checkbox v-for="city in cities" :label="city" :key="city.id">
+            <a>{{city.ID}}</a>
+            <a>{{city.user}}</a>
+            <a>{{city.true}}</a>
+            <a>{{city.phone}}</a>
+            <a>{{city.position}}</a>
             <a>{{city.ID}}</a>
             <a>{{city.user}}</a>
             <a>{{city.true}}</a>
@@ -58,14 +66,24 @@ const cityOptions = [
     user: "卡尔门",
     true: "天天",
     phone: "15689742568",
-    position: "管理"
+    position: "管理",
+    work:"深圳市宜居云科技有限公司",
+    facility:"LOSRO-2000-S(ADI)",
+    state:'可用',
+    time:'2019-03-14',
+    delete:'删除',
   },
   {
     ID: "17002",
     user: "ener门",
     true: "天天",
     phone: "15689742568",
-    position: "管理"
+    position: "管理",
+     work:"深圳市宜居云科技有限公司",
+    facility:"LOSRO-2000-S(ADI)",
+    state:'可用',
+    time:'2019-03-14',
+    delete:'删除',
   }
 ];
 export default {
@@ -141,6 +159,9 @@ export default {
       align-items: center;
       padding: 0 16px;
       box-sizing: border-box;
+    .box-nav{
+      border: 1px saddlebrown solid
+    }
       p {
         float: left;
         width: 108px;
@@ -203,7 +224,7 @@ export default {
       height: 87.5px;
       border-bottom: 1px solid #cccccc;
       line-height: 87.5px;
-      padding: 0 16px 0 24px;
+      // padding: 0 16px 0 24px;
       box-sizing: border-box;
       display: flex;
       justify-content: space-around;
@@ -261,29 +282,51 @@ export default {
       // }
     }
   }
-  .table {
-    .el-checkbox-group {
-      padding-left: 24px;
-      box-sizing: border-box;
-      .el-checkbox {
-        display: block;
-        border: 1px solid red;
-        height: 50px;
-        line-height: 50px;
-        margin: 20px 0;
-        .el-checkbox__inner {
-          width: 18px;
-          height: 18px;
-        }
-        .el-checkbox__inner::after {
-          height: 10px;
-          left: 6px;
-          top: 1px;
-          width: 4px;
-        }
+  .table{
+      .el-checkbox-group{
+          // padding-left: 24px;
+          display: flex;
+          flex-direction: column;
+          padding-top: 20px;
+          box-sizing: border-box;
+          overflow: hidden;
+          .el-checkbox{
+              display: block;
+              margin-right: 0;
+              border: 1px solid red;
+              height: 50px;
+              // line-height: 50px;
+              margin-bottom:20px;
+              // padding-left: 20px;
+              margin-left: 12px;
+              display: flex;
+              flex: 1;
+              box-sizing: border-box;
+              float: left;
+                 .el-checkbox__inner {
+                        width: 18px;
+                        height: 18px;
+                         display: block;
+                         float: left;
+                    }
+                    .el-checkbox__inner::after {
+                        height: 10px;
+                        left: 6px;
+                        top: 1px;
+                        width: 4px;
+                    }
+          }
+          .el-checkbox__label{
+            padding-left: 20px;
+            height: 100%;
+            line-height: 50px;
+            border:1px solid blue;
+            display: flex;
+            flex: 1;
+            justify-content: space-around;
+          }
       }
     }
   }
-}
 </style>
 
