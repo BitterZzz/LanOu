@@ -1,112 +1,361 @@
 <template>
-  <div id="account">
-    <div id="header">
-      <div class="header-title">
-        <span>您所在的位置 :</span>
-        <span>账号管理</span> >
-        <span class="span-thrid">账号列表</span>
-      </div>
+  <div id="user">
+    <div id="title">
+      <p>
+        您所在的位置 : 用户管理 >
+        <a>账号列表</a>
+      </p>
     </div>
-    <div id="content">
-      <div id="content-header">
-        <div class="btn-box">
-          <div class="btn-add">
-            <img src="../../../assets/img/add.png" alt class="addImg" />
-            <span>新增</span>
-          </div>
-          <div class="btn-delet">
-            <img src="../../../assets/img/delet.png" alt class="deletImg" />
-            <span>删除</span>
-          </div>
+    <div class="userBox">
+      <ul class="top">
+        <li>
+          <p>
+            <img src="../../../assets/img/start.png" alt />新增
+          </p>
+          <p>
+            <img src="../../../assets/img/forbid.png" alt />删除
+          </p>
+        </li>
+      </ul>
+      <ul class="navigation">
+        <el-checkbox
+          :indeterminate="isIndeterminate"
+          v-model="checkAll"
+          @change="handleCheckAllChange"
+        ></el-checkbox>
+        <div class="box-nav">
+        <a v-for=" item in list" :key="item.id">{{item.value}}</a>
         </div>
-      </div>
+      </ul>
+      
+      <ul class="table">
+        <el-checkbox-group
+          v-model="checkedCities"
+          @click="tabAction()"
+          @change="handleCheckedCitiesChange"
+        >
+          <el-checkbox v-for="city in cities" :label="city" :key="city.id">
+            <a>{{city.username}}</a>
+            <a>{{city.name}}</a>
+            <a>{{city.basic}}</a>
+            <a>{{city.operation}}</a>
+            <a>{{city.time}}</a>
+            <a>{{city.redact}}  {{city.delete}}</a>
+
+            
+          </el-checkbox>
+          <p>
+            <i v-for="i in 5" :key="i" @click="deleteAction()"></i>
+          </p>
+        </el-checkbox-group>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
+import ky from '../../../assets/img/ky.png'
+import stop from '../../../assets/img/ky.png'
+const cityOptions = [
+  {
+    id:"1",
+    username: "diaodong",
+    name: "超级管理员",
+    basic: "查看所有页面",
+    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
+    time:'2019-03-14',
+    delete:"删除",
+    redact:'编辑',
+
+  },
+  {
+    id:"2",
+    username: "diaodong",
+    name: "超级管理员",
+    basic: "查看所有页面",
+    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
+    time:'2019-03-14',
+    delete:"删除",
+    redact:'编辑',
+
+  },
+ {
+    id:"3",
+    username: "diaodong",
+    name: "超级管理员",
+    basic: "查看所有页面",
+    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
+    time:'2019-03-14',
+    delete:"删除",
+    redact:'编辑',
+
+  },
+ {
+    id:"4",
+    username: "diaodong",
+    name: "超级管理员",
+    basic: "查看所有页面",
+    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
+    time:'2019-03-14',
+    delete:"删除",
+    redact:'编辑',
+
+  },
+{
+    id:"5",
+    username: "diaodong",
+    name: "超级管理员",
+    basic: "查看所有页面",
+    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
+    time:'2019-03-14',
+    delete:"删除",
+    redact:'编辑',
+
+  },
+];
 export default {
-  name: "account"
+  data() {
+    return {
+      checkAll: false,
+      checkedCities: [],
+      cities: cityOptions,
+
+      isIndeterminate: false,
+      ky: ky,
+      stop: stop,
+      list: [
+        { value: "用户名" },
+        { value: "角色名称" },
+        { value: "基本权限" },
+        { value: "操作权限" },
+        { value: "创建时间" },
+        { value: "操作项" },
+      ]
+    };
+  },
+  methods: {
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? cityOptions : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.cities.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.cities.length;
+    },
+    serachAction(){
+            console.log("搜索")
+    },
+    deleteAction(){
+      console.log("删除")
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped>
-#account {
-  overflow: hidden;
-  #header {
-    .header-title {
+<style lang="scss" >
+#user {
+  padding: 8px 24px 0 24px;
+  box-sizing: border-box;
+  #title {
+    width: 293px;
+    height: 22px;
+    position: absolute;
+    top: 16px;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 16px;
       color: #999999;
-      position: absolute;
-      top: 16px;
-      span {
-        font-family: PingFangSC-Regular;
+      a {
         font-size: 16px;
-        color: #999999;
-        letter-spacing: 0;
-      }
-      .span-thrid {
         color: #3999f9;
       }
     }
   }
-  #content {
-    margin: 0 auto;
-    margin-top: 8px;
-    #content-header {
+  .userBox {
+    width: 100%;
+    height: 594px;
+    border: 1px solid #cccccc;
+    .top {
       height: 80px;
       background: #eeeeee;
-      overflow: hidden;
-      .btn-box {
-        .btn-add {
-          display: inline-block;
-          width: 108px;
-          height: 46px;
-          background: #3999f9;
-          padding-top: 8px;
-          margin-left: 16px;
-          margin-top: 17px;
-          box-sizing: border-box;
-          overflow: hidden;
-
-          .addImg {
-            width: 30px;
-            height: 30px;
-            border: 0;
-            margin-left: 14px;
-            margin-top: -2px;
-            vertical-align: middle;
-          }
-          span {
-            display: inline-block;
-            color: #ffffff;
-            font-size: 20px;
-          }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      box-sizing: border-box;
+    
+      p {
+        float: left;
+        width: 108px;
+        height: 46px;
+        line-height: 46px;
+        text-align: center;
+        font-size: 20px;
+        color: #ffffff;
+        cursor: pointer;
+        img {
+          width: 30px;
+          height: 30px;
+          position: relative;
+          top: 8px;
+          left: -8px;
         }
-        .btn-delet {
-          display: inline-block;
-          width: 108px;
-          height: 46px;
-          background-color: #ff6259;
-          overflow: hidden;
-          padding-top: 8px;
-          margin-left: 16px;
-          margin-top: 17px;
-          box-sizing: border-box;
-          span {
-            display: inline-block;
-            color: #ffffff;
-            font-size: 20px;
+      }
+      p:nth-child(1) {
+        background: #3A9EF4;
+        border-radius: 3px;
+        border-radius: 3px;
+        margin-right: 16px;
+      }
+      p:nth-child(2) {
+        background: #FF6259;
+        border-radius: 3px;
+        border-radius: 3px;
+        margin-right: 16px;
+      }
+    }
+    .navigation {
+      height: 87.5px;
+      border-bottom: 1px solid #cccccc;
+      line-height: 87.5px;
+      box-sizing: border-box;
+      display: flex;
+      padding-left: 12px;
+      box-sizing: border-box;
+
+      .box-nav{
+          width:100%;
+          display: flex;
+          a{
+            width: 16.6%;
+            text-align: center;
+            white-space:normal;
+            height: 100%; 
+            border: 1px solid red;
           }
-          .deletImg {
-            width: 30px;
-            height: 30px;
-            margin-left: 14px;
-            margin-top: -2px;
-            vertical-align: middle;
+          a:nth-child(4) {
+               margin: 0 60px;
+            }
+        }
+     
+      .el-checkbox {
+        margin-right: 0;
+        .el-checkbox__input {
+          .el-checkbox__inner {
+            width: 18px;
+            height: 18px;
+          }
+          .el-checkbox__inner::after {
+            height: 10px;
+            left: 6px;
+            top: 1px;
+            width: 4px;
           }
         }
       }
+      a {
+        font-size: 16px;
+        color: #333333;
+        font-weight: 600;
+      }
+
     }
   }
-}
+  .table{
+      .el-checkbox-group{
+          display: flex;
+          flex-direction: column;
+          padding-top: 20px;
+          box-sizing: border-box;
+          overflow: hidden;
+          // border: 1px solid green;
+          position: relative;
+          // p{
+          //     // border: 1px solid royalblue;
+          //     width: 100%;
+          //     height: 89%;
+          //     position: absolute;
+          //     left: 1%;
+          //      padding-top: 16px;
+          //       i{
+          //         display: block;
+          //         position: relative;
+          //         right: 0;
+          //         width: 3%;
+          //         height: 20px;
+          //         // border: 1px solid forestgreen;
+          //         margin-bottom: 48px;
+          //         left:93.8%;
+          //         cursor: pointer;
+          //       }
+          //   }
+          .el-checkbox{
+              display: block;
+              margin-right: 0;
+              height: 50px;
+              margin-bottom:20px;
+              margin-left: 12px;
+              width: 100%;
+              display: flex;
+              flex: 1;
+              box-sizing: border-box;
+              float: left;
+              border: 1px solid red;
+                 .el-checkbox__inner {
+                        width: 18px;
+                        height: 18px;
+                         display: block;
+                         float: left;
+                         position: relative;
+                         top: 16px;
+                        //  background: #D8D8D8;
+                         outline: none;
+                    }
+                    .el-checkbox__inner::after {
+                        height: 10px;
+                        left: 6px;
+                        top: 1px;
+                        width: 4px;
+                      //  color: red;
+                    }
+          }
+          .el-checkbox__label{
+            height: 100%;
+            line-height: 50px;
+            padding: 0;
+            display: flex;
+            flex: 1;
+              a{
+                display: block;
+                width: 16.6%;
+                white-space:normal;
+                height: 100%;
+                line-height: 50px;
+                font-size: 16px;
+                text-align: center;
+                border: 1px solid green;
+                 img{
+                   position: relative;
+                   top: 8px;
+                 }
+                
+              }
+            
+                a:nth-child(4){
+                   margin: 0 60px;
+               }
+               a:nth-child(10){
+                 text-decoration:underline;
+                 color: #F64330;
+                 
+                // z-index: 6px;
+                // border: 1px solid red;
+               }
+          }
+      }
+    }
+  }
 </style>
+
