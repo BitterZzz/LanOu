@@ -16,7 +16,7 @@
             <div class="downLable">
               <i class="el-icon-caret-top"></i>
               <ul>
-                <li>机器Id</li>
+                <li v-for="item in liList" :key="item.ID">{{item.name}}</li>
               </ul>
             </div>
           </div>
@@ -29,9 +29,17 @@
           <table border="1" cellspacing="0" width="100%" class="table-style">
             <tr class="tr-header" align="center">
               <th>机器ID</th>
-              <th>
+              <th class="down">
                 机器状态
                 <i class="el-icon-caret-bottom"></i>
+                <div class="table-down">
+                  <i class="el-icon-caret-top"></i>
+                  <ul>
+                    <li>在线</li>
+                    <li>在线</li>
+                    <li>在线</li>
+                  </ul>
+                </div>
               </th>
               <th>水质数据</th>
               <th>安装地址</th>
@@ -92,7 +100,7 @@
               <td>6</td>
               <td>
                 <div class="operation">
-                  <p>查看</p>
+                  <router-link to="waterPurifier/particulars">查看</router-link>
                   <p>参数配置</p>
                   <p>信息维护</p>
                   <p>日志</p>
@@ -105,12 +113,21 @@
       <div class="pagetion">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="prev, pager, next,slot, jumper"
           :total="100"
           @size-change="handleSizeChange"
           @current-change="handleCurrent"
-        ></el-pagination>
+        >
+          <div class="page-show">
+            <span class="nowPage">4</span>
+            <i>/</i>
+            <span class="totalPage">10</span>
+          </div>
+        </el-pagination>
       </div>
+    </div>
+    <div class="popup">
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -121,11 +138,11 @@ export default {
   data() {
     return {
       list: [{ ID: 123 }, { ID: 123 }, { ID: 123 }, { ID: 123 }],
-      liList:[
-        {name:"机器Id"},
-        {name:"安装地址"},
-        {name:"故障状态"},
-        {name:"保养状态"}
+      liList: [
+        { name: "机器Id", ID: 200 },
+        { name: "安装地址", ID: 300 },
+        { name: "故障状态", ID: 400 },
+        { name: "保养状态", ID: 500 }
       ]
     };
   },
@@ -136,17 +153,35 @@ export default {
     },
     handleCurrent() {
       console.log(2222);
+    },
+    //下拉菜单
+    pull(_ulBox, _ckeck, _li) {
+      var _ulBox = document.querySelector(_ulBox);
+      var _ckeck = document.querySelector(_ckeck);
+      var _li = document.querySelectorAll(_li);
+      var _this = this;
+      _ckeck.onmousedown = function() {
+        _ulBox.style.display = "block";
+        _ckeck.onmousemove = function(e) {
+          e = e || window.event;
+          let target = e.target || e.srcElement;
+          if (target.nodeName === "LI") {
+            for (var i = 0; i < _li.length; i++) {
+              _li[i].classList.remove("liColor");
+            }
+            target.classList.add("liColor");
+          }
+        };
+      };
+      _ckeck.onmouseleave = function() {
+        _ulBox.style.display = "none";
+      };
     }
+    //机器状态下拉菜单
   },
   mounted() {
-    var _ulBox = document.querySelector(".downLable");
-    var _ckeck = document.querySelector(".ckeck");
-    _ckeck.onmousedown = function() {
-      _ulBox.style.display = "block";
-    };
-    _ckeck.onmouseleave = function() {
-      _ulBox.style.display = "none";
-    };
+    this.pull(".downLable", ".ckeck", ".downLable ul li");
+    this.pull(".table-down", ".down", ".table-down ul li");
   }
 };
 </script>
@@ -177,42 +212,53 @@ export default {
       margin-left: 24px;
       margin-top: 16px;
       .search {
-        width: 680px;
-        height: 46px;
         border: solid 1px #cccccc;
         border-radius: 5px;
         border-radius: 5px;
+        box-sizing: border-box;
         float: left;
         .ckeck {
-          display: inline-block;
           position: relative;
-          width: 100px;
+          float: left;
+          width: 84px;
           height: 46px;
+          line-height: 46px;
           text-align: center;
           color: #333333;
+          border: solid 1px #3999f9;
+          border-radius: 5px;
+          box-sizing: border-box;
           cursor: pointer;
           .downLable {
             position: absolute;
             width: 106px;
-            background-color: #ffffff;
             left: 0;
-            top: 40px;
+            top: 42px;
             display: none;
+            i {
+              position: absolute;
+              left: 38px;
+              top: 0;
+            }
             ul {
+              position: absolute;
+              width: 84px;
+              background-color: #ffffff;
+              box-shadow: 2px 2px 5px #cccccc;
+              top: 10px;
               li {
                 width: 100%;
-                padding: 13px 0;
                 font-size: 12px;
               }
-              liColor{
-                background: red;
+              .liColor {
+                background: #ecf9ff;
               }
             }
           }
         }
         .search-value {
           display: inline-block;
-          width: 552px;
+          width: 400px;
           height: 46px;
           border: 0;
           border-left: solid 1px #cccccc;
@@ -237,7 +283,6 @@ export default {
       padding-top: 16px;
       .table-box {
         .table-style {
-          // display: table-row-group;
           font-family: PingFangSC-Regular;
           border: 0;
           border: solid 1px #cccccc;
@@ -250,6 +295,34 @@ export default {
             th {
               padding: 16px 0;
               background: #eeeeee;
+            }
+            th:nth-child(2) {
+              position: relative;
+              .table-down {
+                display: none;
+                position: absolute;
+                width: 106px;
+                left: 18%;
+                top: 46px;
+                ul {
+                  position: absolute;
+                  width: 100%;
+                  top: 14px;
+                  font-size: 12px;
+                  box-shadow: 2px 2px 5px #cccccc;
+                  background-color: #ffffff;
+                  color: #cccccc;
+                  li {
+                    width: 100%;
+                    padding: 12px;
+                    background-color: #ffffff;
+                    box-sizing: border-box;
+                  }
+                  .liColor {
+                    background: #3999f9;
+                  }
+                }
+              }
             }
           }
           .tr-main {
@@ -329,6 +402,27 @@ export default {
       width: 100%;
       text-align: center;
       margin-top: 46px;
+      .page-show {
+        display: inline-block;
+        .nowPage {
+          color: #3a9ef4;
+          margin-right: -10px;
+        }
+        .totalPage {
+          color: #151515;
+          margin-left: -10px;
+        }
+        i {
+          display: inline-block;
+          margin-top: 2px;
+          padding: 0;
+        }
+      }
+    }
+    .popup{
+      position: absolute;
+      left: 0;
+      top: 0;
     }
   }
 }

@@ -21,7 +21,17 @@ const routes = [
         {
           path:'waterPurifier',
           name:'净水器管理',
-          component:()=>import('../pages/home/children/waterPurifier.vue')
+          component:()=>import('../pages/home/children/waterPurifier.vue'),
+          children:[
+            {
+              path:"particulars",
+              component:()=>import('../pages/waterMange/particulars.vue')
+            },
+            {
+              path:"*",
+              redirect:("particulars")
+            }
+          ]
         },
         {
           path:'account',
