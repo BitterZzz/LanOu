@@ -40,13 +40,14 @@
             <a>{{city.basic}}</a>
             <a>{{city.operation}}</a>
             <a>{{city.time}}</a>
-            <a>{{city.redact}}  {{city.delete}}</a>
+            <a><span>{{city.redact}}</span><i>{{city.delete}}</i></a>
 
             
           </el-checkbox>
-          <p>
-            <i v-for="i in 5" :key="i" @click="deleteAction()"></i>
-          </p>
+          <div>
+           <p class="add"><span  v-for="add in 5" :key="add" @click="addPushAction()">新增</span></p>
+           <p class="delete"><i v-for="i in 5" :key="i" @click="deleteAction()"></i></p>
+          </div>
         </el-checkbox-group>
       </ul>
     </div>
@@ -101,7 +102,7 @@ const cityOptions = [
     redact:'编辑',
 
   },
-{
+   {
     id:"5",
     username: "diaodong",
     name: "超级管理员",
@@ -111,7 +112,7 @@ const cityOptions = [
     delete:"删除",
     redact:'编辑',
 
-  },
+  }
 ];
 export default {
   data() {
@@ -144,9 +145,10 @@ export default {
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.cities.length;
     },
-    serachAction(){
-            console.log("搜索")
+    addPushAction(){
+            console.log("编辑")
     },
+    
     deleteAction(){
       console.log("删除")
     }
@@ -233,7 +235,7 @@ export default {
             text-align: center;
             white-space:normal;
             height: 100%; 
-            border: 1px solid red;
+            // border: 1px solid red;
           }
           a:nth-child(4) {
                margin: 0 60px;
@@ -265,32 +267,85 @@ export default {
   }
   .table{
       .el-checkbox-group{
-          display: flex;
-          flex-direction: column;
+          // display: flex;
+          // flex-direction: column;
           padding-top: 20px;
           box-sizing: border-box;
           overflow: hidden;
           // border: 1px solid green;
           position: relative;
-          // p{
-          //     // border: 1px solid royalblue;
-          //     width: 100%;
-          //     height: 89%;
-          //     position: absolute;
-          //     left: 1%;
-          //      padding-top: 16px;
-          //       i{
-          //         display: block;
-          //         position: relative;
-          //         right: 0;
-          //         width: 3%;
-          //         height: 20px;
-          //         // border: 1px solid forestgreen;
-          //         margin-bottom: 48px;
-          //         left:93.8%;
-          //         cursor: pointer;
-          //       }
-          //   }
+          div{
+              // border: 1px solid royalblue;
+              width: 100%;
+              height: 89%;
+              position: absolute;
+              left: 1%;
+              padding-top: 16px;
+              top: 16px;
+             ;
+                p{
+                  display:inline-block;
+                  width: 44px;
+                  height: 100%;
+                  position: relative;
+                  left:88.8%;
+                  cursor: pointer;
+                  
+                     span{
+                        display: block;
+                        position: absolute;
+                        width: 100%;
+                        height: 20px;
+                        margin-bottom: 48px;
+                        color: #176FFF;
+                        // border: 1px solid blue;
+                        
+                        }
+                     i{
+                        display: block;
+                        position: absolute;
+                        width: 100%;
+                        height: 20px;
+                        margin-bottom: 48px;
+                        // border: 1px solid red;
+                     }
+                     i:nth-child(1){
+                       top: 0;
+                     }
+                     i:nth-child(2){
+                       top: 22%;
+                     }
+                     i:nth-child(3){
+                       top: 43%;
+                     }
+                     i:nth-child(4){
+                       top: 64%;
+                     }
+                     i:nth-child(5){
+                       top: 85.5%;
+                     }
+                     span:nth-child(1){
+                       top: 0;
+                     }
+                     span:nth-child(1){
+                       top: 0;
+                     }
+                     span:nth-child(2){
+                       top: 22%;
+                     }
+                     span:nth-child(3){
+                       top: 43%;
+                     }
+                     span:nth-child(4){
+                       top: 64%;
+                     }
+                     span:nth-child(5){
+                       top: 85.5%;
+                     }
+                     
+                     
+                } 
+            }
           .el-checkbox{
               display: block;
               margin-right: 0;
@@ -302,7 +357,7 @@ export default {
               flex: 1;
               box-sizing: border-box;
               float: left;
-              border: 1px solid red;
+              // border: 1px solid red;
                  .el-checkbox__inner {
                         width: 18px;
                         height: 18px;
@@ -335,7 +390,7 @@ export default {
                 line-height: 50px;
                 font-size: 16px;
                 text-align: center;
-                border: 1px solid green;
+                // border: 1px solid green;
                  img{
                    position: relative;
                    top: 8px;
@@ -344,14 +399,28 @@ export default {
               }
             
                 a:nth-child(4){
-                   margin: 0 60px;
+                  //  margin: 0 20px;
+                   width: 324px;
+                   height: 50px;
+                   line-height: normal;
+                   text-align: left;
+                   padding-top: 3px;
+                   box-sizing: border-box;
                }
-               a:nth-child(10){
-                 text-decoration:underline;
-                 color: #F64330;
-                 
-                // z-index: 6px;
-                // border: 1px solid red;
+               a:nth-child(6){
+                 span{
+                   text-decoration:underline;
+                   color: #176FFF;
+                 }
+                 i{
+                   text-decoration:underline;
+                   color: #F64330;
+                 }
+               }
+               a:last-child{
+                   span{
+                     margin-right: 16px;
+                   }
                }
           }
       }
