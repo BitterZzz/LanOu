@@ -21,7 +21,7 @@
         </li>
         <li class="inp">
           <input type="text" class="text" placeholder="搜索用户名/真实姓名" />
-          <img src="../../../assets/img/search.png" alt />
+          <img src="../../../assets/img/search.png" alt  @click="serachAction()"/>
         </li>
       </ul>
       <ul class="navigation">
@@ -49,7 +49,7 @@
             <a>{{city.position}}</a>
             <a>{{city.work}}</a>
             <a>{{city.facility}}</a>
-            <a>{{city.state}}</a>
+            <a>{{city.state}} <img :src=" false ?  stop : ky"> </a>
             <a>{{city.time}}</a>
             <a >{{city.delete}}</a>
             
@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import ky from '../../../assets/img/ky.png'
+import stop from '../../../assets/img/ky.png'
 const cityOptions = [
   {
     ID: "17001",
@@ -137,6 +139,8 @@ export default {
       // {ID:'17002',user:'ener门',true:'天天',phone:'15689742568',position:'管理',}
       // ]
       isIndeterminate: false,
+      ky: ky,
+      stop: stop,
       list: [
         { value: "机器ID" },
         { value: "用户名" },
@@ -161,6 +165,9 @@ export default {
       this.checkAll = checkedCount === this.cities.length;
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.cities.length;
+    },
+    serachAction(){
+            console.log("搜索")
     },
     deleteAction(){
       console.log("删除")
@@ -240,22 +247,22 @@ export default {
       .inp {
         position: relative;
         input {
-          width: 426px;
-          height: 60px;
+          width: 386px;
+          height: 44px;
           border: 1px solid #cccccc;
           border-radius: 5px;
           background: #ffffff;
-          font-size: 20px;
+          font-size: 14px;
           color: #999999;
           padding: 16px 55px 16px 20px;
           box-sizing: border-box;
         }
         img {
-          width: 30px;
-          height: 30px;
+          width: 26px;
+          height: 26px;
           position: absolute;
           right: 0;
-          top: 15px;
+          top: 10px;
           right: 25px;
           cursor: pointer;
         }
@@ -317,10 +324,10 @@ export default {
           padding-top: 20px;
           box-sizing: border-box;
           overflow: hidden;
-          border: 1px solid green;
+          // border: 1px solid green;
           position: relative;
           p{
-              border: 1px solid royalblue;
+              // border: 1px solid royalblue;
               width: 100%;
               height: 89%;
               position: absolute;
@@ -335,6 +342,7 @@ export default {
                   // border: 1px solid forestgreen;
                   margin-bottom: 48px;
                   left:93.8%;
+                  cursor: pointer;
                 }
             }
           .el-checkbox{
@@ -348,7 +356,7 @@ export default {
               flex: 1;
               box-sizing: border-box;
               float: left;
-              border: 1px solid red;
+              // border: 1px solid red;
                  .el-checkbox__inner {
                         width: 18px;
                         height: 18px;
@@ -382,6 +390,10 @@ export default {
                 font-size: 16px;
                 text-align: center;
                 // border: 1px solid red;
+                 img{
+                   position: relative;
+                   top: 8px;
+                 }
                 
               }
               a:nth-child(5){
@@ -402,7 +414,7 @@ export default {
                a:nth-child(10){
                  text-decoration:underline;
                  color: #F64330;
-                 cursor: pointer;
+                 
                 // z-index: 6px;
                 // border: 1px solid red;
                }
