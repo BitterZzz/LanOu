@@ -13,13 +13,10 @@
           <div class="ckeck" @click="show()">
             <span>机器Id</span>
             <i class="el-icon-caret-bottom icon-bottom"></i>
-
             <div class="downLable">
+              <i class="el-icon-caret-top"></i>
               <ul>
                 <li>机器Id</li>
-                <li>安装地址</li>
-                <li>故障状态</li>
-                <li>保养状态</li>
               </ul>
             </div>
           </div>
@@ -106,7 +103,13 @@
         </div>
       </div>
       <div class="pagetion">
-        <el-pagination background layout="prev, pager, next" :total="100"></el-pagination>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="100"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrent"
+        ></el-pagination>
       </div>
     </div>
   </div>
@@ -117,21 +120,33 @@ export default {
   name: "water",
   data() {
     return {
-      list: [{ ID: 123 }, { ID: 123 }, { ID: 123 }, { ID: 123 }]
+      list: [{ ID: 123 }, { ID: 123 }, { ID: 123 }, { ID: 123 }],
+      liList:[
+        {name:"机器Id"},
+        {name:"安装地址"},
+        {name:"故障状态"},
+        {name:"保养状态"}
+      ]
     };
   },
   methods: {
-    show() {
-      var _ulBox = document.querySelector(".downLable");
-      var _ckeck = document.querySelector(".ckeck");
-      _ckeck.onmousedown = function(){
-        _ulBox.style.display = "block";
-      }
-      _ckeck.onmouseleave = function(){
-        console.log(1111);
-        _ulBox.style.display = "none";
-      }
+    show() {},
+    handleSizeChange() {
+      console.log(1111);
+    },
+    handleCurrent() {
+      console.log(2222);
     }
+  },
+  mounted() {
+    var _ulBox = document.querySelector(".downLable");
+    var _ckeck = document.querySelector(".ckeck");
+    _ckeck.onmousedown = function() {
+      _ulBox.style.display = "block";
+    };
+    _ckeck.onmouseleave = function() {
+      _ulBox.style.display = "none";
+    };
   }
 };
 </script>
@@ -173,9 +188,9 @@ export default {
           position: relative;
           width: 100px;
           height: 46px;
-          line-height: 46px;
           text-align: center;
           color: #333333;
+          cursor: pointer;
           .downLable {
             position: absolute;
             width: 106px;
@@ -188,15 +203,14 @@ export default {
                 width: 100%;
                 padding: 13px 0;
                 font-size: 12px;
-                :hover{
-                  background: red;
-                }
+              }
+              liColor{
+                background: red;
               }
             }
           }
         }
         .search-value {
-          overflow: hidden;
           display: inline-block;
           width: 552px;
           height: 46px;
