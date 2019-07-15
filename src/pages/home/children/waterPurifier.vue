@@ -8,27 +8,138 @@
       </div>
     </div>
     <div id="content">
-      <div id="search-box">
+      <div id="search-box" class="clearfix">
         <div class="search">
-          <div class="ckeck">
+          <div class="ckeck" @click="show()">
             <span>机器Id</span>
             <i class="el-icon-caret-bottom icon-bottom"></i>
+
+            <div class="downLable">
+              <ul>
+                <li>机器Id</li>
+                <li>安装地址</li>
+                <li>故障状态</li>
+                <li>保养状态</li>
+              </ul>
+            </div>
           </div>
           <input type="text" class="search-value" placeholder="请输入内容" />
         </div>
         <button type="submit" class="search-btn">搜索</button>
+      </div>
+      <div class="detalis">
+        <div class="table-box">
+          <table border="1" cellspacing="0" width="100%" class="table-style">
+            <tr class="tr-header" align="center">
+              <th>机器ID</th>
+              <th>
+                机器状态
+                <i class="el-icon-caret-bottom"></i>
+              </th>
+              <th>水质数据</th>
+              <th>安装地址</th>
+              <th>时间</th>
+              <th>用户</th>
+              <th>操作项</th>
+            </tr>
+            <tr class="tr-main" align="center" v-for="item in this.list" :key="item.Id">
+              <td>1</td>
+              <td>
+                <div>在线状态: 在线</div>
+                <div>在线状态: 在线</div>
+                <div>在线状态: 在线</div>
+              </td>
+              <td>
+                <div class="msg">
+                  <div>水温 X℃</div>
+                  <div>
+                    TDS(ppm)原水:XX
+                    <span class="bar"></span> 纯水:XX
+                  </div>
+                  <div>
+                    TDS(ppm)原水:XX
+                    <span class="bar"></span> 纯水:XX
+                  </div>
+                  <div>
+                    TDS(ppm)原水:XX
+                    <span class="bar"></span> 纯水:XX
+                  </div>
+                  <div>
+                    TDS(ppm)原水:XX
+                    <span class="bar"></span> 纯水:XX
+                  </div>
+                  <div>余氧(mg/l)去除率:XX%</div>
+                </div>
+              </td>
+              <td>
+                <div class="addres">
+                  <div>深圳市宝安区高新奇工业园2期1号楼</div>
+                </div>
+              </td>
+              <td>
+                <div class="time">
+                  <div class="time-title">
+                    <span>安装时间:</span>
+                    <img src="../../../assets/img/time.png" alt />
+                  </div>
+                  <div>2019-04-06</div>
+                  <div>14:23:12</div>
+                  <div class="time-title">
+                    <span>上传时间:</span>
+                    <img src="../../../assets/img/time.png" alt />
+                  </div>
+                  <div>2019-04-06</div>
+                  <div>14:23:12</div>
+                </div>
+              </td>
+              <td>6</td>
+              <td>
+                <div class="operation">
+                  <p>查看</p>
+                  <p>参数配置</p>
+                  <p>信息维护</p>
+                  <p>日志</p>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="pagetion">
+        <el-pagination background layout="prev, pager, next" :total="100"></el-pagination>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "water",
+  data() {
+    return {
+      list: [{ ID: 123 }, { ID: 123 }, { ID: 123 }, { ID: 123 }]
+    };
+  },
+  methods: {
+    show() {
+      var _ulBox = document.querySelector(".downLable");
+      var _ckeck = document.querySelector(".ckeck");
+      _ckeck.onmousedown = function(){
+        _ulBox.style.display = "block";
+      }
+      _ckeck.onmouseleave = function(){
+        console.log(1111);
+        _ulBox.style.display = "none";
+      }
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 #water {
   overflow: hidden;
+  height: 100%;
   #header {
     .header-title {
       color: #999999;
@@ -52,22 +163,43 @@ export default {};
       margin-top: 16px;
       .search {
         width: 680px;
-        height: 60px;
+        height: 46px;
         border: solid 1px #cccccc;
         border-radius: 5px;
         border-radius: 5px;
         float: left;
         .ckeck {
           display: inline-block;
+          position: relative;
           width: 100px;
-          height: 60px;
+          height: 46px;
+          line-height: 46px;
           text-align: center;
           color: #333333;
+          .downLable {
+            position: absolute;
+            width: 106px;
+            background-color: #ffffff;
+            left: 0;
+            top: 40px;
+            display: none;
+            ul {
+              li {
+                width: 100%;
+                padding: 13px 0;
+                font-size: 12px;
+                :hover{
+                  background: red;
+                }
+              }
+            }
+          }
         }
         .search-value {
+          overflow: hidden;
           display: inline-block;
           width: 552px;
-          height: 60px;
+          height: 46px;
           border: 0;
           border-left: solid 1px #cccccc;
           padding-left: 32px;
@@ -77,13 +209,112 @@ export default {};
       .search-btn {
         float: left;
         width: 120px;
-        height: 60px;
-        border: 0;
+        height: 46px;
         background: #ffffff;
         border: solid 1px #cccccc;
         border-radius: 5px;
         margin-left: 16px;
       }
+    }
+    .detalis {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 0 24px;
+      padding-top: 16px;
+      .table-box {
+        .table-style {
+          // display: table-row-group;
+          font-family: PingFangSC-Regular;
+          border: 0;
+          border: solid 1px #cccccc;
+          border-collapse: collapse;
+          vertical-align: middle;
+          color: #333333;
+          .tr-header {
+            color: #333333;
+            font-size: 16px;
+            th {
+              padding: 16px 0;
+              background: #eeeeee;
+            }
+          }
+          .tr-main {
+            display: table-row;
+            color: #333333;
+            font-size: 14px;
+            td:nth-child(1) {
+              padding: 64px 0;
+              box-sizing: border-box;
+            }
+            td:nth-child(1) {
+              width: 150px;
+            }
+            td:nth-child(2) {
+              width: 164px;
+            }
+            td:nth-child(3) {
+              width: 200px;
+              .msg {
+                width: 196px;
+                text-align: left;
+                div {
+                  .bar {
+                    display: inline-block;
+                    width: 4px;
+                  }
+                }
+              }
+            }
+            td:nth-child(4) {
+              width: 140px;
+              .addres {
+                width: 92px;
+                text-align: left;
+              }
+            }
+            td:nth-child(5) {
+              width: 200px;
+              .time {
+                width: 110px;
+                text-align: left;
+                div {
+                  padding: 0 2px;
+                }
+                .time-title {
+                  position: relative;
+                  img {
+                    position: absolute;
+                    right: 16px;
+                    top: -6px;
+                    vertical-align: middle;
+                    box-sizing: border-box;
+                  }
+                }
+              }
+            }
+            td:nth-child(6) {
+              width: 150px;
+            }
+            td:nth-child(7) {
+              width: 140px;
+              .operation {
+                width: 56px;
+                text-align: left;
+                p {
+                  margin: 10px 0;
+                  color: #176fff;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .pagetion {
+      width: 100%;
+      text-align: center;
+      margin-top: 46px;
     }
   }
 }
