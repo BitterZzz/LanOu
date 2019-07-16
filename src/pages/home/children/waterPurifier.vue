@@ -100,7 +100,7 @@
               <td>6</td>
               <td>
                 <div class="operation">
-                  <router-link to="waterPurifier/particulars">查看</router-link>
+                  <router-link tag="p" to="waterPurifier/particulars">查看</router-link>
                   <p>参数配置</p>
                   <p>信息维护</p>
                   <p>日志</p>
