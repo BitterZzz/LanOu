@@ -36,7 +36,7 @@ const routes = [
         {
           path:'account',
           name:'账号管理',
-          component:()=>import('../pages/home/children/account.vue')
+          component:()=>import('../pages/home/children/account.vue'),
         },
         {
           path:'user',
