@@ -99,8 +99,8 @@
               </td>
               <td>6</td>
               <td>
-                <div class="operation">
-                  <router-link tag="p" to="waterPurifier/particulars">查看</router-link>
+                <div class="operation" @click="saveIndex(item)">
+                  <p>查看</p>
                   <p>参数配置</p>
                   <p>信息维护</p>
                   <p>日志</p>
@@ -126,13 +126,15 @@
         </el-pagination>
       </div>
     </div>
-    <div class="popup">
-      <router-view></router-view>
-    </div>
+    <!-- <div class="popup">
+      <router-view :test="test"></router-view>
+    </div> -->
+    <particulars></particulars>
   </div>
 </template>
 
 <script>
+import particulars from '../../waterMange/particulars' ;
 export default {
   name: "water",
   data() {
@@ -143,7 +145,8 @@ export default {
         { name: "安装地址", ID: 300 },
         { name: "故障状态", ID: 400 },
         { name: "保养状态", ID: 500 }
-      ]
+      ],
+      test:"",
     };
   },
   methods: {
@@ -153,6 +156,11 @@ export default {
     },
     handleCurrent() {
       console.log(2222);
+    },
+    //保存点击时获取到的index
+    saveIndex(item){
+      this.test = item.ID
+      console.log(this.test);
     },
     //下拉菜单
     pull(_ulBox, _ckeck, _li) {
@@ -178,6 +186,9 @@ export default {
       };
     }
     //机器状态下拉菜单
+  },
+  components:{
+    particulars
   },
   mounted() {
     this.pull(".downLable", ".ckeck", ".downLable ul li");

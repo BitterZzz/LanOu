@@ -22,16 +22,16 @@ const routes = [
           path:'waterPurifier',
           name:'净水器管理',
           component:()=>import('../pages/home/children/waterPurifier.vue'),
-          children:[
-            {
-              path:"particulars",
-              component:()=>import('../pages/waterMange/particulars.vue')
-            },
-            {
-              path:"*",
-              redirect:("particulars")
-            }
-          ]
+          // children:[
+          //   {
+          //     path:"particulars",
+          //     component:()=>import('../pages/waterMange/particulars.vue')
+          //   },
+          //   {
+          //     path:"*",
+          //     redirect:("particulars")
+          //   }
+          // ]
         },
         {
           path:'account',
@@ -61,7 +61,7 @@ const routes = [
 ]
 
 const router = new Router({
-  mode: 'hash',   
+  // mode: 'hash',   
   base: process.env.BASE_URL,  //路径以什么为基础
   routes,
 })
