@@ -7,7 +7,7 @@
       </p>
     </div>
     <div class="userBox">
-      <ul class="top">
+      <ul class="Top">
         <li>
           <p>
             <img src="../../../assets/img/start.png" alt />启用
@@ -64,8 +64,10 @@
 </template>
 
 <script>
+import Axios from 'axios'
 import ky from '../../../assets/img/ky.png'
 import stop from '../../../assets/img/ky.png'
+
 const cityOptions = [
   {
     ID: "17001",
@@ -152,7 +154,8 @@ export default {
         { value: "账号状态" },
         { value: "注册时间" },
         { value: "操作项" }
-      ]
+      ],
+      // showUserInfo:[],
     };
   },
   methods: {
@@ -166,13 +169,30 @@ export default {
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.cities.length;
     },
+    showUserInfo(){
+        Axios.get("http://192.168.1.237:7523/getLanOuUserInfo",{
+          params:{
+            pageNum:5,
+            pageSize:5
+          },
+          headers:{
+           " Access-Control-Allow-Origin":"*"
+          }
+        }).then(res=>{
+            console.log(res)
+            console.log(1)
+        })
+    },
     serachAction(){
             console.log("搜索")
     },
     deleteAction(){
       console.log("删除")
     }
-  }
+  },
+  created() {
+    this.showUserInfo();
+  },
 };
 </script>
 
@@ -201,7 +221,7 @@ export default {
     height: 594px;
     border: 1px solid #cccccc;
     // margin: 0 24px;
-    .top {
+    .Top {
       height: 80px;
       background: #eeeeee;
       display: flex;
@@ -212,16 +232,16 @@ export default {
     
       p {
         float: left;
-        width: 108px;
-        height: 46px;
-        line-height: 46px;
+        width: 96px;
+        height: 40px;
+        line-height: 36px;
         text-align: center;
-        font-size: 20px;
+        font-size: 16px;
         color: #ffffff;
         cursor: pointer;
         img {
-          width: 30px;
-          height: 30px;
+          width: 25px;
+          height:25px;
           position: relative;
           top: 8px;
           left: -8px;

@@ -238,6 +238,7 @@ export default {
       .active {
         color: #3999f9;
         background: #ecf9ff;
+        border-right: 2px solid #3999F9;
       }
     }
     .main {

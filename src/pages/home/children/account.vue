@@ -23,12 +23,12 @@
           v-model="checkAll"
           @change="handleCheckAllChange"
         ></el-checkbox>
-        <div class="box-nav">
+        <div class="nav-box">
         <a v-for=" item in list" :key="item.id">{{item.value}}</a>
         </div>
       </ul>
       
-      <ul class="table">
+      <ul class="nav-table">
         <el-checkbox-group
           v-model="checkedCities"
           @click="tabAction()"
@@ -190,16 +190,16 @@ export default {
     
       p {
         float: left;
-        width: 108px;
-        height: 46px;
-        line-height: 46px;
+        width: 96px;
+        height: 40px;
+        line-height: 40px;
         text-align: center;
-        font-size: 20px;
+        font-size: 16px;
         color: #ffffff;
         cursor: pointer;
         img {
-          width: 30px;
-          height: 30px;
+          width: 25px;
+          height: 25px;
           position: relative;
           top: 8px;
           left: -8px;
@@ -227,7 +227,7 @@ export default {
       padding-left: 12px;
       box-sizing: border-box;
 
-      .box-nav{
+      .nav-box{
           width:100%;
           display: flex;
           a{
@@ -265,7 +265,7 @@ export default {
 
     }
   }
-  .table{
+  .nav-table{
       .el-checkbox-group{
           // display: flex;
           // flex-direction: column;
