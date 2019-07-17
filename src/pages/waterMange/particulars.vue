@@ -35,8 +35,33 @@
                 <img src="../../assets/img/ppm.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="aaaa" style="width:208px;height:200px"></div>
+              <div id="table-echarts" style="width:280px;height:200px"></div>
             </div>
+            <div class="table-box">
+              <div class="table-TDS">
+                <img src="../../assets/img/ppm.png" alt />
+                <span class="TDS-num">145</span>
+              </div>
+              <span>TDS</span>
+              <div class="table-TDS table-TDS2">
+                <img src="../../assets/img/ppm.png" alt />
+                <span class="TDS-num">145</span>
+              </div>
+              <div id="table-echarts" style="width:280px;height:200px"></div>
+            </div>
+            <div class="table-box">
+              <div class="table-TDS">
+                <img src="../../assets/img/ppm.png" alt />
+                <span class="TDS-num">145</span>
+              </div>
+              <span>TDS</span>
+              <div class="table-TDS table-TDS2">
+                <img src="../../assets/img/ppm.png" alt />
+                <span class="TDS-num">145</span>
+              </div>
+              <div id="table-echarts" style="width:280px;height:200px"></div>
+            </div>
+            
           </div>
         </div>
         <div class="waterQuality-right">
@@ -68,7 +93,7 @@ export default {
     return {};
   },
   mounted() {
-    this.$chart.line1("aaaa");
+    this.$chart.line1("table-echarts");
   }
 };
 </script>
@@ -135,6 +160,7 @@ export default {
           .table-box {
             position: relative;
             margin-left: 38px;
+            float: left;
             .table-TDS {
               display: inline-block;
               position: relative;
@@ -154,6 +180,10 @@ export default {
             }
             .table-TDS2 {
               margin-left: 22px;
+            }
+            #table-echarts{
+              position: absolute;
+              top: 60px;
             }
           }
         }
