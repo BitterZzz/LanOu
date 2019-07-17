@@ -52,7 +52,6 @@
             <a>{{city.state}} <img :src=" false ?  stop : ky"> </a>
             <a>{{city.time}}</a>
             <a >{{city.delete}}</a>
-            
           </el-checkbox>
           <p>
             <el-button v-for="i in 5" :key="i" type="text" @click="deleteShow"></el-button>
