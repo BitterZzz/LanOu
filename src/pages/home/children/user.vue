@@ -55,18 +55,34 @@
             
           </el-checkbox>
           <p>
-            <i v-for="i in 5" :key="i" @click="deleteAction()"></i>
+            <el-button v-for="i in 5" :key="i" type="text" @click="deleteShow"></el-button>
+           
           </p>
         </el-checkbox-group>
       </ul>
     </div>
+      <transition name="slide-fade" enter-active-class=" animated fadeIn" leave-active-class="animated fadeOut" >
+            <div id="popup" v-if="showPopup">
+                <div class="hint">
+                    <img src="../../../assets/img/card.png" alt=""> 确认删除所选项目吗？ 
+                    <span>x</span>
+                </div>
+                <div class="buttons">
+                    <a @click="deleteInfo()">确定</a>
+                    <a @click="cancelSelect()">取消</a>
+                </div>
+            </div>
+        </transition>
+        <transition name="slide-fade" enter-active-class=" animated fadeIn" leave-active-class="animated fadeOut" >
+           <div id="shadow" v-if="showShadow"></div>
+        </transition>
   </div>
 </template>
 
 <script>
-import Axios from 'axios'
-import ky from '../../../assets/img/ky.png'
-import stop from '../../../assets/img/ky.png'
+import Axios from 'axios';
+import ky from '../../../assets/img/ky.png';
+import stop from '../../../assets/img/ky.png';
 
 const cityOptions = [
   {
@@ -136,11 +152,9 @@ export default {
       checkAll: false,
       checkedCities: [],
       cities: cityOptions,
-      // [
-      // {ID:'17001',user:'卡尔门',true:'天天',phone:'15689742568',position:'管理',},
-      // {ID:'17002',user:'ener门',true:'天天',phone:'15689742568',position:'管理',}
-      // ]
       isIndeterminate: false,
+      showPopup:false,
+      showShadow:false,
       ky: ky,
       stop: stop,
       list: [
@@ -155,7 +169,6 @@ export default {
         { value: "注册时间" },
         { value: "操作项" }
       ],
-      // showUserInfo:[],
     };
   },
   methods: {
@@ -175,20 +188,33 @@ export default {
             pageNum:5,
             pageSize:5
           },
-          headers:{
-           " Access-Control-Allow-Origin":"*"
-          }
+
         }).then(res=>{
-            console.log(res)
-            console.log(1)
+            let data = res.data.data.list
+            console.log(data)
         })
     },
     serachAction(){
             console.log("搜索")
     },
-    deleteAction(){
-      console.log("删除")
+    deleteShow() {
+        this.showPopup = !this.showPopup;
+        this.showShadow = !this.showShadow;
+    },
+    // 删除信息
+    deleteInfo(){
+          console.log("确定删除")
+          this.showPopup = false;
+          this.showShadow = false;
+
+    },
+    // 取消删除
+    cancelSelect(){
+          console.log("取消删除")
+          this.showPopup = false;
+          this.showShadow = false;
     }
+
   },
   created() {
     this.showUserInfo();
@@ -353,17 +379,22 @@ export default {
               position: absolute;
               left: 1%;
                padding-top: 16px;
-                i{
-                  display: block;
-                  position: relative;
-                  right: 0;
-                  width: 3%;
-                  height: 20px;
-                  // border: 1px solid forestgreen;
-                  margin-bottom: 48px;
-                  left:93.8%;
-                  cursor: pointer;
+                .el-button{
+                    display: block;
+                    position: relative;
+                    right: 0;
+                    width: 3%;
+                    height: 20px;
+                    // border: 1px solid forestgreen;
+                    margin-bottom: 42px;
+                    left:92.8%;
+                    cursor: pointer;
+                    opacity: 0;
                 }
+                .el-button:first-child{
+                    margin-left: 10px;
+                }
+
             }
           .el-checkbox{
               display: block;
@@ -441,6 +472,75 @@ export default {
           }
       }
     }
+    #popup{ 
+          width: 430px;
+          height: 170px;
+          position: absolute;
+          background: #ffffff;
+          left: 0;
+          right: 0;
+          top: -150px;
+          bottom: 0;
+          margin: auto;
+          padding-top: 24px;
+          box-sizing: border-box;
+          cursor: pointer;
+          border-radius: 5px;
+          z-index: 6;
+       .hint{
+           font-size: 16px;
+           width: 100%;
+           height: 29px;
+           line-height: 29px;
+           color: #333333;
+           span{
+             position: relative;
+             left: 180px;
+             font-size: 18px;
+           }
+           img{
+              width: 25px;
+              height: 25px;
+              margin:0 4px 0 20px;
+              position: relative;
+              top: 7px;
+           }
+       }
+       .buttons{
+           width: 100%;
+           height: 35px;
+           position: relative;
+           top: 64px;
+           padding-left: 60%;
+             a{
+               display: inline-block;
+               width: 55px;
+               height: 30px;
+               line-height: 30px;
+               border-radius: 5px;
+               font-size: 16px;
+               text-align: center;
+             }
+             a:nth-child(1){
+                   background: #3A9EF4;
+                   margin-right: 10px;
+                   color: #ffffff;
+             }
+             a:nth-child(2){
+                   border: 1px solid #CCCCCC;
+             }
+       }
+    }
+    #shadow{
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top:0;
+          left:0;
+          background: rgba(0,0,0,0.40);
+          z-index: 5;
+    }
+
   }
 </style>
 

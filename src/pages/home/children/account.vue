@@ -9,9 +9,11 @@
     <div class="userBox">
       <ul class="top">
         <li>
+          
           <p>
             <img src="../../../assets/img/start.png" alt />新增
           </p>
+          
           <p>
             <img src="../../../assets/img/forbid.png" alt />删除
           </p>
@@ -51,12 +53,14 @@
         </el-checkbox-group>
       </ul>
     </div>
+      <addPage class="addPage" v-if="pageShow"></addPage>
   </div>
 </template>
 
 <script>
 import ky from '../../../assets/img/ky.png'
 import stop from '../../../assets/img/ky.png'
+import addPage from '../../addPage/addPage.vue'
 const cityOptions = [
   {
     id:"1",
@@ -115,6 +119,9 @@ const cityOptions = [
   }
 ];
 export default {
+  components:{
+      addPage,
+  },
   data() {
     return {
       checkAll: false,
@@ -282,7 +289,6 @@ export default {
               left: 1%;
               padding-top: 16px;
               top: 16px;
-             ;
                 p{
                   display:inline-block;
                   width: 44px;
@@ -425,6 +431,18 @@ export default {
           }
       }
     }
+   .addPage{
+     position: absolute;
+     top: 54px;
+     left: 32px;
+     width: 95.5%;
+     background: rgb(218, 245, 218);
+     padding: 8px 24px 0 24px;
+     box-sizing: border-box;
+     height: 828px;
+     z-index: 3;
+     display: none;
+   }
   }
 </style>
 

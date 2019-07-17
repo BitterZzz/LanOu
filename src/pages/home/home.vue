@@ -78,8 +78,8 @@ export default {
           name: "账号管理",
           path: "account",
           url: require("../../assets/img/icon3.png"),
-          require: require("../../assets/img/icon4.png")
-        },
+          require: require("../../assets/img/icon4.png"),
+        } ,
         {
           id: 4,
           name: "用户管理",
