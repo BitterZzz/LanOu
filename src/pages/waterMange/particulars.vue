@@ -83,6 +83,7 @@
       <!-- 滤芯寿命 -->
       <div class="Cartridge"></div>
       <div class="State"></div>
+      <a href="###" class="aaa">aaaaaaaa</a>
     </section>
   </div>
 </template>
@@ -94,6 +95,7 @@ export default {
   },
   mounted() {
     this.$chart.line1("table-echarts");
+    console.log(document.querySelector('.aaa').innerHTML);
   }
 };
 </script>
