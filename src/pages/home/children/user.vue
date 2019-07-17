@@ -47,11 +47,11 @@
             <a>{{city.true}}</a>
             <a>{{city.phone}}</a>
             <a>{{city.position}}</a>
-            <a>{{city.work}}</a>
-            <a>{{city.facility}}</a>
-            <a class="why">{{city.state}} <img :src=" false ?  stop : ky"> </a>
-            <a>{{city.time}}</a>
-            <a class="delet">{{city.delete}}</a>
+            <a><div>{{city.workUnit}}</div></a>
+            <a>{{city.productId}}</a>
+            <a id="decide" class="why">可用<img :src="city.isEnabled === '1' ?  stop : ky"> </a>
+            <a>{{city.createTime}}</a>
+            <a class="delet">删除</a>
           </el-checkbox>
           <p>
             <el-button v-for="i in 5" :key="i" type="text" @click="deleteShow"></el-button>
