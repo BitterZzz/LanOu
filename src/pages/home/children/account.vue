@@ -441,7 +441,7 @@ export default {
      box-sizing: border-box;
      height: 828px;
      z-index: 3;
-     display: none;
+     display: none
    }
   }
 </style>
