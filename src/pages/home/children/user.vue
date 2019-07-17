@@ -49,7 +49,7 @@
             <a>{{city.position}}</a>
             <a><div>{{city.workUnit}}</div></a>
             <a>{{city.productId}}</a>
-            <a >{{city.isEnabled}}<img :src="city.isEnabled === '1' ?  stop : ky"> </a>
+            <a id="decide">可用<img :src="city.isEnabled === '1' ?  stop : ky"> </a>
             <a>{{city.createTime}}</a>
             <a >删除</a>
           </el-checkbox>
