@@ -42,16 +42,16 @@
           @change="handleCheckedCitiesChange"
         >
           <el-checkbox v-for="city in cities" :label="city" :key="city.id">
-            <a>{{city.ID}}</a>
-            <a>{{city.user}}</a>
-            <a>{{city.true}}</a>
-            <a>{{city.phone}}</a>
+            <a>{{city.userId}}</a>
+            <a>{{city.didName}}</a>
+            <a>{{city.realName}}</a>
+            <a>{{city.cellPhone}}</a>
             <a>{{city.position}}</a>
-            <a>{{city.work}}</a>
-            <a>{{city.facility}}</a>
-            <a>{{city.state}} <img :src=" false ?  stop : ky"> </a>
-            <a>{{city.time}}</a>
-            <a >{{city.delete}}</a>
+            <a><div>{{city.workUnit}}</div></a>
+            <a>{{city.productId}}</a>
+            <a >{{city.isEnabled}}<img :src="city.isEnabled === '1' ?  stop : ky"> </a>
+            <a>{{city.createTime}}</a>
+            <a >删除</a>
           </el-checkbox>
           <p>
             <el-button v-for="i in 5" :key="i" type="text" @click="deleteShow"></el-button>
@@ -67,7 +67,7 @@
                     <span>x</span>
                 </div>
                 <div class="buttons">
-                    <a @click="deleteInfo()">确定</a>
+                    <a ref="decide" @click="deleteInfo()">确定</a>
                     <a @click="cancelSelect()">取消</a>
                 </div>
             </div>
@@ -81,7 +81,7 @@
 <script>
 import Axios from 'axios';
 import ky from '../../../assets/img/ky.png';
-import stop from '../../../assets/img/ky.png';
+import stop from '../../../assets/img/stop.png';
 
 const cityOptions = [
   {
@@ -150,7 +150,7 @@ export default {
     return {
       checkAll: false,
       checkedCities: [],
-      cities: cityOptions,
+      cities: "",
       isIndeterminate: false,
       showPopup:false,
       showShadow:false,
@@ -189,8 +189,26 @@ export default {
           },
 
         }).then(res=>{
-            let data = res.data.data.list
-            console.log(data)
+            
+            // this.cities = res.data.data.list
+            // console.log(this.cities)
+           this.cities = res.data.data.list
+           console.log(this.cities)
+            for(var i = 0; i < this.cities.length; i++){
+              this.cities[i].createTime = this.cities[i].createTime.substring(0,10);
+            }
+            for(var j = 0; j < this.cities.length; j++){
+              if(this.cities[j].isEnabled === "1") {
+                //  let stop = document.querySelector("#decide").innerHTML
+                //  console.log(stop)
+              }
+
+            }
+           
+            console.log(this.cities);
+           
+             
+            
         })
     },
     serachAction(){
@@ -205,7 +223,6 @@ export default {
           console.log("确定删除")
           this.showPopup = false;
           this.showShadow = false;
-
     },
     // 取消删除
     cancelSelect(){
@@ -213,11 +230,17 @@ export default {
           this.showPopup = false;
           this.showShadow = false;
     }
-
+  
   },
   created() {
     this.showUserInfo();
+   
   },
+  mounted(){
+         let stop = document.querySelector('#decide').innerHTML
+
+         console.log(stop)     
+  }
 };
 </script>
 
@@ -377,7 +400,7 @@ export default {
               height: 89%;
               position: absolute;
               left: 1%;
-               padding-top: 16px;
+              padding-top: 16px;
                 .el-button{
                     display: block;
                     position: relative;
@@ -427,7 +450,7 @@ export default {
           }
           .el-checkbox__label{
             height: 100%;
-            line-height: 50px;
+            // line-height: 50px;
             padding: 0;
             display: flex;
             flex: 1;
@@ -435,11 +458,11 @@ export default {
                 display: block;
                 width: 10%;
                 white-space:normal;
-                height: 100%;
+                height: 50px;
                 line-height: 50px;
                 font-size: 16px;
                 text-align: center;
-                // border: 1px solid red;
+                border: 1px solid red;
                  img{
                    position: relative;
                    top: 8px;
@@ -451,12 +474,21 @@ export default {
                }
                a:nth-child(6){
                  width: 130px;
+                 height: 52px;
+                 margin:5 auto;
+                 display: table;
                  line-height: normal;
-                 text-align:initial;
-                 padding-left:8px;
-                 padding-right: 14px;
-                 padding-top: 4px;
+                //  float: left;
+                //  text-align:center;
+                 padding: 0px 14px 0px 8px;
                  box-sizing: border-box;
+                   div{
+                        display:table-cell; 
+                        vertical-align:middle;  
+                        text-align: center; /*设置文本水平居中*/  
+                        width:100%;   
+                   }
+                 
                }
                 a:nth-child(7){
                  width: 170px;
