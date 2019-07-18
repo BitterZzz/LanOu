@@ -32,7 +32,7 @@
               </div>
               <span>TDS</span>
               <div class="table-TDS table-TDS2">
-                <img src="../../assets/img/ppm.png" alt />
+                <img src="../../assets/img/ppm2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
               <div id="table-echarts" style="width:280px;height:200px"></div>
@@ -42,28 +42,54 @@
                 <img src="../../assets/img/ppm.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <span>TDS</span>
+              <span>TOC</span>
               <div class="table-TDS table-TDS2">
-                <img src="../../assets/img/ppm.png" alt />
+                <img src="../../assets/img/ppm2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts" style="width:280px;height:200px"></div>
+              <div id="table-echarts2" style="width:280px;height:200px"></div>
             </div>
             <div class="table-box">
               <div class="table-TDS">
                 <img src="../../assets/img/ppm.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <span>TDS</span>
+              <span>浊度</span>
               <div class="table-TDS table-TDS2">
+                <img src="../../assets/img/ppm2.png" alt />
+                <span class="TDS-num">145</span>
+              </div>
+              <div id="table-echarts3" style="width:280px;height:200px"></div>
+            </div>
+          </div>
+          <div class="data-table data-table2">
+            <div class="table-box">
+              <div class="table-TDS">
                 <img src="../../assets/img/ppm.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts" style="width:280px;height:200px"></div>
+              <span>COD</span>
+              <div class="table-TDS table-TDS2">
+                <img src="../../assets/img/ppm2.png" alt />
+                <span class="TDS-num">145</span>
+              </div>
+              <div id="table-echarts4" style="width:280px;height:200px"></div>
             </div>
-            
+            <div class="table-box">
+              <div class="table-TDS">
+                <img src="../../assets/img/ppm.png" alt />
+                <span class="TDS-num">145</span>
+              </div>
+              <span>余氯</span>
+              <div class="table-TDS table-TDS2">
+                <img src="../../assets/img/ppm2.png" alt />
+                <span class="TDS-num">145</span>
+              </div>
+              <div id="table-echarts5" style="width:280px;height:200px"></div>
+            </div>
           </div>
         </div>
+        <!-- 用水曲线 -->
         <div class="waterQuality-right">
           <div class="right-title clearfix">
             <div class="title-left">用水曲线</div>
@@ -78,12 +104,38 @@
               </p>
             </div>
           </div>
+          <div class="right-table">
+            <div class="right-calendar">
+              <i class="el-icon-caret-left" style="color:#333"></i>
+              <span>2019-05</span>
+              <i class="el-icon-caret-right" style="color:#333"></i>
+            </div>
+            <div class="table-box">
+              <div id="table-line2" style="width:320px;height:400px"></div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- 滤芯寿命 -->
-      <div class="Cartridge"></div>
+      <div class="Cartridge">
+        <div class="Cartridge-title">
+          滤芯寿命
+        </div>
+        <div class="Cartridge-content">
+          <div class="content-meter">
+            <div class="inflow-box">
+              <img src="../../assets/img/ppm.png" alt="">
+              <span class="inflow">145</span>
+            </div>
+            <div class="clearwater-box">
+              <img src="../../assets/img/ppm2.png" alt="">
+              <span class="clearwater">145</span>
+            </div>
+            <strong class="content-title">石英砂</strong>
+          </div>
+        </div>
+      </div>
       <div class="State"></div>
-      <a href="###" class="aaa">aaaaaaaa</a>
     </section>
   </div>
 </template>
@@ -95,14 +147,18 @@ export default {
   },
   mounted() {
     this.$chart.line1("table-echarts");
-    console.log(document.querySelector('.aaa').innerHTML);
+    this.$chart.line1("table-echarts2");
+    this.$chart.line1("table-echarts3");
+    this.$chart.line1("table-echarts4");
+    this.$chart.line1("table-echarts5");
+    this.$chart.line2("table-line2");
   }
 };
 </script>
 <style lang="scss" scoped>
 #particulars {
   position: absolute;
-  width: 110%;
+  width: 104%;
   border: solid 1px red;
   background: #ffffff;
   left: -156px;
@@ -158,10 +214,17 @@ export default {
           }
         }
         .data-table {
+          // width: 1106px;
           margin-top: 50px;
+          // .table-box:nth-child(1){
+          //   margin-left: 4%;
+          // }
+          display: flex;
+          justify-content: space-around;
+
           .table-box {
             position: relative;
-            margin-left: 38px;
+            height: 300px;
             float: left;
             .table-TDS {
               display: inline-block;
@@ -183,11 +246,27 @@ export default {
             .table-TDS2 {
               margin-left: 22px;
             }
-            #table-echarts{
+            #table-echarts {
               position: absolute;
               top: 60px;
+              left: 0;
+            }
+            #table-echarts2 {
+              position: absolute;
+              top: 60px;
+              left: 0;
+            }
+            #table-echarts3,
+            #table-echarts4,
+            #table-echarts5 {
+              position: absolute;
+              top: 60px;
+              left: 0;
             }
           }
+        }
+        .data-table2 {
+          margin-top: 0;
         }
       }
       .waterQuality-right {
@@ -200,13 +279,28 @@ export default {
           height: 60px;
           padding-top: 6px;
           background: #053272;
+          color: #ffffff;
+
           .title-left {
             float: left;
             margin-left: 1.5%;
+            color: #ffffff;
           }
           .title-right {
             float: right;
             margin-right: 1.9%;
+            color: #ffffff;
+          }
+        }
+        .right-table {
+          .right-calendar {
+            width: 106px;
+            margin: 40px auto;
+          }
+        }
+        .table-box {
+          #table-line2 {
+            margin: 0 auto;
           }
         }
       }
@@ -216,6 +310,43 @@ export default {
       height: 376px;
       background: #053272;
       margin-top: 20px;
+      overflow: hidden;
+      .Cartridge-title{
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffffff;
+        margin-left: 1.8%;
+        margin-top: 10px;
+      }
+      .Cartridge-content{
+        .content-meter{
+          position: relative;
+          .inflow-box{
+            position: relative;
+            float: left;
+            .inflow{
+              position: absolute;
+              left:38px;
+              top: 38px;
+            }
+          }
+          .clearwater-box{
+            position: relative;
+            float: left;
+            margin-left: 20px;
+            .clearwater{
+              position: absolute;
+              left: 38px;
+              top: 38px;
+            }
+          }
+          .content-title{
+            position: absolute;
+            left: 50px;
+            top: 0;
+          }
+        }
+      }
     }
     .State {
       width: 100%;
