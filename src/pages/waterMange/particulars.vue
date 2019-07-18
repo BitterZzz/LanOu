@@ -2,8 +2,8 @@
   <div id="particulars">
     <header id="header" class="clearfix">
       <div class="header-box">
-        <div class="title">
-          <img src="../../assets/img/back.png" alt />
+        <div class="title" @click="click">
+          <img src="../../assets/img/back.png" />
           <span>机器详情</span>
         </div>
         <div class="IdBox">
@@ -140,7 +140,7 @@
               <img src="../../assets/img/ppm2.png" alt />
               <span class="clearwater">145</span>
             </div>
-            <strong class="content-title">石英砂</strong>
+            <strong class="content-title">活性炭</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
@@ -151,7 +151,7 @@
               <img src="../../assets/img/ppm2.png" alt />
               <span class="clearwater">145</span>
             </div>
-            <strong class="content-title">石英砂</strong>
+            <strong class="content-title">软化树脂</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
@@ -162,11 +162,112 @@
               <img src="../../assets/img/ppm2.png" alt />
               <span class="clearwater">145</span>
             </div>
-            <strong class="content-title">石英砂</strong>
+            <strong class="content-title">再生盐</strong>
+          </div>
+        </div>
+        <div class="Cartridge-content">
+          <div class="content-meter">
+            <div class="inflow-box">
+              <img src="../../assets/img/ppm.png" alt />
+              <span class="inflow">145</span>
+            </div>
+            <div class="clearwater-box">
+              <img src="../../assets/img/ppm2.png" alt />
+              <span class="clearwater">145</span>
+            </div>
+            <strong class="content-title">精密滤芯</strong>
+          </div>
+          <div class="content-meter">
+            <div class="inflow-box">
+              <img src="../../assets/img/ppm.png" alt />
+              <span class="inflow">145</span>
+            </div>
+            <div class="clearwater-box">
+              <img src="../../assets/img/ppm2.png" alt />
+              <span class="clearwater">145</span>
+            </div>
+            <strong class="content-title">RO膜</strong>
+          </div>
+          <div class="content-meter">
+            <div class="inflow-box">
+              <img src="../../assets/img/ppm.png" alt />
+              <span class="inflow">145</span>
+            </div>
+            <div class="clearwater-box">
+              <img src="../../assets/img/ppm2.png" alt />
+              <span class="clearwater">145</span>
+            </div>
+            <strong class="content-title" style="left:100px">UV</strong>
+          </div>
+          <div class="content-meter" style="width:224px;"></div>
+        </div>
+      </div>
+      <!-- 机器状态 -->
+      <div class="State">
+        <div class="State-header">机器状态</div>
+        <div class="State-main clearfix">
+          <div class="operation-left">
+            <div class="switch">
+              <div class="switch-title">开关信号量输出</div>
+              <div class="switch-main">
+                <ul>
+                  <li>
+                    <span class="state-span">纯水箱低水位开关</span>
+                    <span class="disconnect">断开</span>
+                  </li>
+                  <li>
+                    <span class="state-span">纯水箱低水位开关</span>
+                    <span class="close">闭合</span>
+                  </li>
+                  <li>
+                    <span class="state-span">纯水箱低水位开关</span>
+                    <span class="close">闭合</span>
+                  </li>
+                  <li>
+                    <span class="state-span">纯水箱低水位开关</span>
+                    <span class="close">闭合</span>
+                  </li>
+                  <li>
+                    <span class="state-span">纯水箱低水位开关</span>
+                    <span class="disconnect">断开</span>
+                  </li>
+                  <li>
+                    <span class="state-span">纯水箱低水位开关</span>
+                    <span class="disconnect">断开</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="Analog switch">
+              <div class="switch-title">模拟量输入</div>
+              <div class="switch-main Analog-main">
+                <ul>
+                  <li v-for="item in AnalogList" :key="item.ID">
+                    <span class="state-span">{{item.name}}</span>
+                    <div style="width:140px">
+                      <span class="Analog-value">{{item.num}}</span>
+                      <span class="Analog-unit">{{item.unit}}</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="operation-right">
+            <div class="relay-header">继电器输出</div>
+            <div class="relay-headr switch">
+              <div class="switch-main">
+                <ul>
+                  <li v-for="list in relayList" :key="list.ID">
+                    <span class="state-span"> {{list.name}} </span>
+                    <span class="disconnect"> {{list.operation}} </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="State"></div>
     </section>
   </div>
 </template>
@@ -174,7 +275,37 @@
 export default {
   name: "particulars",
   data() {
-    return {};
+    return {
+      AnalogList: [
+        { ID: 100, name: "纯水箱低水位开关", unit: "MPa", num: "9.2" },
+        { ID: 101, name: "纯水箱中水位开关", unit: "MPa", num: "9.2" },
+        { ID: 102, name: "纯水箱高水位开关", unit: "Mpa", num: "9.2" },
+        { ID: 103, name: "纯水箱防溢开关", unit: "m³/H", num: "9.2" },
+        { ID: 104, name: "软水信号开关", unit: "m³/H", num: "9.2" },
+        { ID: 105, name: "软水信号开关", unit: "m³", num: "9.2" },
+        { ID: 106, name: "阀头反冲洗信号开关", unit: "m³", num: "9.2" }
+      ],
+      relayList: [
+        { ID: 200, name:"进水电磁阀", operation:"断开" },
+        { ID: 201, name:"进水电磁阀", operation:"断开" },
+        { ID: 202, name:"进水电磁阀", operation:"断开" },
+        { ID: 203, name:"进水电磁阀", operation:"断开" },
+        { ID: 204, name:"进水电磁阀", operation:"断开" },
+        { ID: 205, name:"进水电磁阀", operation:"断开" },
+        { ID: 206, name:"进水电磁阀", operation:"断开" },
+        { ID: 207, name:"进水电磁阀", operation:"断开" },
+        { ID: 208, name:"进水电磁阀", operation:"断开" },
+        { ID: 209, name:"进水电磁阀", operation:"断开" },
+        { ID: 210, name:"进水电磁阀", operation:"断开" },
+        { ID: 211, name:"进水电磁阀", operation:"断开" },
+        ]
+    };
+  },
+  methods:{
+    click(){
+      let _machine = document.querySelector('.machine');
+      _machine.style.display = "none";
+    }
   },
   mounted() {
     this.$chart.line1("table-echarts");
@@ -195,6 +326,7 @@ export default {
   left: -156px;
   top: 20px;
   z-index: 10000;
+  display: block;
   #header {
     .header-box {
       div {
@@ -206,6 +338,7 @@ export default {
       .title {
         img {
           vertical-align: middle;
+          cursor: pointer;
         }
         span {
           font-size: 18px;
@@ -384,9 +517,162 @@ export default {
     }
     .State {
       width: 100%;
-      height: 1340px;
       background: #053272;
       margin-top: 21px;
+      overflow: hidden;
+      .State-header {
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffffff;
+        margin-left: 1.8%;
+        margin-top: 10px;
+      }
+      .State-main {
+        margin-top: 28px;
+        margin-bottom: 40px;
+        .operation-left {
+          width: 44.4%;
+          margin-left: 1.3%;
+          float: left;
+          .switch {
+            background: #ffffff;
+            .switch-title {
+              width: 100%;
+              height: 80px;
+              line-height: 80px;
+              color: #333;
+              font-family: PingFangSC-Medium;
+              font-weight: bold;
+              background: #d8d8d8;
+              text-align: center;
+            }
+            .switch-main {
+              ul {
+                width: 100%;
+                li {
+                  display: flex;
+                  margin: 0 5.6% 0 2.8%;
+                  padding: 20px 0;
+                  justify-content: space-between;
+                  align-items: center;
+                  .disconnect {
+                    display: inline-block;
+                    width: 88px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    background: #ffc130;
+                    color: #ffffff;
+                  }
+                  .close {
+                    display: inline-block;
+                    width: 88px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    background: #ff6259;
+                    color: #ffffff;
+                  }
+                  .state-span {
+                    color: #333;
+                    font-size: 14px;
+                  }
+                }
+              }
+            }
+          }
+          .Analog {
+            margin-top: 20px;
+            .Analog-main {
+              ul {
+                li {
+                  color: #333;
+                  padding: 19px 0;
+                  .Analog-value {
+                    display: inline-block;
+                    width: 88px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    border: solid 1px #979797;
+                    color: #333;
+                  }
+                  // .Analog-unit{
+                  //   display: inline-block;
+                  //   height: 42px;
+                  //   line-height: 42px;
+                  // }
+                }
+              }
+            }
+          }
+        }
+        .operation-right {
+          width: 44.4%;
+          height: 100%;
+          padding-bottom:180px; 
+          background: #ffffff;
+          float: right;
+          margin-right: 4.8%;
+          .relay-header {
+            width: 100%;
+            height: 80px;
+            line-height: 80px;
+            text-align: center;
+            background: #d8d8d8;
+            color: #333;
+            font-family: PingFangSC-Medium;
+            font-weight: bold;
+          }
+          .switch {
+            background: #ffffff;
+            .switch-title {
+              width: 100%;
+              height: 80px;
+              line-height: 80px;
+              color: #333;
+              font-family: PingFangSC-Medium;
+              font-weight: bold;
+              background: #d8d8d8;
+              text-align: center;
+            }
+            .switch-main {
+              ul {
+                width: 100%;
+                li {
+                  display: flex;
+                  margin: 0 5.6% 0 2.8%;
+                  padding: 20px 0;
+                  justify-content: space-between;
+                  align-items: center;
+                  .disconnect {
+                    display: inline-block;
+                    width: 88px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    background: #ffc130;
+                    color: #ffffff;
+                  }
+                  .close {
+                    display: inline-block;
+                    width: 88px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    background: #ff6259;
+                    color: #ffffff;
+                  }
+                  .state-span {
+                    color: #333;
+                    font-size: 14px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

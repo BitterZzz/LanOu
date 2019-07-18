@@ -100,7 +100,7 @@
               <td>6</td>
               <td>
                 <div class="operation" @click="saveIndex(item)">
-                  <p>查看</p>
+                  <p @click="showMachine('.machine')">查看</p>
                   <p>参数配置</p>
                   <p>信息维护</p>
                   <p>日志</p>
@@ -128,13 +128,15 @@
     </div>
     <!-- <div class="popup">
       <router-view :test="test"></router-view>
-    </div> -->
-    <particulars></particulars>
+    </div>-->
+    <div v-if="aa">
+      <particulars></particulars>
+    </div>
   </div>
 </template>
 
 <script>
-import particulars from '../../waterMange/particulars' ;
+import particulars from "../../waterMange/particulars";
 export default {
   name: "water",
   data() {
@@ -146,7 +148,9 @@ export default {
         { name: "故障状态", ID: 400 },
         { name: "保养状态", ID: 500 }
       ],
-      test:"",
+      test: "",
+      dom: "",
+      aa:false
     };
   },
   methods: {
@@ -158,8 +162,8 @@ export default {
       console.log(2222);
     },
     //保存点击时获取到的index
-    saveIndex(item){
-      this.test = item.ID
+    saveIndex(item) {
+      this.test = item.ID;
       console.log(this.test);
     },
     //下拉菜单
@@ -184,10 +188,15 @@ export default {
       _ckeck.onmouseleave = function() {
         _ulBox.style.display = "none";
       };
+    },
+    showMachine(Dom) {
+      // this.dom = document.querySelector(Dom);
+      // console.log(this.dom);
+      // this.dom.style.display = "block";
+      this.aa = true;
     }
-    //机器状态下拉菜单
   },
-  components:{
+  components: {
     particulars
   },
   mounted() {
@@ -236,7 +245,6 @@ export default {
           line-height: 46px;
           text-align: center;
           color: #333333;
-          border: solid 1px #3999f9;
           border-radius: 5px;
           box-sizing: border-box;
           cursor: pointer;
@@ -266,6 +274,9 @@ export default {
               }
             }
           }
+        }
+        .newCkeck {
+          border: solid 1px #3999f9;
         }
         .search-value {
           display: inline-block;
@@ -430,11 +441,14 @@ export default {
         }
       }
     }
-    .popup{
+    .popup {
       position: absolute;
       left: 0;
       top: 0;
     }
+  }
+  .machine {
+    display: none;
   }
 }
 </style>
