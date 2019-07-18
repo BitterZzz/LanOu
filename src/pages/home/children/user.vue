@@ -12,7 +12,7 @@
           <p>
             <img src="../../../assets/img/start.png" alt />启用
           </p>
-          <p>
+          <p @click="forbidden">
             <img src="../../../assets/img/forbid.png" alt />禁止
           </p>
           <p>
@@ -21,7 +21,7 @@
         </li>
         <li class="inp">
           <input type="text" class="text" placeholder="搜索用户名/真实姓名" />
-          <img src="../../../assets/img/search.png" alt  @click="serachAction()"/>
+          <img src="../../../assets/img/search.png" alt @click="serachAction()" />
         </li>
       </ul>
       <ul class="navigation">
@@ -31,10 +31,10 @@
           @change="handleCheckAllChange"
         ></el-checkbox>
         <div class="box-nav">
-        <a v-for=" item in list" :key="item.id">{{item.value}}</a>
+          <a v-for=" item in list" :key="item.id">{{item.value}}</a>
         </div>
       </ul>
-      
+
       <ul class="table">
         <el-checkbox-group
           v-model="checkedCities"
@@ -42,118 +42,68 @@
           @change="handleCheckedCitiesChange"
         >
           <el-checkbox v-for="city in cities" :label="city" :key="city.id">
-            <a>{{city.ID}}</a>
-            <a>{{city.user}}</a>
-            <a>{{city.true}}</a>
-            <a>{{city.phone}}</a>
+            <a>{{city.userId}}</a>
+            <a>{{city.didName}}</a>
+            <a>{{city.realName}}</a>
+            <a>{{city.cellPhone}}</a>
             <a>{{city.position}}</a>
-            <a><div>{{city.workUnit}}</div></a>
+            <a>
+              <div>{{city.workUnit}}</div>
+            </a>
             <a>{{city.productId}}</a>
-            <a id="decide" class="why">可用<img :src="city.isEnabled === '1' ?  stop : ky"> </a>
+            <a id="decide">
+              {{city.isEnabled === "1" ? '可用': '禁止'}}
+              <img :src="city.isEnabled === '1' ?  stop : ky" />
+            </a>
             <a>{{city.createTime}}</a>
-            <a class="delet">删除</a>
+            <a>删除</a>
           </el-checkbox>
           <p>
             <el-button v-for="i in 5" :key="i" type="text" @click="deleteShow"></el-button>
-           
           </p>
         </el-checkbox-group>
       </ul>
     </div>
-      <transition name="slide-fade" enter-active-class=" animated fadeIn" leave-active-class="animated fadeOut" >
-            <div id="popup" v-if="showPopup">
-                <div class="hint">
-                    <img src="../../../assets/img/card.png" alt=""> 确认删除所选项目吗？ 
-                    <span>x</span>
-                </div>
-                <div class="buttons">
-                    <a @click="deleteInfo()">确定</a>
-                    <a @click="cancelSelect()">取消</a>
-                </div>
-            </div>
-        </transition>
-        <transition name="slide-fade" enter-active-class=" animated fadeIn" leave-active-class="animated fadeOut" >
-           <div id="shadow" v-if="showShadow"></div>
-        </transition>
+    <transition
+      name="slide-fade"
+      enter-active-class=" animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div id="popup" v-if="showPopup">
+        <div class="hint">
+          <img src="../../../assets/img/card.png" alt /> 确认删除所选项目吗？
+          <span>x</span>
+        </div>
+        <div class="buttons">
+          <a @click="deleteInfo()">确定</a>
+          <a @click="cancelSelect()">取消</a>
+        </div>
+      </div>
+    </transition>
+    <transition
+      name="slide-fade"
+      enter-active-class=" animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div id="shadow" v-if="showShadow"></div>
+    </transition>
   </div>
 </template>
 
 <script>
-import Axios from 'axios';
-import ky from '../../../assets/img/ky.png';
-import stop from '../../../assets/img/ky.png';
-
-const cityOptions = [
-  {
-    ID: "17001",
-    user: "卡尔门",
-    true: "天天",
-    phone: "15689742568",
-    position: "管理",
-    work:"深圳市宜居云科技有限公司",
-    facility:"LOSRO-2000-S(ADI)",
-    state:'可用',
-    time:'2019-03-14',
-    delete:'删除',
-  },
-  {
-    ID: "17002",
-    user: "ener门",
-    true: "天天",
-    phone: "15689742568",
-    position: "管理",
-     work:"深圳市宜居云科技有限公司",
-    facility:"LOSRO-2000-S(ADI)",
-    state:'可用',
-    time:'2019-03-14',
-    delete:'删除',
-  },
-  {
-    ID: "17003",
-    user: "ener门",
-    true: "天天",
-    phone: "15689742568",
-    position: "管理",
-     work:"深圳市宜居云科技有限公司",
-    facility:"LOSRO-2000-S(ADI)",
-    state:'可用',
-    time:'2019-03-14',
-    delete:'删除',
-  },
-  {
-    ID: "17004",
-    user: "ener门",
-    true: "天天",
-    phone: "15689742568",
-    position: "管理",
-     work:"深圳市宜居云科技有限公司",
-    facility:"LOSRO-2000-S(ADI)",
-    state:'可用',
-    time:'2019-03-14',
-    delete:'删除',
-  },
-  {
-    ID: "17005",
-    user: "ener门",
-    true: "天天",
-    phone: "15689742568",
-    position: "管理",
-     work:"深圳市宜居云科技有限公司",
-    facility:"LOSRO-2000-S(ADI)",
-    state:'可用',
-    time:'2019-03-14',
-    delete:'删除',
-  }
-];
+import Axios from "axios";
+import ky from "../../../assets/img/ky.png";
+import stop from "../../../assets/img/stop.png";
+import { setTimeout } from "timers";
 export default {
   data() {
     return {
       checkAll: false,
       checkedCities: [],
-      cities: cityOptions,
+      cities: "",
       isIndeterminate: false,
-      showPopup:false,
-      showShadow:false,
+      showPopup: false,
+      showShadow: false,
       ky: ky,
       stop: stop,
       list: [
@@ -167,7 +117,7 @@ export default {
         { value: "账号状态" },
         { value: "注册时间" },
         { value: "操作项" }
-      ],
+      ]
     };
   },
   methods: {
@@ -181,47 +131,59 @@ export default {
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.cities.length;
     },
-    showUserInfo(){
-        Axios.get("http://192.168.1.237:7523/getLanOuUserInfo",{
-          params:{
-            pageNum:5,
-            pageSize:5
-          },
-
-        }).then(res=>{
-            let data = res.data.data.list
-            console.log(data)
-        })
+    showUserInfo() {
+      Axios.get("http://192.168.1.237:7523/getLanOuUserInfo", {
+        params: {
+          pageNum: 1,
+          pageSize: 5
+        }
+      }).then(res => {
+        this.cities = res.data.data.list;
+        console.log(this.cities);
+        for (var i = 0; i < this.cities.length; i++) {
+          this.cities[i].createTime = this.cities[i].createTime.substring(0,10)
+          
+        }
+      });
     },
-    serachAction(){
-            console.log("搜索")
+    // 禁用
+    forbidden(){
+          Axios.get("http://192.168.1.237:7523/updateByLanOuUserState",{
+            params:{
+             lanOuUserStateVo	: {
+                "did":"16",
+                "id":"6",
+                "isEnabled":"1",
+                "userId":"1124"
+              }
+            }
+          }).then(res=>{
+             console.log(res)
+          })
+    },
+    serachAction() {
+      console.log("搜索");
     },
     deleteShow() {
-        this.showPopup = !this.showPopup;
-        this.showShadow = !this.showShadow;
+      this.showPopup = !this.showPopup;
+      this.showShadow = !this.showShadow;
     },
     // 删除信息
-    deleteInfo(){
-          console.log("确定删除")
-          this.showPopup = false;
-          this.showShadow = false;
-
+    deleteInfo() {
+      console.log("确定删除");
+      this.showPopup = false;
+      this.showShadow = false;
     },
     // 取消删除
-    cancelSelect(){
-          console.log("取消删除")
-          this.showPopup = false;
-          this.showShadow = false;
+    cancelSelect() {
+      console.log("取消删除");
+      this.showPopup = false;
+      this.showShadow = false;
     }
-
   },
   created() {
-    this.showUserInfo();
+     this.showUserInfo();
   },
-  mounted(){
-    console.log(document.querySelector('.why').innerHTML)
-    console.log(document.querySelector('.delet').innerHTML)
-  }
 };
 </script>
 
@@ -258,7 +220,7 @@ export default {
       align-items: center;
       padding: 0 16px;
       box-sizing: border-box;
-    
+
       p {
         float: left;
         width: 96px;
@@ -270,7 +232,7 @@ export default {
         cursor: pointer;
         img {
           width: 25px;
-          height:25px;
+          height: 25px;
           position: relative;
           top: 8px;
           left: -8px;
@@ -326,25 +288,25 @@ export default {
       padding-left: 12px;
       box-sizing: border-box;
 
-      .box-nav{
-          // border: 1px saddlebrown solid;
-          width:100%;
-          display: flex;
-          a{
-            width: 10%;
+      .box-nav {
+        // border: 1px saddlebrown solid;
+        width: 100%;
+        display: flex;
+        a {
+          width: 10%;
 
-            text-align: center;
-            white-space:normal;
-            height: 100%; 
-          }
-          a:nth-child(7) {
-               width: 170px;
-            }
+          text-align: center;
+          white-space: normal;
+          height: 100%;
         }
-     
+        a:nth-child(7) {
+          width: 170px;
+        }
+      }
+
       .el-checkbox {
         margin-right: 0;
-       
+
         .el-checkbox__input {
           .el-checkbox__inner {
             width: 18px;
@@ -363,187 +325,198 @@ export default {
         color: #333333;
         font-weight: 600;
       }
-
     }
   }
-  .table{
-      .el-checkbox-group{
-          display: flex;
-          flex-direction: column;
-          padding-top: 20px;
-          box-sizing: border-box;
-          overflow: hidden;
-          // border: 1px solid green;
+  .table {
+    .el-checkbox-group {
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+      // border: 1px solid green;
+      position: relative;
+      p {
+        border: 1px solid royalblue;
+        width: 100%;
+        height: 89%;
+        position: absolute;
+        left: 1%;
+        padding-top: 16px;
+       
+        .el-button {
+          display: block;
           position: relative;
-          p{
-              // border: 1px solid royalblue;
-              width: 100%;
-              height: 89%;
-              position: absolute;
-              left: 1%;
-               padding-top: 16px;
-                .el-button{
-                    display: block;
-                    position: relative;
-                    right: 0;
-                    width: 3%;
-                    height: 20px;
-                    // border: 1px solid forestgreen;
-                    margin-bottom: 42px;
-                    left:92.8%;
-                    cursor: pointer;
-                    opacity: 0;
-                }
-                .el-button:first-child{
-                    margin-left: 10px;
-                }
-
+          right: 0;
+          width: 3%;
+          height: 20px;
+          // border: 1px solid forestgreen;
+          margin-bottom: 42px;
+          left: 92.8%;
+          cursor: pointer;
+          opacity: 0;
+           display: none;
+        }
+        .el-button:first-child {
+          margin-left: 10px;
+        }
+      }
+      .el-checkbox {
+        display: block;
+        margin-right: 0;
+        height: 50px;
+        margin-bottom: 20px;
+        margin-left: 12px;
+        width: 100%;
+        display: flex;
+        flex: 1;
+        box-sizing: border-box;
+        float: left;
+        // border: 1px solid red;
+        .el-checkbox__inner {
+          width: 18px;
+          height: 18px;
+          display: block;
+          float: left;
+          position: relative;
+          top: 16px;
+          //  background: #D8D8D8;
+          outline: none;
+        }
+        .el-checkbox__inner::after {
+          height: 10px;
+          left: 6px;
+          top: 1px;
+          width: 4px;
+          //  color: red;
+        }
+      }
+      .el-checkbox__label {
+        height: 100%;
+        line-height: 50px;
+        padding: 0;
+        display: flex;
+        flex: 1;
+        a {
+          display: block;
+          width: 10%;
+          white-space: normal;
+          height: 100%;
+          line-height: 50px;
+          font-size: 16px;
+          text-align: center;
+          // border: 1px solid red;
+          
+          img {
+            position: relative;
+            top: 8px;
+          }
+        }
+        a:nth-child(5) {
+          padding:0 4px;
+        }
+        a:nth-child(6) {
+          width: 130px;
+          height: 52px;
+          line-height: normal;
+          text-align: initial;
+         
+          padding:0 6px;
+          box-sizing: border-box;
+          display: table;
+             div{
+                 vertical-align: middle;
+                 display: table-cell;
+                 text-align: center;
+                 width: 100%;
+             }
+        }
+        a:nth-child(7) {
+          width: 170px;
+        }
+        a:nth-child(10) {
+          text-decoration: underline;
+          color: #f64330;
+          z-index: 10;
+          cursor: pointer;
+          border: 1px solid blue;
+            span{
+              
+               
             }
-          .el-checkbox{
-              display: block;
-              margin-right: 0;
-              height: 50px;
-              margin-bottom:20px;
-              margin-left: 12px;
-              width: 100%;
-              display: flex;
-              flex: 1;
-              box-sizing: border-box;
-              float: left;
-              // border: 1px solid red;
-                 .el-checkbox__inner {
-                        width: 18px;
-                        height: 18px;
-                         display: block;
-                         float: left;
-                         position: relative;
-                         top: 16px;
-                        //  background: #D8D8D8;
-                         outline: none;
-                    }
-                    .el-checkbox__inner::after {
-                        height: 10px;
-                        left: 6px;
-                        top: 1px;
-                        width: 4px;
-                      //  color: red;
-                    }
-          }
-          .el-checkbox__label{
-            height: 100%;
-            line-height: 50px;
-            padding: 0;
-            display: flex;
-            flex: 1;
-              a{
-                display: block;
-                width: 10%;
-                white-space:normal;
-                height: 100%;
-                line-height: 50px;
-                font-size: 16px;
-                text-align: center;
-                // border: 1px solid red;
-                 img{
-                   position: relative;
-                   top: 8px;
-                 }
-                
-              }
-              a:nth-child(5){
-                 padding-right: 4px;
-               }
-               a:nth-child(6){
-                 width: 130px;
-                 line-height: normal;
-                 text-align:initial;
-                 padding-left:8px;
-                 padding-right: 14px;
-                 padding-top: 4px;
-                 box-sizing: border-box;
-               }
-                a:nth-child(7){
-                 width: 170px;
-               }
-               a:nth-child(10){
-                 text-decoration:underline;
-                 color: #F64330;
-                 
-                // z-index: 6px;
-                // border: 1px solid red;
-               }
-          }
+          // border: 1px solid red;
+        }
       }
     }
-    #popup{ 
-          width: 430px;
-          height: 170px;
-          position: absolute;
-          background: #ffffff;
-          left: 0;
-          right: 0;
-          top: -150px;
-          bottom: 0;
-          margin: auto;
-          padding-top: 24px;
-          box-sizing: border-box;
-          cursor: pointer;
-          border-radius: 5px;
-          z-index: 6;
-       .hint{
-           font-size: 16px;
-           width: 100%;
-           height: 29px;
-           line-height: 29px;
-           color: #333333;
-           span{
-             position: relative;
-             left: 180px;
-             font-size: 18px;
-           }
-           img{
-              width: 25px;
-              height: 25px;
-              margin:0 4px 0 20px;
-              position: relative;
-              top: 7px;
-           }
-       }
-       .buttons{
-           width: 100%;
-           height: 35px;
-           position: relative;
-           top: 64px;
-           padding-left: 60%;
-             a{
-               display: inline-block;
-               width: 55px;
-               height: 30px;
-               line-height: 30px;
-               border-radius: 5px;
-               font-size: 16px;
-               text-align: center;
-             }
-             a:nth-child(1){
-                   background: #3A9EF4;
-                   margin-right: 10px;
-                   color: #ffffff;
-             }
-             a:nth-child(2){
-                   border: 1px solid #CCCCCC;
-             }
-       }
-    }
-    #shadow{
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          top:0;
-          left:0;
-          background: rgba(0,0,0,0.40);
-          z-index: 5;
-    }
-
   }
+  #popup {
+    width: 430px;
+    height: 170px;
+    position: absolute;
+    background: #ffffff;
+    left: 0;
+    right: 0;
+    top: -150px;
+    bottom: 0;
+    margin: auto;
+    padding-top: 24px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 6;
+    .hint {
+      font-size: 16px;
+      width: 100%;
+      height: 29px;
+      line-height: 29px;
+      color: #333333;
+      span {
+        position: relative;
+        left: 180px;
+        font-size: 18px;
+      }
+      img {
+        width: 25px;
+        height: 25px;
+        margin: 0 4px 0 20px;
+        position: relative;
+        top: 7px;
+      }
+    }
+    .buttons {
+      width: 100%;
+      height: 35px;
+      position: relative;
+      top: 64px;
+      padding-left: 60%;
+      a {
+        display: inline-block;
+        width: 55px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+      }
+      a:nth-child(1) {
+        background: #3a9ef4;
+        margin-right: 10px;
+        color: #ffffff;
+      }
+      a:nth-child(2) {
+        border: 1px solid #cccccc;
+      }
+    }
+  }
+  #shadow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 5;
+  }
+}
 </style>
 

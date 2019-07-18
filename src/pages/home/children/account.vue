@@ -53,7 +53,7 @@
         </el-checkbox-group>
       </ul>
     </div>
-      <addPage class="addPage" v-if="pageShow"></addPage>
+      <addPage class="addPage" ></addPage>
   </div>
 </template>
 
@@ -436,7 +436,7 @@ export default {
      top: 54px;
      left: 32px;
      width: 95.5%;
-     background: rgb(218, 245, 218);
+     background: #ffffff;
      padding: 8px 24px 0 24px;
      box-sizing: border-box;
      height: 828px;
