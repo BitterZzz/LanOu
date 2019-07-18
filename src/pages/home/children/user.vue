@@ -12,10 +12,10 @@
           <p>
             <img src="../../../assets/img/start.png" alt />启用
           </p>
-          <p @click="forbidden">
+          <p @click="forbidden()">
             <img src="../../../assets/img/forbid.png" alt />禁止
           </p>
-          <p>
+          <p @click="RemoveAll()">
             <img src="../../../assets/img/delete.png" alt />删除
           </p>
         </li>
@@ -29,6 +29,7 @@
           :indeterminate="isIndeterminate"
           v-model="checkAll"
           @change="handleCheckAllChange"
+         
         ></el-checkbox>
         <div class="box-nav">
           <a v-for=" item in list" :key="item.id">{{item.value}}</a>
@@ -38,10 +39,12 @@
       <ul class="table">
         <el-checkbox-group
           v-model="checkedCities"
-          @click="tabAction()"
+         
           @change="handleCheckedCitiesChange"
         >
-          <el-checkbox v-for="city in cities" :label="city" :key="city.id">
+         <div v-for="city in cities" :key="city.id" @click="checkbox(city)">
+          <el-checkbox   :label="city"  >
+           
             <a>{{city.userId}}</a>
             <a>{{city.didName}}</a>
             <a>{{city.realName}}</a>
@@ -56,10 +59,12 @@
               <img :src="city.isEnabled === '1' ?  stop : ky" />
             </a>
             <a>{{city.createTime}}</a>
-            <a>删除</a>
+            <a @click="deleteShow">删除</a> 
+           
           </el-checkbox>
+           </div>
           <p>
-            <el-button v-for="i in 5" :key="i" type="text" @click="deleteShow"></el-button>
+            <el-button v-for="i in 5" :key="i" type="text" ></el-button>
           </p>
         </el-checkbox-group>
       </ul>
@@ -106,6 +111,8 @@ export default {
       showShadow: false,
       ky: ky,
       stop: stop,
+      deleteId:'',
+      deleteAllId:"",
       list: [
         { value: "机器ID" },
         { value: "用户名" },
@@ -122,7 +129,7 @@ export default {
   },
   methods: {
     handleCheckAllChange(val) {
-      this.checkedCities = val ? cityOptions : [];
+      this.checkedCities = val ? this.cities : [];
       this.isIndeterminate = false;
     },
     handleCheckedCitiesChange(value) {
@@ -168,17 +175,38 @@ export default {
       this.showPopup = !this.showPopup;
       this.showShadow = !this.showShadow;
     },
-    // 删除信息
+    checkbox(city){
+          this.deleteId = city.id
+          console.log(this.deleteId)  //3
+     },
+    // 删除单个用户信息
     deleteInfo() {
       console.log("确定删除");
       this.showPopup = false;
       this.showShadow = false;
+      Axios.delete("http://192.168.1.237:7523/deleteLanOuUser",{
+        params:{
+          id: this.deleteId
+        }
+      }).then(res=>{
+        document.querySelector("")
+         console.log("成功删除账户信息")
+      })
     },
     // 取消删除
     cancelSelect() {
       console.log("取消删除");
       this.showPopup = false;
       this.showShadow = false;
+    },
+    // 删除所有用户信息
+    RemoveAll(){
+      for (var i = 0; i < this.cities.length; i++) {
+          this.deleteAllId = this.cities[i].id 
+           console.log(this.deleteAllId)
+        }
+          console.log("删除所有用户信息")
+         
     }
   },
   created() {
@@ -337,7 +365,7 @@ export default {
       // border: 1px solid green;
       position: relative;
       p {
-        border: 1px solid royalblue;
+        // border: 1px solid royalblue;
         width: 100%;
         height: 89%;
         position: absolute;
@@ -437,11 +465,12 @@ export default {
         a:nth-child(10) {
           text-decoration: underline;
           color: #f64330;
-          z-index: 10;
+          z-index: 3;
           cursor: pointer;
-          border: 1px solid blue;
+         
             span{
-              
+                display: block;
+                border: 1px solid blue;
                
             }
           // border: 1px solid red;

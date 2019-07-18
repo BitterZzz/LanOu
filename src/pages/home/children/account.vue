@@ -10,7 +10,7 @@
       <ul class="top">
         <li>
           
-          <p>
+          <p @click="newAdd()">
             <img src="../../../assets/img/start.png" alt />新增
           </p>
           
@@ -158,6 +158,12 @@ export default {
     
     deleteAction(){
       console.log("删除")
+    },
+    // 新增页面
+    newAdd(){
+       console.log("新增页面")
+       document.querySelector(".addPage").style.display = "block"
+
     }
   }
 };
@@ -194,7 +200,6 @@ export default {
       align-items: center;
       padding: 0 16px;
       box-sizing: border-box;
-    
       p {
         float: left;
         width: 96px;
