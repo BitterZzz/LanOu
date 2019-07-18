@@ -118,17 +118,48 @@
       </div>
       <!-- 滤芯寿命 -->
       <div class="Cartridge">
-        <div class="Cartridge-title">
-          滤芯寿命
-        </div>
+        <div class="Cartridge-title">滤芯寿命</div>
         <div class="Cartridge-content">
           <div class="content-meter">
             <div class="inflow-box">
-              <img src="../../assets/img/ppm.png" alt="">
+              <img src="../../assets/img/ppm.png" alt />
               <span class="inflow">145</span>
             </div>
             <div class="clearwater-box">
-              <img src="../../assets/img/ppm2.png" alt="">
+              <img src="../../assets/img/ppm2.png" alt />
+              <span class="clearwater">145</span>
+            </div>
+            <strong class="content-title">石英砂</strong>
+          </div>
+          <div class="content-meter">
+            <div class="inflow-box">
+              <img src="../../assets/img/ppm.png" alt />
+              <span class="inflow">145</span>
+            </div>
+            <div class="clearwater-box">
+              <img src="../../assets/img/ppm2.png" alt />
+              <span class="clearwater">145</span>
+            </div>
+            <strong class="content-title">石英砂</strong>
+          </div>
+          <div class="content-meter">
+            <div class="inflow-box">
+              <img src="../../assets/img/ppm.png" alt />
+              <span class="inflow">145</span>
+            </div>
+            <div class="clearwater-box">
+              <img src="../../assets/img/ppm2.png" alt />
+              <span class="clearwater">145</span>
+            </div>
+            <strong class="content-title">石英砂</strong>
+          </div>
+          <div class="content-meter">
+            <div class="inflow-box">
+              <img src="../../assets/img/ppm.png" alt />
+              <span class="inflow">145</span>
+            </div>
+            <div class="clearwater-box">
+              <img src="../../assets/img/ppm2.png" alt />
               <span class="clearwater">145</span>
             </div>
             <strong class="content-title">石英砂</strong>
@@ -311,39 +342,42 @@ export default {
       background: #053272;
       margin-top: 20px;
       overflow: hidden;
-      .Cartridge-title{
+      .Cartridge-title {
         font-size: 18px;
         font-weight: bold;
         color: #ffffff;
         margin-left: 1.8%;
         margin-top: 10px;
       }
-      .Cartridge-content{
-        .content-meter{
+      .Cartridge-content {
+        margin-top: 50px;
+        display: flex;
+        justify-content: space-around;
+        .content-meter {
           position: relative;
-          .inflow-box{
+          .inflow-box {
             position: relative;
             float: left;
-            .inflow{
-              position: absolute;
-              left:38px;
-              top: 38px;
-            }
-          }
-          .clearwater-box{
-            position: relative;
-            float: left;
-            margin-left: 20px;
-            .clearwater{
+            .inflow {
               position: absolute;
               left: 38px;
               top: 38px;
             }
           }
-          .content-title{
+          .clearwater-box {
+            position: relative;
+            float: left;
+            margin-left: 20px;
+            .clearwater {
+              position: absolute;
+              left: 38px;
+              top: 38px;
+            }
+          }
+          .content-title {
             position: absolute;
-            left: 50px;
-            top: 0;
+            left: 90px;
+            top: -34px;
           }
         }
       }
