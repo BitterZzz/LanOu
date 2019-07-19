@@ -189,8 +189,7 @@ export default {
           id: this.deleteId
         }
       }).then(res=>{
-        document.querySelector("")
-         console.log("成功删除账户信息")
+           this.showUserInfo()
       })
     },
     // 取消删除
@@ -448,7 +447,6 @@ export default {
           height: 52px;
           line-height: normal;
           text-align: initial;
-         
           padding:0 6px;
           box-sizing: border-box;
           display: table;

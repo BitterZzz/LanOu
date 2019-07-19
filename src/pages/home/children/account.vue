@@ -33,27 +33,50 @@
       <ul class="nav-table">
         <el-checkbox-group
           v-model="checkedCities"
-          @click="tabAction()"
+
           @change="handleCheckedCitiesChange"
         >
-          <el-checkbox v-for="city in cities" :label="city" :key="city.id">
-            <a>{{city.username}}</a>
-            <a>{{city.name}}</a>
-            <a>{{city.basic}}</a>
-            <a>{{city.operation}}</a>
-            <a>{{city.time}}</a>
-            <a><span>{{city.redact}}</span><i>{{city.delete}}</i></a>
-
-            
-          </el-checkbox>
-          <div>
-           <p class="add"><span  v-for="add in 5" :key="add" @click="addPushAction()">新增</span></p>
-           <p class="delete"><i v-for="i in 5" :key="i" @click="deleteAction()"></i></p>
-          </div>
+            <div v-for="city in cities" :key="city.id" @click="checkbox(city)">
+                <el-checkbox :label="city" :id=" '_'+ city.id">
+                  <a>{{city.userName}}</a>
+                  <a>{{city.role}}</a>
+                  <a>{{city.authorityName}}</a>
+                  <a>
+                    <i>{{city.description}}</i>
+                  </a>
+                  <a>{{city.createTime}}</a>
+                  <a @click="addPushAction()">编辑</a>
+                  <a  @click="deleteAction()">删除</a>
+                </el-checkbox>
+            </div>
+            <p></p>
         </el-checkbox-group>
       </ul>
     </div>
       <addPage class="addPage" ></addPage>
+    <transition
+      name="slide-fade"
+      enter-active-class=" animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div id="popup" v-if="showPopup">
+        <div class="hint">
+          <img src="../../../assets/img/card.png" alt /> 确认删除所选项目吗？
+          <span>x</span>
+        </div>
+        <div class="buttons">
+          <a @click="deleteInfo()">确定</a>
+          <a @click="cancelSelect()">取消</a>
+        </div>
+      </div>
+    </transition>
+        <transition
+      name="slide-fade"
+      enter-active-class=" animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div id="shadow" v-if="showShadow"></div>
+    </transition>
   </div>
 </template>
 
@@ -61,63 +84,8 @@
 import ky from '../../../assets/img/ky.png'
 import stop from '../../../assets/img/ky.png'
 import addPage from '../../addPage/addPage.vue'
-const cityOptions = [
-  {
-    id:"1",
-    username: "diaodong",
-    name: "超级管理员",
-    basic: "查看所有页面",
-    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
-    time:'2019-03-14',
-    delete:"删除",
-    redact:'编辑',
+import Axios from 'axios';
 
-  },
-  {
-    id:"2",
-    username: "diaodong",
-    name: "超级管理员",
-    basic: "查看所有页面",
-    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
-    time:'2019-03-14',
-    delete:"删除",
-    redact:'编辑',
-
-  },
- {
-    id:"3",
-    username: "diaodong",
-    name: "超级管理员",
-    basic: "查看所有页面",
-    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
-    time:'2019-03-14',
-    delete:"删除",
-    redact:'编辑',
-
-  },
- {
-    id:"4",
-    username: "diaodong",
-    name: "超级管理员",
-    basic: "查看所有页面",
-    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
-    time:'2019-03-14',
-    delete:"删除",
-    redact:'编辑',
-
-  },
-   {
-    id:"5",
-    username: "diaodong",
-    name: "超级管理员",
-    basic: "查看所有页面",
-    operation:"编辑、发布、预览、保存、删除、推送、还原、添加人员、添加角色、添加权限",
-    time:'2019-03-14',
-    delete:"删除",
-    redact:'编辑',
-
-  }
-];
 export default {
   components:{
       addPage,
@@ -126,9 +94,11 @@ export default {
     return {
       checkAll: false,
       checkedCities: [],
-      cities: cityOptions,
-
+      cities: "",
+      showPopup: false,
+      showShadow: false,
       isIndeterminate: false,
+      deleteId:'',
       ky: ky,
       stop: stop,
       list: [
@@ -143,7 +113,7 @@ export default {
   },
   methods: {
     handleCheckAllChange(val) {
-      this.checkedCities = val ? cityOptions : [];
+      this.checkedCities = val ? this.cities : [];
       this.isIndeterminate = false;
     },
     handleCheckedCitiesChange(value) {
@@ -152,19 +122,63 @@ export default {
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.cities.length;
     },
-    addPushAction(){
-            console.log("编辑")
+    showAccountInfo(){
+        Axios.get("http://192.168.1.237:7523/getLanOuAccountInfo",{
+          params:{
+              pageNum :1,
+              pageSize : 5,
+          }
+        }).then(res=>{
+           this.cities = res.data.data.list
+           for(var i = 0; i<this.cities.length; i++){
+             this.cities[i].createTime = this.cities[i].createTime.substring(0,10)
+           }
+            console.log(this.cities)
+        })
     },
-    
+    addPushAction(){
+          console.log("编辑")
+    },
     deleteAction(){
       console.log("删除")
+      this.showPopup = !this.showPopup;
+      this.showShadow = !this.showShadow;
+    },
+    checkbox(city){
+          this.deleteId = city.id
+          console.log(this.deleteId)  //3
+     },
+    // 删除单个账户信息
+    deleteInfo() {
+      console.log("确定删除");
+      this.showPopup = false;
+      this.showShadow = false;
+      Axios.delete("http://192.168.1.237:7523/deleteLanOuAccountInfo",{
+        params:{
+          id: this.deleteId
+        }
+      }).then(res=>{
+        
+      // let dom = document.querySelector('#_'+this.deleteId)
+      // console.log(dom)
+      // dom.style.display ="none"
+      this.showAccountInfo();
+      })     
+    },
+    // 取消删除
+    cancelSelect() {
+      console.log("取消删除");
+      this.showPopup = false;
+      this.showShadow = false;
     },
     // 新增页面
     newAdd(){
        console.log("新增页面")
        document.querySelector(".addPage").style.display = "block"
-
     }
+  },
+  created(){
+     this.showAccountInfo()
   }
 };
 </script>
@@ -250,7 +264,7 @@ export default {
             // border: 1px solid red;
           }
           a:nth-child(4) {
-               margin: 0 60px;
+               margin: 0 30px;
             }
         }
      
@@ -286,77 +300,14 @@ export default {
           overflow: hidden;
           // border: 1px solid green;
           position: relative;
-          div{
-              // border: 1px solid royalblue;
-              width: 100%;
-              height: 89%;
-              position: absolute;
-              left: 1%;
-              padding-top: 16px;
-              top: 16px;
-                p{
-                  display:inline-block;
-                  width: 44px;
-                  height: 100%;
-                  position: relative;
-                  left:88.8%;
-                  cursor: pointer;
-                  
-                     span{
-                        display: block;
-                        position: absolute;
-                        width: 100%;
-                        height: 20px;
-                        margin-bottom: 48px;
-                        color: #176FFF;
-                        // border: 1px solid blue;
-                        
-                        }
-                     i{
-                        display: block;
-                        position: absolute;
-                        width: 100%;
-                        height: 20px;
-                        margin-bottom: 48px;
-                        // border: 1px solid red;
-                     }
-                     i:nth-child(1){
-                       top: 0;
-                     }
-                     i:nth-child(2){
-                       top: 22%;
-                     }
-                     i:nth-child(3){
-                       top: 43%;
-                     }
-                     i:nth-child(4){
-                       top: 64%;
-                     }
-                     i:nth-child(5){
-                       top: 85.5%;
-                     }
-                     span:nth-child(1){
-                       top: 0;
-                     }
-                     span:nth-child(1){
-                       top: 0;
-                     }
-                     span:nth-child(2){
-                       top: 22%;
-                     }
-                     span:nth-child(3){
-                       top: 43%;
-                     }
-                     span:nth-child(4){
-                       top: 64%;
-                     }
-                     span:nth-child(5){
-                       top: 85.5%;
-                     }
-                     
-                     
-                } 
-            }
+           p{
+               // border: 1px solid royalblue;
+                width: 100%;
+                height: 89%;
+                position: absolute;
+                left: 1%;
+                padding-top: 16px;
+           }
           .el-checkbox{
               display: block;
               margin-right: 0;
@@ -368,6 +319,7 @@ export default {
               flex: 1;
               box-sizing: border-box;
               float: left;
+              overflow: hidden;
               // border: 1px solid red;
                  .el-checkbox__inner {
                         width: 18px;
@@ -406,32 +358,60 @@ export default {
                    position: relative;
                    top: 8px;
                  }
-                
               }
-            
+                a:nth-child(3){
+                  padding: 0 6px;
+                  box-sizing: border-box;
+                }
                 a:nth-child(4){
                   //  margin: 0 20px;
                    width: 324px;
                    height: 50px;
                    line-height: normal;
-                   text-align: left;
-                   padding-top: 3px;
+                   text-align: initial;
+                   padding-top:4px;
                    box-sizing: border-box;
+                   display: table;
+                   padding: 0 6px;
+                      i{
+                        overflow: hidden;
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 2;
+                        padding-top:5px;
+                        box-sizing: border-box;
+                        vertical-align: middle;
+                        display: table-cell;
+                        text-align: center;
+                        width: 100%;
+                      }
+               }
+               a:nth-child(5){
+                //  padding-right: 6%;
+                 box-sizing: border-box;
                }
                a:nth-child(6){
-                 span{
-                   text-decoration:underline;
-                   color: #176FFF;
-                 }
-                 i{
-                   text-decoration:underline;
-                   color: #F64330;
-                 }
+                    position: relative;
+                    top: 8px;
+                    height: 30px;
+                    line-height: 30px;
+                    margin-left: 5%;
+                    margin-right: 5px;
+                    width: 3%;
+                    z-index: 3;
+                    text-decoration: underline;
+                    color: #176FFF;
                }
                a:last-child{
-                   span{
-                     margin-right: 16px;
-                   }
+                   position: relative;
+                   top: 8px;
+                   height: 30px;
+                   line-height: 30px;
+                   width: 3%;
+                   z-index: 3;
+                   margin-right: 5%;
+                   text-decoration: underline;
+                   color:#F64330;
                }
           }
       }
@@ -448,6 +428,74 @@ export default {
      z-index: 3;
      display: none
    }
+    #popup {
+    width: 430px;
+    height: 170px;
+    position: absolute;
+    background: #ffffff;
+    left: 0;
+    right: 0;
+    top: -150px;
+    bottom: 0;
+    margin: auto;
+    padding-top: 24px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 6;
+    .hint {
+      font-size: 16px;
+      width: 100%;
+      height: 29px;
+      line-height: 29px;
+      color: #333333;
+      span {
+        position: relative;
+        left: 180px;
+        font-size: 18px;
+      }
+      img {
+        width: 25px;
+        height: 25px;
+        margin: 0 4px 0 20px;
+        position: relative;
+        top: 7px;
+      }
+    }
+    .buttons {
+      width: 100%;
+      height: 35px;
+      position: relative;
+      top: 64px;
+      padding-left: 60%;
+      a {
+        display: inline-block;
+        width: 55px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+      }
+      a:nth-child(1) {
+        background: #3a9ef4;
+        margin-right: 10px;
+        color: #ffffff;
+      }
+      a:nth-child(2) {
+        border: 1px solid #cccccc;
+      }
+    }
+  }
+  #shadow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 5;
+  }
   }
 </style>
 
