@@ -110,7 +110,7 @@
           </table>
         </div>
       </div>
-      <div class="pagetion">
+      <!-- <div class="pagetion">
         <el-pagination
           background
           layout="prev, pager, next,slot, jumper"
@@ -124,7 +124,8 @@
             <span class="totalPage">10</span>
           </div>
         </el-pagination>
-      </div>
+      </div> -->
+      <sorter></sorter>
     </div>
     <!-- <div class="popup">
       <router-view :test="test"></router-view>
@@ -137,6 +138,7 @@
 
 <script>
 import particulars from "../../waterMange/particulars";
+import sorter from "../../../components/sorter";
 export default {
   name: "water",
   data() {
@@ -197,7 +199,8 @@ export default {
     }
   },
   components: {
-    particulars
+    particulars,
+    sorter
   },
   mounted() {
     this.pull(".downLable", ".ckeck", ".downLable ul li");
@@ -420,27 +423,27 @@ export default {
         }
       }
     }
-    .pagetion {
-      width: 100%;
-      text-align: center;
-      margin-top: 46px;
-      .page-show {
-        display: inline-block;
-        .nowPage {
-          color: #3a9ef4;
-          margin-right: -10px;
-        }
-        .totalPage {
-          color: #151515;
-          margin-left: -10px;
-        }
-        i {
-          display: inline-block;
-          margin-top: 2px;
-          padding: 0;
-        }
-      }
-    }
+    // .pagetion {
+    //   width: 100%;
+    //   text-align: center;
+    //   margin-top: 46px;
+    //   .page-show {
+    //     display: inline-block;
+    //     .nowPage {
+    //       color: #3a9ef4;
+    //       margin-right: -10px;
+    //     }
+    //     .totalPage {
+    //       color: #151515;
+    //       margin-left: -10px;
+    //     }
+    //     i {
+    //       display: inline-block;
+    //       margin-top: 2px;
+    //       padding: 0;
+    //     }
+    //   }
+    // }
     .popup {
       position: absolute;
       left: 0;
