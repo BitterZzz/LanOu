@@ -307,6 +307,9 @@ export default {
       _machine.style.display = "none";
     }
   },
+  created(){
+    
+  },
   mounted() {
     this.$chart.line1("table-echarts");
     this.$chart.line1("table-echarts2");
@@ -329,6 +332,7 @@ export default {
   display: block;
   #header {
     .header-box {
+      margin-top: 10px;
       div {
         float: left;
         line-height: 50px;

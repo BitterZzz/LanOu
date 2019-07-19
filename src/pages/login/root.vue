@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <div id="login-box" class="container">
+    <div id="login-box">
       <div class="contenr">
         <div class="logo">
           <div class="logo-box">
@@ -31,6 +31,8 @@
   </div>
 </template>
 <script>
+import Axios from "axios";
+import QS from "qs";
 export default {
   name: "login",
   data() {
@@ -39,16 +41,16 @@ export default {
         userDom: "",
         pwdDom: ""
       },
-      userMsg:{
-        phone:"",
-        pwd:""
+      userMsg: {
+        phone: "",
+        pwd: ""
       }
     };
   },
   methods: {
     login() {
       var userVerity = /^[1][3,4,5,7,8][0-9]{9}$/;
-      var pwdVerity;
+      var pwdVerity = /^[\w_-]{6,16}$/;
       if (this.dom.userDom.value === "") {
         this.$message({
           message: "用户名不能为空",
@@ -61,10 +63,57 @@ export default {
           message: "密码不能为空",
           type: "warninig"
         });
+        return;
       }
       if (userVerity.test(this.dom.userDom.value)) {
-        
+        if (pwdVerity.test(this.dom.userDom.value)) {
+          this.$message({
+            message: "密码正确",
+            type: "success"
+          });
+          this.RequestLogin();
+        } else {
+          this.$message({
+            message: "密码不正确",
+            type: "warninig"
+          });
+          return;
+        }
+      } else {
+        this.$message({
+          message: "请输入正确手机号",
+          type: "warninig"
+        });
+        return;
       }
+    },
+    //请求登录
+    RequestLogin() {
+      Axios.post(
+        "http://192.168.1.237:7523/loginLanOu",
+        QS.stringify({
+          phone: this.dom.userDom.value,
+          passWord: this.dom.pwdDom.value
+        }),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        }
+      ).then(res => {
+        setTimeout(() => {
+          if (res.data.code === 0) {
+            this.$router.push("/homepage");
+            let _data = res.data.data;
+            let _dataArr = [];
+            for (var i = 0; i < _data.length; i++) {
+              _dataArr[i] = _data[i].lanOuDid;
+            }
+            let _newdataArr = JSON.stringify(_dataArr);
+            localStorage.setItem("did", _newdataArr);
+          }
+        },2000);
+      });
     }
   },
   mounted() {

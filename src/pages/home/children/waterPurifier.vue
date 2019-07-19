@@ -62,15 +62,15 @@
                     <span class="bar"></span> 纯水:XX
                   </div>
                   <div>
-                    TDS(ppm)原水:XX
+                    TOC(mg/l)原水:XX
                     <span class="bar"></span> 纯水:XX
                   </div>
                   <div>
-                    TDS(ppm)原水:XX
+                    浊度(NTU)原水:XX
                     <span class="bar"></span> 纯水:XX
                   </div>
                   <div>
-                    TDS(ppm)原水:XX
+                    COD(mg/l)原水:XX
                     <span class="bar"></span> 纯水:XX
                   </div>
                   <div>余氧(mg/l)去除率:XX%</div>
@@ -133,12 +133,17 @@
     <div v-if="aa">
       <particulars></particulars>
     </div>
+    <div>
+      <parameter></parameter>
+    </div>
   </div>
 </template>
 
 <script>
 import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
+import parameter from "../../waterMange/parameter";
+import Axios from 'axios';
 export default {
   name: "water",
   data() {
@@ -157,12 +162,6 @@ export default {
   },
   methods: {
     show() {},
-    handleSizeChange() {
-      console.log(1111);
-    },
-    handleCurrent() {
-      console.log(2222);
-    },
     //保存点击时获取到的index
     saveIndex(item) {
       this.test = item.ID;
@@ -200,11 +199,23 @@ export default {
   },
   components: {
     particulars,
-    sorter
+    sorter,
+    parameter
+  },
+  created(){
+    Axios.get('http://192.168.1.237:7523/getDidByPayload',{
+      params:{
+        did:"14"
+      }
+    }).then((res) => {
+      console.log(res);
+      localStorage.setItem('information',res.data.data);
+    })
   },
   mounted() {
     this.pull(".downLable", ".ckeck", ".downLable ul li");
     this.pull(".table-down", ".down", ".table-down ul li");
+    console.log(localStorage.getItem('information'))
   }
 };
 </script>

@@ -17,7 +17,15 @@
 </template>
 <script>
 export default {
-  name: "pagetion"
+  name: "pagetion",
+  methods: {
+    handleSizeChange() {
+      console.log(1111);
+    },
+    handleCurrent() {
+      console.log(2222);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
