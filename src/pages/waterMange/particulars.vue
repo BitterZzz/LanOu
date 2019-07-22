@@ -2,7 +2,7 @@
   <div id="particulars">
     <header id="header" class="clearfix">
       <div class="header-box">
-        <div class="title" @click="click">
+        <div class="title" @click="hidden()">
           <img src="../../assets/img/back.png" />
           <span>机器详情</span>
         </div>
@@ -302,9 +302,8 @@ export default {
     };
   },
   methods:{
-    click(){
-      let _machine = document.querySelector('.machine');
-      _machine.style.display = "none";
+    hidden(){
+      this.$emit('hidden');
     }
   },
   created(){

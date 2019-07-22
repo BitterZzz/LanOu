@@ -124,14 +124,14 @@
             <span class="totalPage">10</span>
           </div>
         </el-pagination>
-      </div> -->
+      </div>-->
       <sorter></sorter>
     </div>
     <!-- <div class="popup">
       <router-view :test="test"></router-view>
     </div>-->
-    <div v-if="aa">
-      <particulars></particulars>
+    <div v-if="checkJudge">
+      <particulars @hidden="hiddenMachine()"></particulars>
     </div>
     <div>
       <parameter></parameter>
@@ -143,7 +143,7 @@
 import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
-import Axios from 'axios';
+import Axios from "axios";
 export default {
   name: "water",
   data() {
@@ -157,7 +157,7 @@ export default {
       ],
       test: "",
       dom: "",
-      aa:false
+      checkJudge: false
     };
   },
   methods: {
@@ -190,11 +190,14 @@ export default {
         _ulBox.style.display = "none";
       };
     },
-    showMachine(Dom) {
+    showMachine() {
       // this.dom = document.querySelector(Dom);
       // console.log(this.dom);
       // this.dom.style.display = "block";
-      this.aa = true;
+      this.checkJudge = true;
+    },
+    hiddenMachine() {
+      this.checkJudge = false;
     }
   },
   components: {
@@ -202,20 +205,21 @@ export default {
     sorter,
     parameter
   },
-  created(){
-    Axios.get('http://192.168.1.237:7523/getDidByPayload',{
-      params:{
-        did:"14"
+  created() {
+    Axios.get("http://192.168.1.237:7523/getDidByPayload", {
+      params: {
+        did: "14"
       }
-    }).then((res) => {
+    }).then(res => {
       console.log(res);
-      localStorage.setItem('information',res.data.data);
-    })
+      localStorage.setItem("information", res.data.data);
+    });
   },
   mounted() {
     this.pull(".downLable", ".ckeck", ".downLable ul li");
     this.pull(".table-down", ".down", ".table-down ul li");
-    console.log(localStorage.getItem('information'))
+    var ascc = localStorage.getItem("information");
+    console.log(ascc.substr(2,2));
   }
 };
 </script>
@@ -228,7 +232,7 @@ export default {
     .header-title {
       color: #999999;
       position: absolute;
-      top: 16px;
+      top: -38px;
       span {
         font-family: PingFangSC-Regular;
         font-size: 16px;
