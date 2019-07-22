@@ -1,8 +1,15 @@
 <template>
     <div id="addPage">
+        <div id="title">
+               <p>
+                    您所在的位置 : 账号管理 > 账号列表 >
+                    <a>新增账户</a>
+
+               </p>
+          </div>
         <div class="toBack">
-            <div class="goHome" @click="backHome()">
-                <img src="../../assets/img/back.png" alt="">
+            <div class="goHome" >
+                <img @click="backHome()" src="../../assets/img/back.png" alt="">
                 <span>返回列表</span>
             </div>
         </div>
@@ -93,6 +100,9 @@ export default {
      robotShow(){
          let id = this.check.id
         console.log(id)
+     },
+     backHome(){
+         this.$emit('sonPage')
      }
   }
 }
@@ -100,12 +110,38 @@ export default {
 
 <style lang="scss" scoped>
     #addPage{
-       
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 8px 24px 0;
+        box-sizing: border-box;
+        background: #ffffff;
+        z-index: 10;
+         #title{
+             width: 400px;
+             height: 22px;
+             background: #f7f7f7;
+             position: absolute;
+             
+             top: -38px;
+                 p {
+                        font-family: PingFangSC-Regular;
+                        font-size: 16px;
+                        color: #999999;
+                        a {
+                        font-size: 16px;
+                        color: #3999f9;
+                        }
+                }
+        }
         .toBack{
             width: 100%;
             height:54px;
             background: #EEEEEE;
             margin-bottom: 32px;
+           
                .goHome{
                     display: flex;
                     align-items: center;

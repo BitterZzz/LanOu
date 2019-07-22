@@ -53,6 +53,7 @@
 </template>
 
 <script>
+
 export default {
   name: "home",
   data() {
@@ -251,6 +252,7 @@ export default {
       box-sizing: border-box;
       position: relative;
       .content {
+        position: relative;
         width: 100%;
         height: 828px;
         background: #fff;
