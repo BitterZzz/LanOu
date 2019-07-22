@@ -92,6 +92,7 @@
     >
       <div id="shadow" v-if="showShadow"></div>
     </transition>
+    <sorter></sorter>
   </div>
 </template>
 
@@ -100,7 +101,11 @@ import Axios from "axios";
 import ky from "../../../assets/img/ky.png";
 import stop from "../../../assets/img/stop.png";
 import { setTimeout } from "timers";
+import sorter from '../../../components/sorter'
 export default {
+  components:{
+    sorter,
+  },
   data() {
     return {
       checkAll: false,
@@ -197,6 +202,7 @@ export default {
       console.log("取消删除");
       this.showPopup = false;
       this.showShadow = false;
+       this.showUserInfo();
     },
     // 删除所有用户信息
     RemoveAll(){
@@ -222,7 +228,8 @@ export default {
     width: 293px;
     height: 22px;
     position: absolute;
-    top: 16px;
+    top: -38px;
+    left: -4px;
     p {
       font-family: PingFangSC-Regular;
       font-size: 16px;

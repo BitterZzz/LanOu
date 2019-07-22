@@ -2,7 +2,7 @@
   <div id="user">
     <div id="title">
       <p>
-        您所在的位置 : 用户管理 >
+        您所在的位置 : 账号管理 >
         <a>账号列表</a>
       </p>
     </div>
@@ -77,6 +77,8 @@
     >
       <div id="shadow" v-if="showShadow"></div>
     </transition>
+    <addPage v-if="showPage" @sonPage="accountPage"/>
+    <sorter/>
   </div>
 </template>
 
@@ -85,10 +87,11 @@ import ky from '../../../assets/img/ky.png'
 import stop from '../../../assets/img/ky.png'
 import addPage from '../../addPage/addPage.vue'
 import Axios from 'axios';
-
+import sorter from '../../../components/sorter'
 export default {
   components:{
       addPage,
+      sorter,
   },
   data() {
     return {
@@ -101,6 +104,7 @@ export default {
       deleteId:'',
       ky: ky,
       stop: stop,
+      showPage:false,
       list: [
         { value: "用户名" },
         { value: "角色名称" },
@@ -173,8 +177,11 @@ export default {
     },
     // 新增页面
     newAdd(){
-       console.log("新增页面")
-       document.querySelector(".addPage").style.display = "block"
+       this.showPage = true
+    },
+    // 页面传值 显示子页面
+    accountPage(){
+       this.showPage = false
     }
   },
   created(){
@@ -191,7 +198,8 @@ export default {
     width: 293px;
     height: 22px;
     position: absolute;
-    top: 16px;
+    top: -38px;
+    left: -4px;
     p {
       font-family: PingFangSC-Regular;
       font-size: 16px;

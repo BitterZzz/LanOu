@@ -33,6 +33,9 @@ export default {
   width: 100%;
   text-align: center;
   margin-top: 46px;
+  position: absolute;
+  bottom: 16px;
+
   .page-show {
     display: inline-block;
     .nowPage {
