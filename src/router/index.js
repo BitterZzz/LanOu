@@ -17,13 +17,6 @@ const routes = [
           path:'homepage',
           name:'首页',
           component:()=>import('../pages/home/children/homePage.vue'),
-          // children:[
-          //     {
-          //       path:'fault',
-          //       component:()=>import('../pages/fault/fault.vue')
-          //       // redirect
-          //     },
-          //  ]
         },
  
         {

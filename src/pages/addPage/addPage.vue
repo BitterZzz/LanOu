@@ -4,7 +4,6 @@
                <p>
                     您所在的位置 : 账号管理 > 账号列表 >
                     <a>新增账户</a>
-
                </p>
           </div>
         <div class="toBack">
@@ -17,31 +16,31 @@
              <ul class="userPassword">
                   <li>
                       <i>*</i><span>用户名 :</span>
-                      <input type="text">
+                      <input type="text" id="username" name="username">
                   </li>
                   <li>
                       <i>*</i><span>密码 :</span>
-                      <input type="password" name="" id="" placeholder="密码为8-16位的字母+数字组成">
+                      <input type="password" id="password" name="password"  placeholder="密码为8-16位的字母+数字组成">
                   </li>
              </ul>
              <ul class="userPassword">
                   <li>
                       <span class="upleft">手机 :</span>
-                      <input type="text" name="" id="">
+                      <input type="text" id="phone" name="phone" >
                   </li>
                   <li>
                       <span>邮箱 :</span>
-                      <input type="email" name="" id="">
+                      <input type="email" name="email" id="email">
                   </li>
              </ul>
               <ul class="userPassword">
                   <li>
                       <span class="upleft">角色 :</span>
-                      <input type="text">
+                      <input type="text" id="role" name="role">
                   </li>
                   <li>
                       <span>部门 :</span>
-                      <input type="text" name="" id="" placeholder="">
+                      <input type="text" name="section" id="section" placeholder="">
                   </li>
              </ul>
         </div>
@@ -65,7 +64,7 @@
             </div>
         </div>
         <div class="buttom">
-              <button type="submit">
+              <button type="submit" @click="submitAction()">
               <img src='../../assets/img/root.png' alt="" srcset="">
                   新增提交
               </button>
@@ -103,7 +102,29 @@ export default {
      },
      backHome(){
          this.$emit('sonPage')
+     },
+     submitAction(){
+           let username = document.querySelector("#username")
+           let password = document.querySelector("#password")
+           
+         if(username.value === "" || password.value ===""){
+              this.$message({
+                  message:"账号或密码不能为空",
+                  type:"warninig"
+              })
+              
+         }
+     },
+     importInfo(){
+         
+           
      }
+  },
+  mounted(){
+     
+  },
+  created(){
+     this.importInfo()
   }
 }
 </script>
