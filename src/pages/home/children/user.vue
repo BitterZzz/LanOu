@@ -206,13 +206,25 @@ export default {
     },
     // 删除所有用户信息
     RemoveAll(){
+      let arr = [];
       for (var i = 0; i < this.cities.length; i++) {
-          this.deleteAllId = this.cities[i].id 
-           console.log(this.deleteAllId)
-        }
-          console.log("删除所有用户信息")
-         
+          // this.deleteAllId = this.cities[i].id 
+          //  console.log(this.deleteAllId)
+           arr[i] = this.cities[i].id;
+        };
+         let list =  arr.join(',')
+        console.log(list);
+      
+        Axios.delete("http://192.168.1.237:7523/deleteLanOuUser",{
+             params:{
+               id:list
+             }
+        }).then(res=>{
+             console.log("删除所有用户信息")
+             this.showUserInfo()
+        })  
     }
+   
   },
   created() {
      this.showUserInfo();

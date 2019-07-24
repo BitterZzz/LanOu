@@ -70,7 +70,7 @@
                </div>
                <div class="question">
                     <div class="upkeep">
-                         <h1>保养信息</h1>
+                         <h1>故障信息</h1>
                          <ul class="upInfo">
                               <li>
                                    <img src="../../../assets/img/untreated.png" alt="" srcset="">
@@ -83,7 +83,7 @@
                                    <a>处理中</a>
                                    <span>(2)</span>
                               </li>
-                              <li>
+                              <li @click="mainShowAction()">
                               <img src="../../../assets/img/more.png" alt="" srcset="">
                               </li>  
                          </ul>
@@ -111,33 +111,43 @@
               
           </div>
            <fault v-if="faultShow"  @faultHidden="hidden"/>
-      
+           <maintain v-if="maintainShow" @mainHidden="mainHidden"/>
      </div>
 </template>
 
 <script>
 import fault from  '../../fault/fault'
+import maintain from '../../maintain/maintain'
 import redAlarm from '../../../assets/img/untreated.png'
 import greenAlarm from '../../../assets/img/dispose.png'
 export default {
         components:{
                fault,
+               maintain,
          },
         data(){
              return{
                   redAlarm:redAlarm,
                   greenAlarm:greenAlarm,
                   faultShow:false,
-              
+                  maintainShow:false,
              }
         },
         methods:{
              faultShowAction(){
-                  this.faultShow = true
+                   this.maintainShow = true                  
+                 
+             },
+             mainShowAction(){
+                   this.faultShow = true
              },
              hidden(){
                   this.faultShow = false
+             },
+             mainHidden(){
+                  this.maintainShow = false
              }
+             
         }
 }
 </script>
@@ -350,7 +360,9 @@ export default {
                               position: relative;
                               left: 10px;
                               width: 320px;
-
+                              li:nth-child(3){
+                                   cursor: pointer;
+                              }
                               li{
                                    
                                    a{

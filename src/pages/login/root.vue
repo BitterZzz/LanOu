@@ -92,22 +92,38 @@ export default {
     //请求登录
     RequestLogin() {
       var _this = this;
-      Axios.post(
-        "http://192.168.1.237:7523/loginLanOu",
-        QS.stringify({
-          phone: this.dom.userDom.value,
-          passWord: this.dom.pwdDom.value
-        }),
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
-        }
-      ).then(res => {
+      // Axios.post(
+      //   "http://192.168.1.237:7523/loginLanOu",
+      //   QS.stringify({
+      //     phone: this.dom.userDom.value,
+      //     passWord: this.dom.pwdDom.value
+      //   }),
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/x-www-form-urlencoded"
+      //     }
+      //   }
+      // ).then(res => {
+      //   setTimeout(() => {
+      //     this.event.setCookie(res.data.code, 7);
+      //     if (res.data.code === 0) {
+      //       this.$router.replace("/homepage");
+      //       let _data = res.data.data;
+      //       let _dataArr = [];
+      //       for (var i = 0; i < _data.length; i++) {
+      //         _dataArr[i] = _data[i].lanOuDid;
+      //       }
+      //       let _newdataArr = JSON.stringify(_dataArr);
+      //       localStorage.setItem("did", _newdataArr);
+      //     }
+      //   }, 2000);
+      // });
+      this.$post("/loginLanOu",{phone: this.dom.userDom.value,passWord: this.dom.pwdDom.value})
+      .then(res => {
         setTimeout(() => {
           this.event.setCookie(res.data.code, 7);
           if (res.data.code === 0) {
-            this.$router.push("/homepage");
+            this.$router.replace("/homepage");
             let _data = res.data.data;
             let _dataArr = [];
             for (var i = 0; i < _data.length; i++) {
@@ -117,7 +133,7 @@ export default {
             localStorage.setItem("did", _newdataArr);
           }
         }, 2000);
-      });
+      })
     },
   },
   mounted() {

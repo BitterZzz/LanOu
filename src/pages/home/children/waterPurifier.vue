@@ -35,7 +35,7 @@
                 <div class="table-down">
                   <i class="el-icon-caret-top"></i>
                   <ul>
-                    <li v-for="item in tdList" :key="item.ID"> {{item.name}} </li>
+                    <li v-for="item in tdList" :key="item.ID">{{item.name}}</li>
                   </ul>
                 </div>
               </th>
@@ -98,8 +98,8 @@
               <td>6</td>
               <td>
                 <div class="operation" @click="saveIndex(item)">
-                  <p @click="showMachine('.machine')">查看</p>
-                  <p>参数配置</p>
+                  <p @click="showMachine()">查看</p>
+                  <p @click="detailsShow()">参数配置</p>
                   <p>信息维护</p>
                   <p>日志</p>
                 </div>
@@ -131,8 +131,8 @@
     <div v-if="checkJudge">
       <particulars @hidden="hiddenMachine()"></particulars>
     </div>
-    <div>
-      <parameter></parameter>
+    <div v-if="detailsJudge">
+      <parameter @hiddenSecond="detailshidden()"></parameter>
     </div>
   </div>
 </template>
@@ -141,7 +141,6 @@
 import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
-import Axios from "axios";
 export default {
   name: "water",
   data() {
@@ -153,14 +152,15 @@ export default {
         { name: "故障状态", ID: 400 },
         { name: "保养状态", ID: 500 }
       ],
-      tdList:[
-        {name:"全部",ID:301},
-        {name:"在线",ID:302},
-        {name:"离线",ID:303}
+      tdList: [
+        { name: "全部", ID: 301 },
+        { name: "在线", ID: 302 },
+        { name: "离线", ID: 303 }
       ],
       test: "",
       dom: "",
-      checkJudge: false
+      checkJudge: false,
+      detailsJudge:false
     };
   },
   methods: {
@@ -205,6 +205,12 @@ export default {
     },
     hiddenMachine() {
       this.checkJudge = false;
+    },
+    detailsShow() {
+      this.detailsJudge = true;
+    },
+    detailshidden() {
+      this.detailsJudge = false;
     }
   },
   components: {
@@ -213,20 +219,26 @@ export default {
     parameter
   },
   created() {
-    Axios.get("http://192.168.1.237:7523/getDidByPayload", {
-      params: {
-        did: "14"
+    // Axios.get("http://192.168.1.237:7523/getDidByPayload", {
+    //   params: {
+    //     did: "14"
+    //   }
+    // }).then(res => {
+    //   console.log(res);
+    //   localStorage.setItem("information", res.data.data);
+    // });
+    this.$get("/getDidByPayload", { did: "14" }).then(
+      res => {
+        console.log(res);
+        localStorage.setItem("information", res.data.data);
       }
-    }).then(res => {
-      console.log(res);
-      localStorage.setItem("information", res.data.data);
-    });
+    );
   },
   mounted() {
     this.pull(".downLable", ".ckeck", ".downLable ul li");
     this.pull(".table-down", ".down", ".table-down ul li");
     var ascc = localStorage.getItem("information");
-    console.log(ascc.substr(2, 2));
+    // console.log(ascc.substr(2, 2));
   }
 };
 </script>

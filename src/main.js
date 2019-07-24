@@ -11,6 +11,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 import myCharts from './js/myCharts'
 //js中封装的cookie的方法
 import cookie from './js/cookie'
+//axios请求封装
+import {get,post} from './request/api'
+
+Vue.prototype.$get = get;
+Vue.prototype.$post = post;
 Vue.use(cookie);
 Vue.use(myCharts)
 Vue.use(ElementUI).use(animated)

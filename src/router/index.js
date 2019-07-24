@@ -14,7 +14,6 @@ const routes = [
   {path:'/',
    component:() => import('../pages/home/home.vue'),
     children:[
-        
         {
           path:"",
           redirect:("homepage"),
@@ -29,46 +28,59 @@ const routes = [
             }else{
               next('/login')
             }
-  
           }
-          // children:[
-          //     {
-          //       path:'fault',
-          //       component:()=>import('../pages/fault/fault.vue')
-          //       // redirect
-          //     },
-          //  ]
         },
  
         {
           path:'waterPurifier',
           name:'净水器管理',
           component:()=>import('../pages/home/children/waterPurifier.vue'),
-          // children:[
-          //   {
-          //     path:"particulars",
-          //     component:()=>import('../pages/waterMange/particulars.vue')
-          //   },
-          //   {
-          //     path:"*",
-          //     redirect:("particulars")
-          //   }
-          // ]
+          beforeEnter: (to, from, next) => {
+            if(getCookie('loginCode') === '0'){
+              next()
+            }else{
+              next('/login')
+            }
+          }
         },
         {
           path:'account',
           name:'账号管理',
           component:()=>import('../pages/home/children/account.vue'),
+          beforeEnter: (to, from, next) => {
+            if(getCookie('loginCode') === '0'){
+              next()
+            }else{
+              next('/login')
+            }
+          }
+
         },
         {
           path:'user',
           name:"用户管理",
-          component:()=>import('../pages/home/children/user.vue')
+          component:()=>import('../pages/home/children/user.vue'),
+          beforeEnter: (to, from, next) => {
+            if(getCookie('loginCode') === '0'){
+              next()
+            }else{
+              next('/login')
+            }
+          }
+          
         },
         {
           path:'operationLog',
           name:'操作日志',
-          component:()=>import('../pages/home/children/operationLog.vue')
+          component:()=>import('../pages/home/children/operationLog.vue'),
+          beforeEnter: (to, from, next) => {
+            if(getCookie('loginCode') === '0'){
+              next()
+            }else{
+              next('/login')
+            }
+          }
+
         },
      
     ]
