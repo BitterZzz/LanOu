@@ -287,7 +287,7 @@ export default {
       ],
       relayList: [
         { ID: 200, name:"进水电磁阀", operation:"断开" },
-        { ID: 201, name:"进水电磁阀", operation:"断开" },
+        { ID: 201, name:"浓水电磁阀", operation:"断开" },
         { ID: 202, name:"进水电磁阀", operation:"断开" },
         { ID: 203, name:"进水电磁阀", operation:"断开" },
         { ID: 204, name:"进水电磁阀", operation:"断开" },
@@ -310,7 +310,7 @@ export default {
     
   },
   mounted() {
-    this.$chart.line1("table-echarts");
+    this.$chart.line1("table-echarts",'mg/L');
     this.$chart.line1("table-echarts2");
     this.$chart.line1("table-echarts3");
     this.$chart.line1("table-echarts4");
