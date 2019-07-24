@@ -3,7 +3,7 @@
     <header id="header" class="clearfix">
       <div class="header-box clearfix">
         <div class="title">
-          <img src="../../assets/img/back.png" />
+          <img src="../../assets/img/back.png" @click="hidden()"/>
           <span>机器详情</span>
         </div>
         <div class="IdBox">
@@ -348,7 +348,14 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  name:"parameter",
+  methods:{
+    hidden(){
+      this.$emit('hiddenSecond')
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
 #parameter {
@@ -360,7 +367,6 @@ export default {};
   left: -156px;
   top: 20px;
   z-index: 10000;
-  display: none;
   #header {
     .header-box {
       margin-top: 10px;

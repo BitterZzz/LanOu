@@ -5,7 +5,7 @@ const install = function (Vue) {
       get() {
         return {
           // 双曲线表
-          line1: function (id) {
+          line1: function (id,name) {
             this.chart = echarts.init(document.getElementById(id))
             this.chart.clear()
             var colors = ['#5793f3', '#d14a61', '#675bba']
@@ -65,13 +65,14 @@ const install = function (Vue) {
                 }
               ],
               yAxis: [
-                {
+                { 
+                  name:name,
                   type: 'value',
                   boundaryGap: [0, '100%'],
                   splitLine: {
                     show: false
                   },
-                  max: 300,
+                  max: 5,
                   min: 0,
                   axisLable: {
                     formatter: '{value}'
@@ -83,15 +84,15 @@ const install = function (Vue) {
                 {
                   name: '2015 降水量',
                   type: 'line',
-                  xAxisIndex: 1,
+                  // xAxisIndex: 1,
                   smooth: true,
-                  data: [20, 30, 40, 50, 60, 50, 40, 30, 40, 50, 60, 70]
+                  data: [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0]
                 },
                 {
                   name: '2016 降水量',
                   type: 'line',
                   smooth: true,
-                  data: [3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7]
+                  data: [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]
                 }
               ]
             }

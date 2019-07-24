@@ -33,6 +33,7 @@
 <script>
 import Axios from "axios";
 import QS from "qs";
+import install from '../../js/cookie';
 export default {
   name: "login",
   data() {
@@ -48,6 +49,7 @@ export default {
     };
   },
   methods: {
+    //登录判断
     login() {
       var userVerity = /^[1][3,4,5,7,8][0-9]{9}$/;
       var pwdVerity = /^[\w_-]{6,16}$/;
@@ -89,21 +91,39 @@ export default {
     },
     //请求登录
     RequestLogin() {
-      Axios.post(
-        "http://192.168.1.237:7523/loginLanOu",
-        QS.stringify({
-          phone: this.dom.userDom.value,
-          passWord: this.dom.pwdDom.value
-        }),
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
-        }
-      ).then(res => {
+      var _this = this;
+      // Axios.post(
+      //   "http://192.168.1.237:7523/loginLanOu",
+      //   QS.stringify({
+      //     phone: this.dom.userDom.value,
+      //     passWord: this.dom.pwdDom.value
+      //   }),
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/x-www-form-urlencoded"
+      //     }
+      //   }
+      // ).then(res => {
+      //   setTimeout(() => {
+      //     this.event.setCookie(res.data.code, 7);
+      //     if (res.data.code === 0) {
+      //       this.$router.replace("/homepage");
+      //       let _data = res.data.data;
+      //       let _dataArr = [];
+      //       for (var i = 0; i < _data.length; i++) {
+      //         _dataArr[i] = _data[i].lanOuDid;
+      //       }
+      //       let _newdataArr = JSON.stringify(_dataArr);
+      //       localStorage.setItem("did", _newdataArr);
+      //     }
+      //   }, 2000);
+      // });
+      this.$post("/loginLanOu",{phone: this.dom.userDom.value,passWord: this.dom.pwdDom.value})
+      .then(res => {
         setTimeout(() => {
+          this.event.setCookie(res.data.code, 7);
           if (res.data.code === 0) {
-            this.$router.push("/homepage");
+            this.$router.replace("/homepage");
             let _data = res.data.data;
             let _dataArr = [];
             for (var i = 0; i < _data.length; i++) {
@@ -112,9 +132,9 @@ export default {
             let _newdataArr = JSON.stringify(_dataArr);
             localStorage.setItem("did", _newdataArr);
           }
-        },2000);
-      });
-    }
+        }, 2000);
+      })
+    },
   },
   mounted() {
     this.dom.userDom = document.querySelector(".userInfo");

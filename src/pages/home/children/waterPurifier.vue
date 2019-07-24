@@ -11,7 +11,7 @@
       <div id="search-box" class="clearfix">
         <div class="search">
           <div class="ckeck" @click="show()">
-            <span>机器Id</span>
+            <span class="ckeck-content">机器Id</span>
             <i class="el-icon-caret-bottom icon-bottom"></i>
             <div class="downLable">
               <i class="el-icon-caret-top"></i>
@@ -35,9 +35,7 @@
                 <div class="table-down">
                   <i class="el-icon-caret-top"></i>
                   <ul>
-                    <li>在线</li>
-                    <li>在线</li>
-                    <li>在线</li>
+                    <li v-for="item in tdList" :key="item.ID">{{item.name}}</li>
                   </ul>
                 </div>
               </th>
@@ -100,8 +98,8 @@
               <td>6</td>
               <td>
                 <div class="operation" @click="saveIndex(item)">
-                  <p @click="showMachine('.machine')">查看</p>
-                  <p>参数配置</p>
+                  <p @click="showMachine()">查看</p>
+                  <p @click="detailsShow()">参数配置</p>
                   <p>信息维护</p>
                   <p>日志</p>
                 </div>
@@ -133,8 +131,8 @@
     <div v-if="checkJudge">
       <particulars @hidden="hiddenMachine()"></particulars>
     </div>
-    <div>
-      <parameter></parameter>
+    <div v-if="detailsJudge">
+      <parameter @hiddenSecond="detailshidden()"></parameter>
     </div>
   </div>
 </template>
@@ -143,7 +141,6 @@
 import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
-import Axios from "axios";
 export default {
   name: "water",
   data() {
@@ -155,9 +152,15 @@ export default {
         { name: "故障状态", ID: 400 },
         { name: "保养状态", ID: 500 }
       ],
+      tdList: [
+        { name: "全部", ID: 301 },
+        { name: "在线", ID: 302 },
+        { name: "离线", ID: 303 }
+      ],
       test: "",
       dom: "",
-      checkJudge: false
+      checkJudge: false,
+      detailsJudge:false
     };
   },
   methods: {
@@ -172,6 +175,7 @@ export default {
       var _ulBox = document.querySelector(_ulBox);
       var _ckeck = document.querySelector(_ckeck);
       var _li = document.querySelectorAll(_li);
+      var _span = document.querySelector(".ckeck-content");
       var _this = this;
       _ckeck.onmousedown = function() {
         _ulBox.style.display = "block";
@@ -183,6 +187,9 @@ export default {
               _li[i].classList.remove("liColor");
             }
             target.classList.add("liColor");
+            if (_ulBox === document.querySelector(".downLable")) {
+              _span.innerHTML = `${target.innerHTML}`;
+            }
           }
         };
       };
@@ -198,6 +205,12 @@ export default {
     },
     hiddenMachine() {
       this.checkJudge = false;
+    },
+    detailsShow() {
+      this.detailsJudge = true;
+    },
+    detailshidden() {
+      this.detailsJudge = false;
     }
   },
   components: {
@@ -206,20 +219,26 @@ export default {
     parameter
   },
   created() {
-    Axios.get("http://192.168.1.237:7523/getDidByPayload", {
-      params: {
-        did: "14"
+    // Axios.get("http://192.168.1.237:7523/getDidByPayload", {
+    //   params: {
+    //     did: "14"
+    //   }
+    // }).then(res => {
+    //   console.log(res);
+    //   localStorage.setItem("information", res.data.data);
+    // });
+    this.$get("/getDidByPayload", { did: "14" }).then(
+      res => {
+        console.log(res);
+        localStorage.setItem("information", res.data.data);
       }
-    }).then(res => {
-      console.log(res);
-      localStorage.setItem("information", res.data.data);
-    });
+    );
   },
   mounted() {
     this.pull(".downLable", ".ckeck", ".downLable ul li");
     this.pull(".table-down", ".down", ".table-down ul li");
     var ascc = localStorage.getItem("information");
-    console.log(ascc.substr(2,2));
+    // console.log(ascc.substr(2, 2));
   }
 };
 </script>
@@ -266,6 +285,9 @@ export default {
           border-radius: 5px;
           box-sizing: border-box;
           cursor: pointer;
+          span {
+            font-size: 14px;
+          }
           .downLable {
             position: absolute;
             width: 106px;
@@ -322,6 +344,7 @@ export default {
       padding: 0 24px;
       padding-top: 16px;
       .table-box {
+        cursor: pointer;
         .table-style {
           font-family: PingFangSC-Regular;
           border: 0;
