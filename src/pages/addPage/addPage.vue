@@ -98,7 +98,9 @@ export default {
 
      robotShow(){
          let id = this.check.id
-        console.log(id)
+         console.log(id)
+         this.showRobot = true
+
      },
      backHome(){
          this.$emit('sonPage')
