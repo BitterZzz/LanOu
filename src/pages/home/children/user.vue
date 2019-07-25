@@ -32,6 +32,7 @@
          
         ></el-checkbox>
         <div class="box-nav">
+          <p class="box-cover"></p>
           <a v-for=" item in list" :key="item.id">{{item.value}}</a>
         </div>
       </ul>
@@ -60,7 +61,7 @@
             </a>
             <a>{{city.createTime}}</a>
             <a @click="deleteShow">删除</a> 
-           
+            <p class="box-el"></p>
           </el-checkbox>
            </div>
           <p>
@@ -135,7 +136,7 @@ export default {
   methods: {
     handleCheckAllChange(val) {
       this.checkedCities = val ? this.cities : [];
-      this.isIndeterminate = false;
+      this.isIndeterminate = true;
     },
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
@@ -179,13 +180,20 @@ export default {
     deleteShow() {
       this.showPopup = !this.showPopup;
       this.showShadow = !this.showShadow;
+       let dom = document.querySelector(".box-cover")
+          dom.style.display = "block";
+          console.log(dom)
     },
     checkbox(city){
+         
+          
           this.deleteId = city.id
           console.log(this.deleteId)  //3
      },
     // 删除单个用户信息
     deleteInfo() {
+      let dom = document.querySelector(".box-cover")
+      dom.style.display = "none";
       console.log("确定删除");
       this.showPopup = false;
       this.showShadow = false;
@@ -199,10 +207,12 @@ export default {
     },
     // 取消删除
     cancelSelect() {
+      let dom = document.querySelector(".box-cover")
+      dom.style.display = "none";
       console.log("取消删除");
       this.showPopup = false;
       this.showShadow = false;
-       this.showUserInfo();
+      this.showUserInfo()
     },
     // 删除所有用户信息
     RemoveAll(){
@@ -338,6 +348,18 @@ export default {
         // border: 1px saddlebrown solid;
         width: 100%;
         display: flex;
+        position: relative;
+         .box-cover{
+           width: 16px;
+           height: 16px;
+           border: 1px solid #cccccc;
+           position: absolute;
+           top: 35px;
+           left: -18px;
+           z-index: 3;
+           background: #ffffff;
+           display: none;
+         }
         a {
           width: 10%;
 
@@ -352,7 +374,7 @@ export default {
 
       .el-checkbox {
         margin-right: 0;
-
+                    
         .el-checkbox__input {
           .el-checkbox__inner {
             width: 18px;
@@ -366,6 +388,7 @@ export default {
           }
         }
       }
+
       a {
         font-size: 16px;
         color: #333333;
@@ -419,6 +442,17 @@ export default {
         box-sizing: border-box;
         float: left;
         // border: 1px solid red;
+            .box-el{
+                          position: absolute;
+                          border: 1px solid #cccccc;
+                          width: 16px;
+                          height: 1px;
+                          background: #ffffff;
+                          top: 15px;
+                          left: 0px;
+                          z-index: 3;
+                           display: none
+                        }
         .el-checkbox__inner {
           width: 18px;
           height: 18px;
