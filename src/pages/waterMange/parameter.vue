@@ -1,5 +1,5 @@
 <template>
-  <div id="parameter">
+  <div id="parameter" class="animated fadeIn">
     <header id="header" class="clearfix">
       <div class="header-box clearfix">
         <div class="title">
