@@ -249,7 +249,7 @@ export default {
     });
   },
   mounted() {
-    this.pull(".downLable", ".ckeck", ".downLable ul li");
+    // this.pull(".downLable", ".ckeck", ".downLable ul li");
     var ascc = localStorage.getItem("information");
     // console.log(document.querySelector('.el-icon-check').classList.add('aaa'));
     this.trDom = document.querySelectorAll(".el-icon-check");
