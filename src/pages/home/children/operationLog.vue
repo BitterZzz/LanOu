@@ -6,10 +6,12 @@
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
+      @select="handleSelectAlone"
+      @select-all="handleSelectAll"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
-
-      <el-table-column prop="userId" label="机器ID" width="120"></el-table-column>
+      <el-table-column type="selection" width="55"  ></el-table-column>
+       
+      <el-table-column prop="userId"  label="机器ID" width="120"></el-table-column>
       <el-table-column prop="didName" label="用户名" width="120"></el-table-column>
       <el-table-column prop="realName" label="真实姓名" show-overflow-tooltip></el-table-column>
       <el-table-column prop="cellPhone" label="手机号码" show-overflow-tooltip></el-table-column>
@@ -21,7 +23,12 @@
         <img :src="this.isEnabled === '1' ?  stop : ky" />
       </el-table-column>
       <el-table-column prop="createTime" label="注册时间" show-overflow-tooltip></el-table-column>
-      <el-table-column label="操作项" show-overflow-tooltip>删除</el-table-column>
+      <el-table-column label="操作项" show-overflow-tooltip class="delete">
+        <template slot-scope="scope">
+          <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+          <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -53,6 +60,15 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      // console.log("选择全部")
+    },
+    // 选择单个
+    handleSelectAlone(val){
+       console.log(val)
+    },
+    // 选择全部用户信息
+    handleSelectAll(val){
+          console.log(val)
     },
     info() {
       Axios.get("http://192.168.1.237:7523/getLanOuUserInfo", {
@@ -75,7 +91,14 @@ export default {
           console.log(this.isEnabled);
         }
       });
-    }
+    },
+    // 删除当前行
+    handleClick(a) {
+      console.log(a.id);
+    },
+    selection(selection){
+            console.log(1)
+    },
   },
   created() {
     this.info();
@@ -86,7 +109,6 @@ export default {
 <style lang="scss" >
 #operation {
   .cell {
-    border: 1px solid red;
     text-align: center;
     height: 50px;
     line-height: 50px;
@@ -95,8 +117,13 @@ export default {
     color: #333;
     img {
       position: absolute;
-      top: -4px;
+      top: 10px;
     }
+  }
+  .el-button--text span {
+    font-size: 16px;
+    color: #f64330;
+    text-decoration: underline;
   }
 }
 </style>

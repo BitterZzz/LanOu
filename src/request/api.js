@@ -24,3 +24,16 @@ export function post(url,params) {
         })
     } )
 }
+
+export function delet(url,params) {
+  return new Promise( (resolve, reject) => {
+    Axios.delete(url, {
+      params: params
+    }).then(res => {
+      resolve(res)
+    })
+    .catch(err => {
+        reject(err);
+    })
+  })
+}
