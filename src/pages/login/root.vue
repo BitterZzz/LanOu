@@ -99,10 +99,11 @@ export default {
           if (res.data.code === 0) {
             this.$router.replace("/homepage");
             let _data = res.data.data;
-            let _dataArr = [];
+            let _dataArr=[];
             for (var i = 0; i < _data.length; i++) {
-              _dataArr[i] = _data[i].lanOuDid;
+              _dataArr.push = _data[i].lanOuDid;
             }
+            console.log(_data);
             let _newdataArr = JSON.stringify(_dataArr);
             localStorage.setItem("did", _newdataArr);          }
         }, 2000);

@@ -14,7 +14,7 @@
               <span>管理员 !</span>
             </a>
           </li>
-          <li class="right">
+          <li class="right" @click="quit()">
             <a href="#">注销</a> |
             <a href="#">退出管理</a>
           </li>
@@ -101,6 +101,10 @@ export default {
   methods: {
     homeAction(name) {
       this.isSelect = name;
+    },
+    quit(){
+      this.event.clearCookie();
+      this.$router.replace('/login');
     }
   },
   mounted() {

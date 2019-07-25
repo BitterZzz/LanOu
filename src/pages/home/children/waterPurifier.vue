@@ -64,8 +64,8 @@
               <th>用户</th>
               <th>操作项</th>
             </tr>
-            <tr class="tr-main" align="center" v-for="item in this.list" :key="item.Id">
-              <td>1</td>
+            <tr class="tr-main" align="center" v-for="item in this.machineList" :key="item.id">
+              <td> {{item.productId}} </td>
               <td>
                 <div>在线状态: 在线</div>
                 <div>在线状态: 在线</div>
@@ -127,26 +127,8 @@
           </table>
         </div>
       </div>
-      <!-- <div class="pagetion">
-        <el-pagination
-          background
-          layout="prev, pager, next,slot, jumper"
-          :total="100"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrent"
-        >
-          <div class="page-show">
-            <span class="nowPage">4</span>
-            <i>/</i>
-            <span class="totalPage">10</span>
-          </div>
-        </el-pagination>
-      </div>-->
-      <sorter></sorter>
+      <sorter :pageMsg="sortPage"></sorter>
     </div>
-    <!-- <div class="popup">
-      <router-view :test="test"></router-view>
-    </div>-->
     <div v-if="checkJudge">
       <particulars @hidden="hiddenMachine()"></particulars>
     </div>
@@ -172,15 +154,21 @@ export default {
         { name: "保养状态", ID: 500 }
       ],
       tdList: [
-        { name: "全部", ID: 0 },
-        { name: "在线", ID: 1 },
-        { name: "离线", ID: 2 }
+        { name: "全部", ID: 1 },
+        { name: "在线", ID: 2 },
+        { name: "离线", ID: 3 }
       ],
       test: "",
       dom: "",
       trDom: "",
       checkJudge: false,
-      detailsJudge: false
+      detailsJudge: false,
+      sortPage: {
+        pages: 1,
+        pageSize: 1,
+        total: 1
+      },
+      machineList: []
     };
   },
   methods: {
@@ -190,35 +178,7 @@ export default {
       this.test = item.ID;
       console.log(this.test);
     },
-    //下拉菜单
-    // pull(_ulBox, _ckeck, _li) {
-    //   var _ulBox = document.querySelector(_ulBox);
-    //   var _ckeck = document.querySelector(_ckeck);
-    //   var _li = document.querySelectorAll(_li);
-    //   var _span = document.querySelector(".ckeck-content");
-    //   var _this = this;
-    //   _ckeck.onmousedown = function() {
-    //     _ulBox.style.display = "block";
-    //     _ckeck.onmousemove = function(e) {
-    //       e = e || window.event;
-    //       let target = e.target || e.srcElement;
-    //       if (target.nodeName === "LI") {
-    //         for (var i = 0; i < _li.length; i++) {
-    //           _li[i].classList.remove("liColor");
-    //         }
-    //         target.classList.add("liColor");
-    //         _span.innerHTML = `${target.innerHTML}`;
-    //       }
-    //     };
-    //   };
-    //   _ckeck.onmouseleave = function() {
-    //     _ulBox.style.display = "none";
-    //   };
-    // },
     showMachine() {
-      // this.dom = document.querySelector(Dom);
-      // console.log(this.dom);
-      // this.dom.style.display = "block";
       this.checkJudge = true;
     },
     hiddenMachine() {
@@ -235,6 +195,18 @@ export default {
         this.trDom[i].classList.remove("el-icon-check");
       }
       this.trDom[item.ID].classList.add("el-icon-check");
+    },
+    machineID() {
+      this.$get("/getLanOuUserInfo", {
+        pageNum: "1",
+        pageSize: "4"
+      }).then(res => {
+        (this.sortPage.total = res.data.data.total),
+          (this.sortPage.pages = res.data.data.pages),
+          (this.sortPage.pageSize = res.data.data.pageSize);
+        this.machineList = res.data.data.list;
+        console.log(res.data.data.list)
+      });
     }
   },
   components: {
@@ -247,11 +219,16 @@ export default {
       console.log(res);
       localStorage.setItem("information", res.data.data);
     });
+    this.machineID();
+    setTimeout(() => {
+      this.sortPage.total = this.sortPage.total;
+      this.sortPage.pages = this.sortPage.pages;
+      this.sortPage.pageSize = this.sortPage.pageSize;
+      this.machineList = this.machineList;
+    }, 1000);
   },
   mounted() {
-    // this.pull(".downLable", ".ckeck", ".downLable ul li");
     var ascc = localStorage.getItem("information");
-    // console.log(document.querySelector('.el-icon-check').classList.add('aaa'));
     this.trDom = document.querySelectorAll(".el-icon-check");
     for (var i = 0; i < this.trDom.length; i++) {
       this.trDom[i].classList.remove("el-icon-check");
@@ -504,7 +481,7 @@ export default {
       left: 0;
       top: 0;
     }
-    .el-dropdown-menu{
+    .el-dropdown-menu {
       width: 90px;
     }
   }

@@ -3,14 +3,15 @@
     <el-pagination
       background
       layout="prev, pager, next,slot, jumper"
-      :total="100"
+      :total="pageMsg.total"
+      :page-size="pageMsg.pageSize"
       @size-change="handleSizeChange"
       @current-change="handleCurrent"
     >
       <div class="page-show">
-        <span class="nowPage">4</span>
+        <span class="nowPage"> 1 </span>
         <i>/</i>
-        <span class="totalPage">10</span>
+        <span class="totalPage"> {{pageMsg.pages}} </span>
       </div>
     </el-pagination>
   </div>
@@ -18,6 +19,11 @@
 <script>
 export default {
   name: "pagetion",
+  props:{
+    pageMsg:{
+      type:Object,
+    }
+  },
   methods: {
     handleSizeChange() {
       console.log(1111);
@@ -25,7 +31,8 @@ export default {
     handleCurrent() {
       console.log(2222);
     }
-  }
+  },
+  mounted(){}
 };
 </script>
 <style lang="scss" scoped>
