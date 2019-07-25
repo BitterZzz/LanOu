@@ -1,5 +1,5 @@
 <template>
-  <div id="particulars">
+  <div id="particulars" class="animated fadeIn">
     <header id="header" class="clearfix">
       <div class="header-box">
         <div class="title" @click="hidden()">
@@ -35,7 +35,7 @@
                 <img src="../../assets/img/ppm2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts" style="width:280px;height:200px"></div>
+              <div id="table-echarts" class="echarts" style="width:280px;height:200px"></div>
             </div>
             <div class="table-box">
               <div class="table-TDS">
@@ -59,7 +59,7 @@
                 <img src="../../assets/img/ppm2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts3" style="width:280px;height:200px"></div>
+              <div id="table-echarts3" class="echarts" style="width:280px;height:200px"></div>
             </div>
           </div>
           <div class="data-table data-table2">
@@ -73,7 +73,7 @@
                 <img src="../../assets/img/ppm2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts4" style="width:280px;height:200px"></div>
+              <div id="table-echarts4" class="echarts" style="width:280px;height:200px"></div>
             </div>
             <div class="table-box">
               <div class="table-TDS">
@@ -85,7 +85,7 @@
                 <img src="../../assets/img/ppm2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts5" style="width:280px;height:200px"></div>
+              <div id="table-echarts5" class="echarts" style="width:280px;height:200px"></div>
             </div>
           </div>
         </div>

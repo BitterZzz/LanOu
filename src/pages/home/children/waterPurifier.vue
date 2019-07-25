@@ -10,15 +10,20 @@
     <div id="content">
       <div id="search-box" class="clearfix">
         <div class="search">
-          <div class="ckeck" @click="show()">
-            <span class="ckeck-content">机器Id</span>
-            <i class="el-icon-caret-bottom icon-bottom"></i>
-            <div class="downLable">
-              <i class="el-icon-caret-top"></i>
-              <ul>
-                <li v-for="item in liList" :key="item.ID">{{item.name}}</li>
-              </ul>
-            </div>
+          <div class="ckeck">
+            <el-dropdown trigger="click">
+              <span class="el-dropdown-link">
+                下拉菜单
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-circle-check-outline">蚵仔煎</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
           <input type="text" class="search-value" placeholder="请输入内容" />
         </div>
@@ -30,14 +35,28 @@
             <tr class="tr-header" align="center">
               <th>机器ID</th>
               <th class="down">
-                机器状态
+                <!-- 机器状态
                 <i class="el-icon-caret-bottom"></i>
                 <div class="table-down">
                   <i class="el-icon-caret-top"></i>
                   <ul>
                     <li v-for="item in tdList" :key="item.ID">{{item.name}}</li>
                   </ul>
-                </div>
+                </div>-->
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link" style="color:#333333">
+                    机器状态
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item
+                      icon="el-icon-check"
+                      v-for="item in tdList"
+                      :key="item.ID"
+                      @click.native="dropdown(item)"
+                    >{{item.name}}</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </th>
               <th>水质数据</th>
               <th>安装地址</th>
@@ -153,14 +172,15 @@ export default {
         { name: "保养状态", ID: 500 }
       ],
       tdList: [
-        { name: "全部", ID: 301 },
-        { name: "在线", ID: 302 },
-        { name: "离线", ID: 303 }
+        { name: "全部", ID: 0 },
+        { name: "在线", ID: 1 },
+        { name: "离线", ID: 2 }
       ],
       test: "",
       dom: "",
+      trDom: "",
       checkJudge: false,
-      detailsJudge:false
+      detailsJudge: false
     };
   },
   methods: {
@@ -171,32 +191,30 @@ export default {
       console.log(this.test);
     },
     //下拉菜单
-    pull(_ulBox, _ckeck, _li) {
-      var _ulBox = document.querySelector(_ulBox);
-      var _ckeck = document.querySelector(_ckeck);
-      var _li = document.querySelectorAll(_li);
-      var _span = document.querySelector(".ckeck-content");
-      var _this = this;
-      _ckeck.onmousedown = function() {
-        _ulBox.style.display = "block";
-        _ckeck.onmousemove = function(e) {
-          e = e || window.event;
-          let target = e.target || e.srcElement;
-          if (target.nodeName === "LI") {
-            for (var i = 0; i < _li.length; i++) {
-              _li[i].classList.remove("liColor");
-            }
-            target.classList.add("liColor");
-            if (_ulBox === document.querySelector(".downLable")) {
-              _span.innerHTML = `${target.innerHTML}`;
-            }
-          }
-        };
-      };
-      _ckeck.onmouseleave = function() {
-        _ulBox.style.display = "none";
-      };
-    },
+    // pull(_ulBox, _ckeck, _li) {
+    //   var _ulBox = document.querySelector(_ulBox);
+    //   var _ckeck = document.querySelector(_ckeck);
+    //   var _li = document.querySelectorAll(_li);
+    //   var _span = document.querySelector(".ckeck-content");
+    //   var _this = this;
+    //   _ckeck.onmousedown = function() {
+    //     _ulBox.style.display = "block";
+    //     _ckeck.onmousemove = function(e) {
+    //       e = e || window.event;
+    //       let target = e.target || e.srcElement;
+    //       if (target.nodeName === "LI") {
+    //         for (var i = 0; i < _li.length; i++) {
+    //           _li[i].classList.remove("liColor");
+    //         }
+    //         target.classList.add("liColor");
+    //         _span.innerHTML = `${target.innerHTML}`;
+    //       }
+    //     };
+    //   };
+    //   _ckeck.onmouseleave = function() {
+    //     _ulBox.style.display = "none";
+    //   };
+    // },
     showMachine() {
       // this.dom = document.querySelector(Dom);
       // console.log(this.dom);
@@ -211,6 +229,12 @@ export default {
     },
     detailshidden() {
       this.detailsJudge = false;
+    },
+    dropdown(item) {
+      for (var i = 0; i < this.trDom.length; i++) {
+        this.trDom[i].classList.remove("el-icon-check");
+      }
+      this.trDom[item.ID].classList.add("el-icon-check");
     }
   },
   components: {
@@ -219,26 +243,19 @@ export default {
     parameter
   },
   created() {
-    // Axios.get("http://192.168.1.237:7523/getDidByPayload", {
-    //   params: {
-    //     did: "14"
-    //   }
-    // }).then(res => {
-    //   console.log(res);
-    //   localStorage.setItem("information", res.data.data);
-    // });
-    this.$get("/getDidByPayload", { did: "14" }).then(
-      res => {
-        console.log(res);
-        localStorage.setItem("information", res.data.data);
-      }
-    );
+    this.$get("/getDidByPayload", { did: "14" }).then(res => {
+      console.log(res);
+      localStorage.setItem("information", res.data.data);
+    });
   },
   mounted() {
     this.pull(".downLable", ".ckeck", ".downLable ul li");
-    this.pull(".table-down", ".down", ".table-down ul li");
     var ascc = localStorage.getItem("information");
-    // console.log(ascc.substr(2, 2));
+    // console.log(document.querySelector('.el-icon-check').classList.add('aaa'));
+    this.trDom = document.querySelectorAll(".el-icon-check");
+    for (var i = 0; i < this.trDom.length; i++) {
+      this.trDom[i].classList.remove("el-icon-check");
+    }
   }
 };
 </script>
@@ -361,31 +378,31 @@ export default {
             }
             th:nth-child(2) {
               position: relative;
-              .table-down {
-                display: none;
-                position: absolute;
-                width: 106px;
-                left: 18%;
-                top: 46px;
-                ul {
-                  position: absolute;
-                  width: 100%;
-                  top: 14px;
-                  font-size: 12px;
-                  box-shadow: 2px 2px 5px #cccccc;
-                  background-color: #ffffff;
-                  color: #cccccc;
-                  li {
-                    width: 100%;
-                    padding: 12px;
-                    background-color: #ffffff;
-                    box-sizing: border-box;
-                  }
-                  .liColor {
-                    background: #3999f9;
-                  }
-                }
-              }
+              // .table-down {
+              //   display: none;
+              //   position: absolute;
+              //   width: 106px;
+              //   left: 18%;
+              //   top: 46px;
+              //   ul {
+              //     position: absolute;
+              //     width: 100%;
+              //     top: 14px;
+              //     font-size: 12px;
+              //     box-shadow: 2px 2px 5px #cccccc;
+              //     background-color: #ffffff;
+              //     color: #cccccc;
+              //     li {
+              //       width: 100%;
+              //       padding: 12px;
+              //       background-color: #ffffff;
+              //       box-sizing: border-box;
+              //     }
+              //     .liColor {
+              //       background: #3999f9;
+              //     }
+              //   }
+              // }
             }
           }
           .tr-main {
@@ -487,9 +504,9 @@ export default {
       left: 0;
       top: 0;
     }
-  }
-  .machine {
-    display: none;
+    .el-dropdown-menu{
+      width: 90px;
+    }
   }
 }
 </style>
