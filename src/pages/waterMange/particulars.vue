@@ -272,6 +272,7 @@
   </div>
 </template>
 <script>
+import bus from '../../js/bus'
 export default {
   name: "particulars",
   data() {
@@ -303,6 +304,8 @@ export default {
   },
   methods:{
     hidden(){
+      //触发home中的getParam使其改变home中的Judge的值
+      bus.$emit('getParam');
       this.$emit('hidden');
     }
   },

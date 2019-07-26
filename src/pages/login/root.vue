@@ -33,7 +33,7 @@
 <script>
 import Axios from "axios";
 import QS from "qs";
-import install from '../../js/cookie';
+import install from "../../js/cookie";
 export default {
   name: "login",
   data() {
@@ -92,23 +92,24 @@ export default {
     //请求登录
     RequestLogin() {
       var _this = this;
-      this.$post("/loginLanOu",{phone: this.dom.userDom.value,passWord: this.dom.pwdDom.value})
-      .then(res => {
+      this.$post("/loginLanOu", {
+        phone: this.dom.userDom.value,
+        passWord: this.dom.pwdDom.value
+      }).then(res => {
         setTimeout(() => {
-          this.event.setCookie(res.data.code, 7);
+          console.log(res);
           if (res.data.code === 0) {
+            this.event.setCookie(res.data.code, 7);
             this.$router.replace("/homepage");
             let _data = res.data.data;
-            let _dataArr=[];
-            for (var i = 0; i < _data.length; i++) {
-              _dataArr.push = _data[i].lanOuDid;
-            }
-            console.log(_data);
+            let _dataArr = [];
+            _dataArr = _data[0].lanOuDid.split(",");
             let _newdataArr = JSON.stringify(_dataArr);
-            localStorage.setItem("did", _newdataArr);          }
+            localStorage.setItem("did", _newdataArr);
+          }
         }, 2000);
-      })
-    },
+      });
+    }
   },
   mounted() {
     this.dom.userDom = document.querySelector(".userInfo");

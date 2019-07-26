@@ -64,8 +64,13 @@
               <th>用户</th>
               <th>操作项</th>
             </tr>
-            <tr class="tr-main" align="center" v-for="item in this.machineList" :key="item.id">
-              <td> {{item.productId}} </td>
+            <tr
+              class="tr-main"
+              align="center"
+              v-for="(item,index) in this.machineList"
+              :key="index"
+            >
+              <td>{{item}}</td>
               <td>
                 <div>在线状态: 在线</div>
                 <div>在线状态: 在线</div>
@@ -179,12 +184,14 @@ export default {
       console.log(this.test);
     },
     showMachine() {
+      this.$emit("routerJudge");
       this.checkJudge = true;
     },
     hiddenMachine() {
       this.checkJudge = false;
     },
     detailsShow() {
+      this.$emit("routerJudge");
       this.detailsJudge = true;
     },
     detailshidden() {
@@ -197,16 +204,21 @@ export default {
       this.trDom[item.ID].classList.add("el-icon-check");
     },
     machineID() {
-      this.$get("/getLanOuUserInfo", {
-        pageNum: "1",
-        pageSize: "4"
-      }).then(res => {
-        (this.sortPage.total = res.data.data.total),
-          (this.sortPage.pages = res.data.data.pages),
-          (this.sortPage.pageSize = res.data.data.pageSize);
-        this.machineList = res.data.data.list;
-        console.log(res.data.data.list)
-      });
+      this.machineList = JSON.parse(localStorage.getItem("did"));
+    },
+    getDid() {
+      let _this = this;
+      for (let i = 0; i < this.machineList.length; i++) {
+        console.log(this.machineList[i]);
+        this.$get("/getDidByPayload", { did: this.machineList[i] }).then(
+          res => {
+            localStorage.setItem(
+              "information" + _this.machineList[i],
+              res.data.data
+            );
+          }
+        );
+      }
     }
   },
   components: {
@@ -215,24 +227,20 @@ export default {
     parameter
   },
   created() {
-    this.$get("/getDidByPayload", { did: "14" }).then(res => {
-      console.log(res);
-      localStorage.setItem("information", res.data.data);
-    });
     this.machineID();
-    setTimeout(() => {
-      this.sortPage.total = this.sortPage.total;
-      this.sortPage.pages = this.sortPage.pages;
-      this.sortPage.pageSize = this.sortPage.pageSize;
-      this.machineList = this.machineList;
-    }, 1000);
+    this.getDid();
   },
   mounted() {
-    var ascc = localStorage.getItem("information");
     this.trDom = document.querySelectorAll(".el-icon-check");
     for (var i = 0; i < this.trDom.length; i++) {
       this.trDom[i].classList.remove("el-icon-check");
     }
+    this.$get('/getLanOuProjectInfoBydid',{
+      pageNum:'1',
+      pageSize:'5',
+      did:'16',
+      accountId:'1'
+    }).then(res => console.log(res.data))
   }
 };
 </script>
@@ -455,27 +463,6 @@ export default {
         }
       }
     }
-    // .pagetion {
-    //   width: 100%;
-    //   text-align: center;
-    //   margin-top: 46px;
-    //   .page-show {
-    //     display: inline-block;
-    //     .nowPage {
-    //       color: #3a9ef4;
-    //       margin-right: -10px;
-    //     }
-    //     .totalPage {
-    //       color: #151515;
-    //       margin-left: -10px;
-    //     }
-    //     i {
-    //       display: inline-block;
-    //       margin-top: 2px;
-    //       padding: 0;
-    //     }
-    //   }
-    // }
     .popup {
       position: absolute;
       left: 0;

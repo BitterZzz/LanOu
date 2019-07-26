@@ -7,33 +7,50 @@ export function get (url, params) {
     }).then(res => {
       resolve(res)
     })
-    .catch(err => {
-        reject(err);
-    })
+      .catch(err => {
+        reject(err)
+      })
   })
 }
 
-export function post(url,params) {
-    return new Promise( (resolve, reject) => {
-        Axios.post(url,Qs.stringify(params))
-        .then(res => {
-            resolve(res);
-        })
-        .catch(err => {
-            reject(err.data);
-        })
-    } )
+// export function getBody (url, params) {
+//   return new Promise((resolve, reject) => {
+//     Axios.get(url, {
+//       params: params,
+//     },
+//     {
+//       did:'14'
+//     }
+//     ).then(res => {
+//       resolve(res)
+//     })
+//       .catch(err => {
+//         reject(err)
+//       })
+//   })
+// }
+
+export function post (url, params) {
+  return new Promise((resolve, reject) => {
+    Axios.post(url, Qs.stringify(params))
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  })
 }
 
-export function delet(url,params) {
-  return new Promise( (resolve, reject) => {
+export function delet (url, params) {
+  return new Promise((resolve, reject) => {
     Axios.delete(url, {
       params: params
     }).then(res => {
       resolve(res)
     })
-    .catch(err => {
-        reject(err);
-    })
+      .catch(err => {
+        reject(err)
+      })
   })
 }

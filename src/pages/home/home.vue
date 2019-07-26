@@ -19,7 +19,6 @@
             <a href="#">退出管理</a>
           </li>
         </div>
-      
       </div>
     </div>
     <div class="mainBox">
@@ -45,15 +44,15 @@
       </div>
       <div class="main">
         <div class="content">
-          <router-view></router-view>
+          <router-view @routerJudge="routerJudge"></router-view>
         </div>
       </div>
     </div>
+    <div class="curtain" v-if="Judge"></div>
   </div>
 </template>
-
 <script>
-
+import bus from '../../js/bus'
 export default {
   name: "home",
   data() {
@@ -79,8 +78,8 @@ export default {
           name: "账号管理",
           path: "account",
           url: require("../../assets/img/icon3.png"),
-          require: require("../../assets/img/icon4.png"),
-        } ,
+          require: require("../../assets/img/icon4.png")
+        },
         {
           id: 4,
           name: "用户管理",
@@ -95,20 +94,33 @@ export default {
           url: require("../../assets/img/icon7.png"),
           require: require("../../assets/img/icon8.png")
         }
-      ]
+      ],
+    Judge:false
     };
   },
   methods: {
     homeAction(name) {
       this.isSelect = name;
     },
-    quit(){
+    quit() {
       this.event.clearCookie();
-      this.$router.replace('/login');
+      this.$router.replace("/login");
+      localStorage.clear();
+    },
+    routerJudge(){
+      this.Judge = true;
     }
+  },
+  created(){
+    bus.$on('getParam',() => {
+      this.Judge = false
+    })
   },
   mounted() {
     this.isSelect = this.$route.name;
+  },
+  beforeDestroy(){
+    bus.$off('getParam')
   }
 };
 </script>
@@ -117,6 +129,16 @@ export default {
 #home {
   position: relative;
   //  margin: auto;
+  .curtain{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    opacity: 0.3;
+  }
   .header {
     width: 100%;
     height: 112px;
@@ -243,7 +265,7 @@ export default {
       .active {
         color: #3999f9;
         background: #ecf9ff;
-        border-right: 2px solid #3999F9;
+        border-right: 2px solid #3999f9;
       }
     }
     .main {
