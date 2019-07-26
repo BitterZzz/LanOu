@@ -86,7 +86,7 @@
       <div id="shadow" v-if="showShadow"></div>
     </transition>
     <addPage v-if="showPage" @sonPage="accountPage" />
-    <sorter />
+    <sorter :pageMsg="sortPage"/>
   </div>
 </template>
 
@@ -114,14 +114,11 @@ export default {
       ky: ky,
       stop: stop,
       showPage: false,
-      list: [
-        { value: "用户名" },
-        { value: "角色名称" },
-        { value: "基本权限" },
-        { value: "操作权限" },
-        { value: "创建时间" },
-        { value: "操作项" }
-      ]
+      sortPage: {
+        pages: 1,
+        pageSize: 1,
+        total: 1
+      }
     };
   },
   methods: {
@@ -204,42 +201,39 @@ export default {
     },
     // 判断是否删除选中的账户信息（可选择）
     deleteAllInfo() {
+      // this.showEntire = true;
+      // this.showShadow = true;
 
-          // this.showEntire = true;
-          // this.showShadow = true;
-
-      if(this.selectId === ""){
-          //  console.log(1)
-           return
-      }else if(this.selectId !==""){
-          
-          this.showEntire = true;
-          this.showShadow = true;
+      if (this.selectId === "") {
+        this.$message({
+          message: "请勾选需要删除的账户"
+        });
+        return;
+      } else if (this.selectId !== "") {
+        this.showEntire = true;
+        this.showShadow = true;
       }
     },
     // 确定删除选中的全部账户信息
     entireInfo() {
-      // this.$delete("/deleteLanOuAccountInfo", {
-      //   id: this.selectId
-      // }).then(res => {
-      //   console.log("删除所有账户信息");
-      //   this.showAccountInfo();
-      // });
-         console.log("已经删除")
-          this.selectId =""
-          this.showEntire = false;
-          this.showShadow = false;
-          this.showAccountInfo()
-      
-    },
-    // 取消选中的账户信息
-    entireSelect() {
-      
-      this.selectId = ""
+      this.$delete("/deleteLanOuAccountInfo", {
+        id: this.selectId
+      }).then(res => {
+        console.log("删除所有账户信息");
+        this.showAccountInfo();
+      });
+      console.log("已经删除");
+      this.selectId = "";
       this.showEntire = false;
       this.showShadow = false;
       this.showAccountInfo();
- 
+    },
+    // 取消选中的账户信息
+    entireSelect() {
+      this.selectId = "";
+      this.showEntire = false;
+      this.showShadow = false;
+      this.showAccountInfo();
     },
     // 新增页面
     newAdd() {
@@ -279,7 +273,7 @@ export default {
   .accountBox {
     height: 590px;
     border: 1px solid #cccccc;
-    border-bottom: none;
+    // border-bottom: none;
     .top {
       height: 80px;
       background: #eeeeee;
