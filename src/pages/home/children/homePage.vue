@@ -136,7 +136,6 @@ export default {
         methods:{
              faultShowAction(){
                    this.maintainShow = true                  
-                 
              },
              mainShowAction(){
                    this.faultShow = true

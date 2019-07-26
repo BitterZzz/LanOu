@@ -9,7 +9,7 @@
     <div class="userBox">
       <ul class="Top">
         <li>
-          <p>
+          <p @click="startUsing()">
             <img src="../../../assets/img/start.png" alt />启用
           </p>
           <p @click="forbidden()">
@@ -20,7 +20,7 @@
           </p>
         </li>
         <li class="inp">
-          <input type="text" class="text" placeholder="搜索用户名/真实姓名" />
+          <input type="text" class="text" id="searchText" placeholder="搜索手机号/真实姓名" />
           <img src="../../../assets/img/search.png" alt @click="serachAction()" />
         </li>
       </ul>
@@ -55,28 +55,46 @@
         </el-table>
       </ul>
     </div>
-    <!-- <transition
+    <transition
       name="slide-fade"
       enter-active-class=" animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-     
-    </transition>-->
-    <!-- <transition
+      <div id="popup" v-if="showPopup">
+        <div class="hint">
+          <img src="../../../assets/img/card.png" alt /> 确认删除所选项目吗？
+          <span @click="cancelSelect()">x</span>
+        </div>
+        <div class="buttons">
+          <a @click="deleteInfo()">确定</a>
+          <a @click="cancelSelect()">取消</a>
+        </div>
+      </div>
+    </transition>
+    <transition
       name="slide-fade"
       enter-active-class=" animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      
-    </transition> -->
-    <removeMeg
-        v-if="showMessage"
-        @cancelSelect="cancelSelect"
-        @showPopup="showPopup"
-        @deleteInfo="deleteInfo"
-        @showShadow="showShadow"
-      />
-    <sorter></sorter>
+      <div id="popup" v-if="showUser">
+        <div class="hint">
+          <img src="../../../assets/img/card.png" alt /> 确认删除所选项目吗？
+          <span @click="cancelSelect()">x</span>
+        </div>
+        <div class="buttons">
+          <a @click="userInfo()">确定</a>
+          <a @click="userCancel()">取消</a>
+        </div>
+      </div>
+    </transition>
+    <transition
+      name="slide-fade"
+      enter-active-class=" animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div id="shadow" v-if="showShadow"></div>
+    </transition>
+    <sorter :pageMsg="sortPage"></sorter>
   </div>
 </template>
 
@@ -86,34 +104,28 @@ import ky from "../../../assets/img/ky.png";
 import stop from "../../../assets/img/stop.png";
 import { setTimeout } from "timers";
 import sorter from "../../../components/sorter";
-import removeMeg from "../../../components/removeMeg";
 export default {
   components: {
-    sorter,
-    removeMeg
+    sorter
   },
   data() {
     return {
       tableData: [],
       multipleSelection: [],
       isEnabled: "",
-      showMessage: false,
+      showPopup: false,
+      showShadow: false,
+      showUser: false,
+      portionUserId: "",
       ky: ky,
       stop: stop,
       deleteId: "",
       deleteAllId: "",
-      list: [
-        { value: "机器ID" },
-        { value: "用户名" },
-        { value: "真实姓名" },
-        { value: "手机号码" },
-        { value: "职位" },
-        { value: "工作单位" },
-        { value: "用户设备" },
-        { value: "账号状态" },
-        { value: "注册时间" },
-        { value: "操作项" }
-      ]
+      sortPage: {
+        pages: 1,
+        pageSize: 1,
+        total: 1
+      }
     };
   },
   methods: {
@@ -129,34 +141,57 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    // 选择单个
-    handleSelectAlone(val) {
-      console.log(val);
+    // 勾选单个用户信息
+    handleSelectAlone(useID) {
+      let arr = [];
+      for (var i = 0; i < useID.length; i++) {
+        arr.push(useID[i].id);
+      }
+      this.portionUserId = arr.join(",");
+      console.log(this.portionUserId);
     },
-    // 选择全部用户信息
-    handleSelectAll(val) {
-      console.log(val);
-      // console.log("选择全部")
+    // 勾选全部用户信息
+    handleSelectAll(allUserID) {
+      let arry = [];
+      for (var j = 0; j < allUserID.length; j++) {
+        arry.push(allUserID[j].id);
+      }
+      this.portionUserId = arry.join(",");
+      console.log(this.portionUserId);
     },
+    // 函数封装
+    capsulation(res) {
+      this.tableData = res.data.data.list;
+
+      for (var i = 0; i < this.tableData.length; i++) {
+        this.tableData[i].createTime = this.tableData[i].createTime.substring(
+          0,
+          10
+        );
+        // console.log(this.tableData[i].createTime);
+      }
+      for (var i = 0; i < this.tableData.length; i++) {
+        this.isEnabled = this.tableData[i].isEnabled;
+        // console.log(this.isEnabled);
+      }
+    },
+    // 获取全部用户信息
     showUserInfo() {
       this.$get("/getLanOuUserInfo", {
         pageNum: 1,
         pageSize: 5
       }).then(res => {
-        this.tableData = res.data.data.list;
-
-        for (var i = 0; i < this.tableData.length; i++) {
-          this.tableData[i].createTime = this.tableData[i].createTime.substring(
-            0,
-            10
-          );
-          // console.log(this.tableData[i].createTime);
-        }
-        for (var i = 0; i < this.tableData.length; i++) {
-          this.isEnabled = this.tableData[i].isEnabled;
-          // console.log(this.isEnabled);
-        }
+        console.log(res.data.data.list);
+        this.capsulation(res);
       });
+    },
+    // 启用
+    startUsing(){
+        this.$get("/updateByLanOuUserState",{
+          lanOuUserStateVo:{
+            
+          }
+        })
     },
     // 禁用
     forbidden() {
@@ -171,25 +206,54 @@ export default {
         console.log(res);
       });
     },
+    // 搜索用户信息
     serachAction() {
-      console.log("搜索");
+      let searchText = document.querySelector("#searchText");
+      let valuePhone = /^[1][3,4,5,7,8][0-9]{9}$/;
+      if (valuePhone.test(searchText.value)) {
+        console.log(1);
+        this.cellPhoneSear();
+      } else {
+        console.log(2);
+        this.reacNameSear();
+      }
+    },
+    // 封装根据真实姓名realName查询
+    reacNameSear() {
+      console.log("真实姓名");
+      this.$get("/getLanOuUserInfo", {
+        pageNum: 1,
+        pageSize: 5,
+        realName: searchText.value
+      }).then(res => {
+        console.log(res.data.data.list);
+        this.tableData = res.data.data.list;
+      });
+    },
+    // 封装根据手机号cellPhone查询
+    cellPhoneSear() {
+      console.log("手机号码");
+      this.$get("/getLanOuUserInfo", {
+        pageNum: 1,
+        pageSize: 5,
+        cellPhone: searchText.value
+      }).then(res => {
+        console.log(res.data.data.list);
+        this.tableData = res.data.data.list;
+      });
     },
     // 删除当前行
     handleClick(aloneId) {
-      console.log(aloneId);
+      console.log(aloneId.id);
       this.deleteId = aloneId.id;
-      this.showMessage = true;
-    },
-    showPopup() {
-      this.showMessage = false;
-    },
-    showShadow() {
-      this.showMessage = false;
+      this.showPopup = !this.showPopup;
+      this.showShadow = !this.showShadow;
     },
     // 删除单个用户信息
     deleteInfo() {
       console.log("确定删除");
-      this.showMessage = false;
+      this.showPopup = false;
+      this.showShadow = false;
 
       this.$delete("/deleteLanOuUser", {
         id: this.deleteId
@@ -200,25 +264,47 @@ export default {
     // 取消删除
     cancelSelect() {
       console.log("取消删除");
-      this.showMessage = false;
-
+      this.showPopup = false;
+      this.showShadow = false;
       this.showUserInfo();
     },
-    // 删除所有用户信息
+    // 判断是否删除所选择用户信息
     RemoveAll() {
-      let arr = [];
-      for (var i = 0; i < this.cities.length; i++) {
-        arr[i] = this.cities[i].id;
+      if (this.portionUserId === "") {
+        this.$message({
+          message: "请勾选需要删除的用户"
+        });
+        return;
+      } else if (this.portionUserId !== "") {
+        this.showUser = !this.showUser;
+        this.showShadow = !this.showShadow;
       }
-      let list = arr.join(",");
-      console.log(list);
+    },
+    // 确定删除所选择的用户信息
+    userInfo() {
+      this.showUser = false;
+      this.showShadow = false;
+      console.log(this.portionUserId);
+      this.showUserInfo();
 
       this.$delete("/deleteLanOuUser", {
-        id: list
+        id: this.portionUserId
       }).then(res => {
         console.log("删除所有用户信息");
         this.showUserInfo();
       });
+      this.portionUserId = "";
+
+      console.log("已经删除");
+    },
+    // 取消所选择的用户
+    userCancel() {
+      this.showUser = false;
+      this.showShadow = false;
+      console.log(this.portionUserId);
+      this.showUserInfo();
+      this.portionUserId = "";
+      console.log("取消删除");
     }
   },
   created() {
@@ -231,10 +317,10 @@ export default {
 #user {
   padding: 8px 24px 0 24px;
   box-sizing: border-box;
-  .el-checkbox__inner{
-     z-index: 0;
+  .el-checkbox__inner {
+    z-index: 0;
   }
-  .el-table::before{
+  .el-table::before {
     height: 0;
   }
   #title {
@@ -256,7 +342,7 @@ export default {
   .userBox {
     height: 590px;
     border: 1px solid #cccccc;
-    border-bottom: none;
+    // border-bottom: none;
     // margin: 0 24px;
     .Top {
       height: 80px;
