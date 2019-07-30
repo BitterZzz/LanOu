@@ -13,15 +13,14 @@
           <div class="ckeck">
             <el-dropdown trigger="click">
               <span class="el-dropdown-link">
-                下拉菜单
+                机器ID
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-circle-check-outline">蚵仔煎</el-dropdown-item>
+                <el-dropdown-item>机器ID</el-dropdown-item>
+                <el-dropdown-item>安装地址</el-dropdown-item>
+                <el-dropdown-item>故障状态</el-dropdown-item>
+                <el-dropdown-item>保养状态</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -107,16 +106,16 @@
                 <div class="time">
                   <div class="time-title">
                     <span>安装时间:</span>
-                    <img src="../../../assets/img/time.png" alt />
+                    <img src="../../../assets/img/time.png" alt @click="installation()" />
                   </div>
-                  <div>2019-04-06</div>
-                  <div>14:23:12</div>
+                  <div class="installationDateI">2019-04-06</div>
+                  <div class="hhmmssI">14:23:12</div>
                   <div class="time-title">
                     <span>上传时间:</span>
-                    <img src="../../../assets/img/time.png" alt />
+                    <img src="../../../assets/img/time.png" alt @click="uploadtime()" />
                   </div>
-                  <div>2019-04-06</div>
-                  <div>14:23:12</div>
+                  <div class="installationDateU">2019-04-06</div>
+                  <div class="hhmmssU">14:23:12</div>
                 </div>
               </td>
               <td>6</td>
@@ -134,12 +133,16 @@
       </div>
       <sorter :pageMsg="sortPage"></sorter>
     </div>
+    <!-- 参数配置组件 -->
     <div v-if="checkJudge">
       <particulars @hidden="hiddenMachine()"></particulars>
     </div>
+    <!-- 查看组件 -->
     <div v-if="detailsJudge">
       <parameter @hiddenSecond="detailshidden()"></parameter>
     </div>
+    <maintain></maintain>    
+    <div class="curtain"></div>
   </div>
 </template>
 
@@ -147,6 +150,7 @@
 import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
+import maintain from "../../waterMange/maintain"
 export default {
   name: "water",
   data() {
@@ -177,6 +181,13 @@ export default {
     };
   },
   methods: {
+    installation() {
+      console.log('installation')
+    },
+    uploadtime() {
+      console.log('uploadtime')
+    },
+
     show() {},
     //保存点击时获取到的index
     saveIndex(item) {
@@ -224,7 +235,8 @@ export default {
   components: {
     particulars,
     sorter,
-    parameter
+    parameter,
+    maintain
   },
   created() {
     this.machineID();
@@ -235,12 +247,12 @@ export default {
     for (var i = 0; i < this.trDom.length; i++) {
       this.trDom[i].classList.remove("el-icon-check");
     }
-    this.$get('/getLanOuProjectInfoBydid',{
-      pageNum:'1',
-      pageSize:'5',
-      did:'16',
-      accountId:'1'
-    }).then(res => console.log(res.data))
+    this.$get("/getLanOuProjectInfoBydid", {
+      pageNum: "1",
+      pageSize: "5",
+      did: "16",
+      accountId: "1"
+    }).then(res => console.log(res.data));
   }
 };
 </script>
@@ -471,6 +483,13 @@ export default {
     .el-dropdown-menu {
       width: 90px;
     }
+  }
+  .curtain{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #333333;
+    opacity: 0.3;
   }
 }
 </style>

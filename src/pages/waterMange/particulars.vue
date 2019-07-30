@@ -289,16 +289,15 @@ export default {
       relayList: [
         { ID: 200, name:"进水电磁阀", operation:"断开" },
         { ID: 201, name:"浓水电磁阀", operation:"断开" },
-        { ID: 202, name:"进水电磁阀", operation:"断开" },
-        { ID: 203, name:"进水电磁阀", operation:"断开" },
-        { ID: 204, name:"进水电磁阀", operation:"断开" },
-        { ID: 205, name:"进水电磁阀", operation:"断开" },
-        { ID: 206, name:"进水电磁阀", operation:"断开" },
-        { ID: 207, name:"进水电磁阀", operation:"断开" },
-        { ID: 208, name:"进水电磁阀", operation:"断开" },
-        { ID: 209, name:"进水电磁阀", operation:"断开" },
-        { ID: 210, name:"进水电磁阀", operation:"断开" },
-        { ID: 211, name:"进水电磁阀", operation:"断开" },
+        { ID: 202, name:"循环电磁阀", operation:"断开" },
+        { ID: 203, name:"排空电磁阀", operation:"断开" },
+        { ID: 204, name:"原水检测电磁阀", operation:"断开" },
+        { ID: 205, name:"纯水检测电磁阀", operation:"断开" },
+        { ID: 206, name:"水路关闭电磁阀", operation:"断开" },
+        { ID: 207, name:"原水泵", operation:"断开" },
+        { ID: 208, name:"高压泵", operation:"断开" },
+        { ID: 209, name:"取水泵", operation:"断开" },
+        { ID: 210, name:"UV", operation:"断开" },
         ]
     };
   },
@@ -616,7 +615,7 @@ export default {
         .operation-right {
           width: 44.4%;
           height: 100%;
-          padding-bottom:180px; 
+          padding-bottom:258PX; 
           background: #ffffff;
           float: right;
           margin-right: 4.8%;

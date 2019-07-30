@@ -13,23 +13,6 @@ export function get (url, params) {
   })
 }
 
-// export function getBody (url, params) {
-//   return new Promise((resolve, reject) => {
-//     Axios.get(url, {
-//       params: params,
-//     },
-//     {
-//       did:'14'
-//     }
-//     ).then(res => {
-//       resolve(res)
-//     })
-//       .catch(err => {
-//         reject(err)
-//       })
-//   })
-// }
-
 export function post (url, params) {
   return new Promise((resolve, reject) => {
     Axios.post(url, Qs.stringify(params))
