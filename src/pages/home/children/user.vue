@@ -95,6 +95,8 @@
       <div id="shadow" v-if="showShadow"></div>
     </transition>
     <sorter :pageMsg="sortPage"></sorter>
+    <!-- <input type="text" id="aaa" placeholder="获取不到内容啊">
+    <button @click="buttonAction()">点击获取</button> -->
   </div>
 </template>
 
@@ -129,6 +131,10 @@ export default {
     };
   },
   methods: {
+    buttonAction(){
+           let  dom = document.querySelector("#aaa")
+           console.log(dom.value)
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -196,11 +202,11 @@ export default {
     // 禁用
     forbidden() {
       this.$get("/updateByLanOuUserState", {
-        lanOuUserStateVo: {
-          did: "16",
-          id: "6",
+        body: {
+          did: "12",
+          id: "1",
           isEnabled: "1",
-          userId: "1124"
+          userId: "15097"
         }
       }).then(res => {
         console.log(res);
