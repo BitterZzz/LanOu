@@ -58,17 +58,16 @@
         </div>
       </div>
     </div>
-    <div class="robot" v-if="showRobot">
+    <div class="robot">
       <h2>指定查看机器：</h2>
       <div>
         <button type="submit" class="submit">全部机器</button>
         <br />
-        <input
-          type="text"
-          onkeyup="this.value=this.value.replace(/[^\w_]/g,'');"
-          placeholder="请输入机器ID"
-        />
-        <span>+ 添加</span>
+        <input type="text" name="" id="botID">
+        <button  type="submit" class="append" @click="appendAction()">+ 添加</button>
+        <div class="reveal" v-if="showReveal">
+          <div v-for="item in append" :key="item.id"></div>
+        </div>
       </div>
     </div>
     <div class="buttom">
@@ -99,16 +98,21 @@ export default {
         { id: 11, value: "查看后台操作日志" }
       ],
       robotId: [],
-      showRobot: false,
-      check2:[]
+      check2: [],
+      append: [],
+      showReveal: false
     };
   },
   methods: {
+    appendAction(){
+             console.log(124)
+             let  botID = document.querySelector("#botID")
+             console.log(botID.value)
+    },
     robotShow(item) {
       this.check2.push(item.id);
-    //   let checkId = check.join(",");
+      //   let checkId = check.join(",");
       console.log(this.check2);
-      this.showRobot = true;
     },
     backHome() {
       this.$emit("sonPage");
@@ -124,11 +128,12 @@ export default {
         });
       }
     },
-    importInfo() {}
   },
-  mounted() {},
+  mounted() {
+
+  },
   created() {
-    this.importInfo();
+    
   }
 };
 </script>
@@ -143,7 +148,7 @@ export default {
   padding: 8px 24px 0;
   box-sizing: border-box;
   background: #ffffff;
-  z-index: 10;
+  z-index: 16;
   #title {
     width: 400px;
     height: 22px;
@@ -313,7 +318,7 @@ export default {
         border-radius: 5px;
         margin-right: 24px;
       }
-      span {
+      .append {
         display: inline-block;
         width: 90px;
         height: 50px;
@@ -325,6 +330,25 @@ export default {
         border: 1px solid #cccccc;
         border-radius: 5px;
         cursor: pointer;
+      }
+      .reveal {
+        margin-top: 5px;
+        width: 410px;
+        height: 80px;
+        border: 1px solid #cccccc;
+        overflow: auto;
+        padding-top: 5px;
+        box-sizing: border-box;
+        div {
+          width: 90px;
+          height: 30px;
+          line-height: 30px;
+          margin: 0 5px 5px 0;
+          border: 1px solid #cccccc;
+          text-align: center;
+          float: left;
+          background: #ecf9ff;
+        }
       }
     }
   }

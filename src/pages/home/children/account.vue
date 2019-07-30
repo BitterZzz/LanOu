@@ -69,8 +69,8 @@
     >
       <div id="entire" v-if="showEntire">
         <div class="hint">
-          <img src="../../../assets/img/card.png" alt /> 确认删除所选项目吗？
-          <span>x</span>
+          <img src="../../../assets/img/card.png"  /> 确认删除所选项目吗？
+          <span @click="entireSelect()">x</span>
         </div>
         <div class="buttons">
           <a @click="entireInfo()">确定</a>
@@ -91,8 +91,6 @@
 </template>
 
 <script>
-import ky from "../../../assets/img/ky.png";
-import stop from "../../../assets/img/ky.png";
 import addPage from "../../addPage/addPage.vue";
 import Axios from "axios";
 import sorter from "../../../components/sorter";
@@ -111,8 +109,6 @@ export default {
       showShadow: false,
       selectId: "",
       valueId: "",
-      ky: ky,
-      stop: stop,
       showPage: false,
       sortPage: {
         pages: 1,
