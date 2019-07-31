@@ -43,8 +43,8 @@
           <el-table-column prop="workUnit" label="工作单位" show-overflow-tooltip></el-table-column>
           <el-table-column prop="productId" label="用户设备" show-overflow-tooltip></el-table-column>
           <el-table-column prop="isEnabled" label="账号状态" show-overflow-tooltip>
-            {{this.isEnabled === "1" ? '可用': '禁止'}}
-            <img :src="this.isEnabled === '1' ?  stop : ky" />
+            {{this.isEnabled === "0" ? '禁止': '可用'}}
+            <img :src="this.isEnabled === '0' ?  stop : ky" />
           </el-table-column>
           <el-table-column prop="createTime" label="注册时间" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作项" show-overflow-tooltip class="delete">
@@ -95,13 +95,12 @@
       <div id="shadow" v-if="showShadow"></div>
     </transition>
     <sorter :pageMsg="sortPage"></sorter>
-    <!-- <input type="text" id="aaa" placeholder="获取不到内容啊">
-    <button @click="buttonAction()">点击获取</button> -->
   </div>
 </template>
 
 <script>
 import Axios from "axios";
+import Qs from "qs";
 import ky from "../../../assets/img/ky.png";
 import stop from "../../../assets/img/stop.png";
 import { setTimeout } from "timers";
@@ -120,6 +119,7 @@ export default {
       showUser: false,
       portionUserId: "",
       ky: ky,
+      checkEnabled: [],
       stop: stop,
       deleteId: "",
       deleteAllId: "",
@@ -131,10 +131,6 @@ export default {
     };
   },
   methods: {
-    buttonAction(){
-           let  dom = document.querySelector("#aaa")
-           console.log(dom.value)
-    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -150,20 +146,41 @@ export default {
     // 勾选单个用户信息
     handleSelectAlone(useID) {
       let arr = [];
+      var checkEnabled = {};
       for (var i = 0; i < useID.length; i++) {
         arr.push(useID[i].id);
+        checkEnabled.did = useID[i].did;
+        checkEnabled.id = useID[i].id;
+        checkEnabled.isEnabled = useID[i].isEnabled;
+        checkEnabled.userId = useID[i].userId;
       }
+      this.checkEnabled.push(checkEnabled);
+      console.log(this.checkEnabled);
+      // console.log(checkEnabled);
       this.portionUserId = arr.join(",");
-      console.log(this.portionUserId);
+      // console.log(this.portionUserId);
     },
     // 勾选全部用户信息
     handleSelectAll(allUserID) {
       let arry = [];
-      for (var j = 0; j < allUserID.length; j++) {
+      let checkEnabled = {};
+      let arr = [];
+      for (let j = 0; j < allUserID.length; j++) {
         arry.push(allUserID[j].id);
+        checkEnabled.did = allUserID[j].did;
+        checkEnabled.id = allUserID[j].id;
+        checkEnabled.isEnabled = allUserID[j].isEnabled;
+        checkEnabled.userId = allUserID[j].userId;
+        // this.checkEnabled.push(checkEnabled);
+        if(this.checkEnabled === '[]'){
+          this.checkEnabled.push(checkEnabled);
+          console.log(1111)
+        }
       }
+
+      console.log(this.checkEnabled);
       this.portionUserId = arry.join(",");
-      console.log(this.portionUserId);
+      // console.log(this.portionUserId);
     },
     // 函数封装
     capsulation(res) {
@@ -192,25 +209,31 @@ export default {
       });
     },
     // 启用
-    startUsing(){
-        this.$get("/updateByLanOuUserState",{
-          lanOuUserStateVo:{
-            
-          }
-        })
+    startUsing() {
+      for (var i = 0; i < this.checkEnabled.length; i++) {
+        Axios.post("/updateByLanOuUserState", {
+          did: this.checkEnabled[i].did,
+          id: this.checkEnabled[i].id,
+          isEnabled: this.checkEnabled[i].isEnabled,
+          userId: this.checkEnabled[i].userId
+        }).then(res => {
+          console.log(res);
+        });
+      }
     },
     // 禁用
     forbidden() {
-      this.$get("/updateByLanOuUserState", {
-        body: {
-          did: "12",
-          id: "1",
-          isEnabled: "1",
-          userId: "15097"
-        }
-      }).then(res => {
-        console.log(res);
-      });
+      for (var i = 0; i < this.checkEnabled.length; i++) {
+        Axios.post("/updateByLanOuUserState", {
+          did: this.checkEnabled[i].did,
+          id: this.checkEnabled[i].id,
+          isEnabled: "0",
+          userId: this.checkEnabled[i].userId
+        }).then(res => {
+          console.log(res);
+          this.showUserInfo();
+        });
+      }
     },
     // 搜索用户信息
     serachAction() {

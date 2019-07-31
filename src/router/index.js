@@ -66,8 +66,7 @@ const routes = [
             }else{
               next('/login')
             }
-          }
-          
+          },
         },
         {
           path:'operationLog',
