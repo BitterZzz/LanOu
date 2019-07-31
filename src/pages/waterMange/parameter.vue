@@ -368,7 +368,7 @@ export default {
   border: solid 1px red;
   background: #ffffff;
   left: -156px;
-  top: 20px;
+  top: -24px;
   z-index: 10000;
   #header {
     .header-box {

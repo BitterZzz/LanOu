@@ -69,7 +69,7 @@
               v-for="(item,index) in this.machineList"
               :key="index"
             >
-              <td>{{item}}</td>
+              <td> {{item.pdid}} </td>
               <td>
                 <div>在线状态: 在线</div>
                 <div>在线状态: 在线</div>
@@ -123,7 +123,7 @@
                 <div class="operation" @click="saveIndex(item)">
                   <p @click="showMachine()">查看</p>
                   <p @click="detailsShow()">参数配置</p>
-                  <p>信息维护</p>
+                  <p @click="maintainShow()">信息维护</p>
                   <p>日志</p>
                 </div>
               </td>
@@ -141,8 +141,10 @@
     <div v-if="detailsJudge">
       <parameter @hiddenSecond="detailshidden()"></parameter>
     </div>
-    <maintain></maintain>    
-    <div class="curtain"></div>
+    <div v-if="maintainJudge">
+      <maintain @maintain="maintainHidden()"></maintain>
+    </div>
+    <div class="curtain" v-if="curtainJudge"></div>
   </div>
 </template>
 
@@ -150,7 +152,8 @@
 import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
-import maintain from "../../waterMange/maintain"
+import maintain from "../../waterMange/maintain";
+import {stringToHex} from "../../../js/stringToHex";
 export default {
   name: "water",
   data() {
@@ -172,20 +175,22 @@ export default {
       trDom: "",
       checkJudge: false,
       detailsJudge: false,
+      maintainJudge: false,
+      curtainJudge: false,
       sortPage: {
-        pages: 1,
+        pages: 2,
         pageSize: 1,
-        total: 1
+        total: 6
       },
       machineList: []
     };
   },
   methods: {
     installation() {
-      console.log('installation')
+      console.log("installation");
     },
     uploadtime() {
-      console.log('uploadtime')
+      console.log("uploadtime");
     },
 
     show() {},
@@ -208,6 +213,14 @@ export default {
     detailshidden() {
       this.detailsJudge = false;
     },
+    maintainShow() {
+      this.curtainJudge = true;
+      this.maintainJudge = true;
+    },
+    maintainHidden() {
+      this.curtainJudge = false;
+      this.maintainJudge = false;
+    },
     dropdown(item) {
       for (var i = 0; i < this.trDom.length; i++) {
         this.trDom[i].classList.remove("el-icon-check");
@@ -215,23 +228,29 @@ export default {
       this.trDom[item.ID].classList.add("el-icon-check");
     },
     machineID() {
-      this.machineList = JSON.parse(localStorage.getItem("did"));
+      // this.machineList = localStorage.getItem("did").split(",");
     },
+    //获取相应did的字节
     getDid() {
       let _this = this;
-      for (let i = 0; i < this.machineList.length; i++) {
-        console.log(this.machineList[i]);
-        this.$get("/getDidByPayload", { did: this.machineList[i] }).then(
-          res => {
-            localStorage.setItem(
-              "information" + _this.machineList[i],
-              res.data.data
-            );
-          }
-        );
-      }
-    }
+      this.$get("/getDidByPayload", { did: localStorage.getItem("did") }).then(
+        res => {
+          let didMsg = res.data.data;
+          console.log(didMsg);
+        }
+      );
+    },
+    // stringToHex(str) {
+    //   var val = "";
+    //   for (let i = 0; i < str.length; i++) {
+    //     if ((val == "")) val = str.charCodeAt(i).toString(16);
+    //     else val += str.charCodeAt(i).toString(16);
+    //   }
+    //   console.log(val);
+    //   return val;
+    // }
   },
+  //封装的组件
   components: {
     particulars,
     sorter,
@@ -242,17 +261,25 @@ export default {
     this.machineID();
     this.getDid();
   },
-  mounted() {
+  mounted() { 
     this.trDom = document.querySelectorAll(".el-icon-check");
     for (var i = 0; i < this.trDom.length; i++) {
       this.trDom[i].classList.remove("el-icon-check");
     }
     this.$get("/getLanOuProjectInfoBydid", {
       pageNum: "1",
-      pageSize: "5",
-      did: "16",
-      accountId: "1"
-    }).then(res => console.log(res.data));
+      pageSize: "4",
+      did: localStorage.did,
+      level: localStorage.getItem('level')
+    }).then(res => {
+      this.machineList = res.data.data.list
+      console.log(this.machineList)
+    });
+    // setTimeout(()=> {
+    //   this.machineList = this.machineList
+    // },1000)
+    var a = stringToHex("Z           t.   :  #2432432333343234       &  2");
+    console.log(a)
   }
 };
 </script>
@@ -484,7 +511,7 @@ export default {
       width: 90px;
     }
   }
-  .curtain{
+  .curtain {
     position: absolute;
     width: 100%;
     height: 100%;

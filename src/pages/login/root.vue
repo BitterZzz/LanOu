@@ -97,15 +97,14 @@ export default {
         passWord: this.dom.pwdDom.value
       }).then(res => {
         setTimeout(() => {
-          console.log(res);
+          console.log(res.data.data);
           if (res.data.code === 0) {
             this.event.setCookie(res.data.code, 7);
             this.$router.replace("/homepage");
             let _data = res.data.data;
             let _dataArr = [];
-            _dataArr = _data[0].lanOuDid.split(",");
-            let _newdataArr = JSON.stringify(_dataArr);
-            localStorage.setItem("did", _newdataArr);
+            localStorage.setItem("did", res.data.data[0].lanOuDid);
+            localStorage.setItem("level",res.data.data[0].level)
           }
         }, 2000);
       });

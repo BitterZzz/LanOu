@@ -1,7 +1,7 @@
 <template>
   <div id="maintain">
     <div id="maintain-header">
-      <img src="../../assets/img/backb.png" alt />
+      <img src="../../assets/img/backb.png" alt @click="hidden()" />
       <span>工程项目基础信息</span>
     </div>
     <div id="maintain-main">
@@ -15,7 +15,7 @@
               <tr align="center" v-for="item in baseList" :key="item.id">
                 <td>{{item.name}}</td>
                 <td colspan="3">
-                  <input type="text" :placeholder="item.placehold" :disabled="item.disable" />
+                  <input type="text" :placeholder="item.placehold" :disabled="item.disable"/>
                 </td>
               </tr>
               <tr align="center">
@@ -23,7 +23,7 @@
                 <td align="left" colspan="3">
                   <div class="addres-box">
                     <div>
-                      <input type="text" class="addres" />省
+                      <input type="text" class="addres"  />省
                     </div>
                     <div>
                       <input type="text" class="addres" />市
@@ -222,6 +222,17 @@ export default {
         { id: 54, name: "其它" }
       ]
     };
+  },
+  methods:{
+    hidden(){
+      this.$emit('maintain');
+    }
+  },
+  mounted(){
+    document.querySelector('.addres').addEventListener('change',()=>{
+      console.log(document.querySelector('.addres').value)
+    },false)
+    console.log(document.querySelector('.addres'));
   }
 };
 </script>
@@ -233,6 +244,7 @@ export default {
   top: 0;
   left: 50%;
   transform: translate(-50%);
+  z-index: 10000;
   #maintain-header {
     width: 100%;
     height: 60px;
@@ -240,6 +252,7 @@ export default {
     background: #2488dd;
     img {
       vertical-align: middle;
+      cursor: pointer;
     }
     span {
       display: inline-block;

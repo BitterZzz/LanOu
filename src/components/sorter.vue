@@ -25,11 +25,11 @@ export default {
     }
   },
   methods: {
-    handleSizeChange() {
-      console.log(1111);
+    handleSizeChange(val) {
+      console.log(val);
     },
-    handleCurrent() {
-      console.log(2222);
+    handleCurrent(val) {
+      console.log(val);
     }
   },
   mounted(){}
