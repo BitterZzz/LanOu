@@ -61,12 +61,12 @@
     <div class="robot">
       <h2>指定查看机器：</h2>
       <div>
-        <button type="submit" class="submit">全部机器</button>
+        <button type="submit" class="submit" @click="All_selected()">全部机器</button>
         <br />
-        <input type="text" name="" id="botID">
-        <button  type="submit" class="append" @click="appendAction()">+ 添加</button>
+        <input type="text" name="text" id="rotID" />
+        <div class="append" @click="appendFile()">+ 添加</div>
         <div class="reveal" v-if="showReveal">
-          <div v-for="item in append" :key="item.id"></div>
+          <div v-for="item in append" :key="item.id">{{item}}</div>
         </div>
       </div>
     </div>
@@ -80,8 +80,9 @@
 </template>
 
 <script>
+import { format } from 'path';
 export default {
-  name: "addPage",
+  name: "appendPage",
   data() {
     return {
       check: [
@@ -99,41 +100,57 @@ export default {
       ],
       robotId: [],
       check2: [],
-      append: [],
-      showReveal: false
+      showReveal: false,
+      append: []
     };
   },
   methods: {
-    appendAction(){
-             console.log(124)
-             let  botID = document.querySelector("#botID")
-             console.log(botID.value)
-    },
     robotShow(item) {
       this.check2.push(item.id);
-      //   let checkId = check.join(",");
       console.log(this.check2);
     },
     backHome() {
       this.$emit("sonPage");
     },
-    submitAction() {
-      let username = document.querySelector("#username");
-      let password = document.querySelector("#password");
+    appendFile() {
+      let dom = document.querySelector("#rotID").value;
+      if (dom === "") {
+        return;
+      } else if (dom !== "") {
+        this.showReveal = true;
+        this.append.push(dom);
+        console.log(dom);
+      }
 
-      if (username.value === "" || password.value === "") {
+      console.log(this.append);
+    },
+    All_selected() {
+      this.showReveal = false;
+    },
+    // 提交新增页面
+    submitAction() {
+      let phone = document.querySelector("#phone");
+       let format = /^[1][3,4,5,7,8][0-9]{9}$/;
+      if (phone.value !== format) {
         this.$message({
-          message: "账号或密码不能为空",
-          type: "warninig"
+          message: "手机号输入错误"
         });
       }
     },
+    settingUp() {
+      let phone = document.querySelector("#phone");
+      let password = document.querySelector("#password");
+      let format = /^[1][3,4,5,7,8][0-9]{9}$/;
+      if (format.test(phone.value)) {
+        this.$message({
+          message: "手机号输入错误"
+        });
+      }
+    }
   },
-  mounted() {
-
-  },
+  mounted() {},
   created() {
-    
+    this.settingUp();
   }
 };
 </script>
@@ -148,7 +165,7 @@ export default {
   padding: 8px 24px 0;
   box-sizing: border-box;
   background: #ffffff;
-  z-index: 16;
+  z-index: 8;
   #title {
     width: 400px;
     height: 22px;
@@ -333,15 +350,19 @@ export default {
       }
       .reveal {
         margin-top: 5px;
-        width: 410px;
+        max-width: 390px;
         height: 80px;
         border: 1px solid #cccccc;
         overflow: auto;
         padding-top: 5px;
         box-sizing: border-box;
+        padding-left: 5px;
+
         div {
-          width: 90px;
+          min-width: 100px;
           height: 30px;
+          padding: 0 5px;
+          box-sizing: border-box;
           line-height: 30px;
           margin: 0 5px 5px 0;
           border: 1px solid #cccccc;

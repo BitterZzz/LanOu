@@ -45,7 +45,6 @@
         </el-table>
       </ul>
     </div>
-    <addPage class="addPage"></addPage>
     <transition
       name="slide-fade"
       enter-active-class=" animated fadeIn"
@@ -69,7 +68,7 @@
     >
       <div id="entire" v-if="showEntire">
         <div class="hint">
-          <img src="../../../assets/img/card.png"  /> 确认删除所选项目吗？
+          <img src="../../../assets/img/card.png" /> 确认删除所选项目吗？
           <span @click="entireSelect()">x</span>
         </div>
         <div class="buttons">
@@ -85,18 +84,19 @@
     >
       <div id="shadow" v-if="showShadow"></div>
     </transition>
-    <addPage v-if="showPage" @sonPage="accountPage" />
-    <sorter :pageMsg="sortPage"/>
+
+      <appendPage v-if="showPage" @sonPage="accountPage" />
+    <sorter :pageMsg="sortPage" />
   </div>
 </template>
 
 <script>
-import addPage from "../../addPage/addPage.vue";
+import appendPage from "../../addPage/addPage.vue";
 import Axios from "axios";
 import sorter from "../../../components/sorter";
 export default {
   components: {
-    addPage,
+    appendPage,
     sorter
   },
   data() {
@@ -250,6 +250,9 @@ export default {
 #user {
   padding: 8px 24px 0 24px;
   box-sizing: border-box;
+  .el-checkbox__inner{
+    z-index: 0;
+  }
   #title {
     width: 293px;
     height: 22px;
@@ -338,18 +341,7 @@ export default {
       }
     }
   }
-  .addPage {
-    position: absolute;
-    top: 54px;
-    left: 32px;
-    width: 95.5%;
-    background: #ffffff;
-    padding: 8px 24px 0 24px;
-    box-sizing: border-box;
-    height: 828px;
-    z-index: 3;
-    display: none;
-  }
+
   #popup {
     width: 430px;
     height: 170px;
