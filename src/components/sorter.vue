@@ -9,7 +9,7 @@
       @current-change="handleCurrent"
     >
       <div class="page-show">
-        <span class="nowPage"> 1 </span>
+        <span class="nowPage"> {{this.nowPage}} </span>
         <i>/</i>
         <span class="totalPage"> {{pageMsg.pages}} </span>
       </div>
@@ -19,6 +19,11 @@
 <script>
 export default {
   name: "pagetion",
+  data(){
+    return{
+      nowPage:'1'
+    }
+  },
   props:{
     pageMsg:{
       type:Object,
@@ -31,6 +36,7 @@ export default {
     handleCurrent(val) {
       //带有分页器的页面都是通过Information来触发父组件的函数
       this.$emit('Information',val)
+      this.nowPage = val;
     }
   },
   mounted(){}

@@ -51,7 +51,7 @@ export default {
   methods: {
     //登录判断
     login() {
-      var userVerity = /^[1][3,4,5,7,8][0-9]{9}$/;
+      var userVerity = /^[1][3,4,5,6,7,8][0-9]{9}$/;
       var pwdVerity = /^[\w_-]{6,16}$/;
       if (this.dom.userDom.value === "") {
         this.$message({

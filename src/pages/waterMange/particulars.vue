@@ -312,7 +312,10 @@ export default {
     
   },
   mounted() {
-    this.$chart.line1("table-echarts",'mg/L');
+    //进水标准
+    let data = [150.0, 40.0, 50.0, 50.0, 150.0, 50.0, 50.0, 50.0, 30.0, 30.0, 30.0, 30.0];
+    let data2 = [30.0, 40.0, 50.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0]
+    this.$chart.line1("table-echarts",'ppm',300, data,data2);
     this.$chart.line1("table-echarts2");
     this.$chart.line1("table-echarts3");
     this.$chart.line1("table-echarts4");

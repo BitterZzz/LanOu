@@ -178,13 +178,13 @@ export default {
       maintainJudge: false,
       curtainJudge: false,
       sortPage: {
-        pages: 0,
-        pageSize: 0,
-        total: 0
+        pages: 1,
+        pageSize: 1,
+        total: 1
       },
       machineList: [],
       did: {},
-      typeFrist:{}
+      typeFrist: {}
     };
   },
   methods: {
@@ -241,10 +241,10 @@ export default {
       });
     },
     //获取该用户可查看的设备
-    getWatchDid(val='1') {
+    getWatchDid(val = "1", pageSize = "4") {
       this.$get("/getLanOuProjectInfoBydid", {
         pageNum: val,
-        pageSize: "4",
+        pageSize: pageSize,
         did: localStorage.did,
         level: localStorage.getItem("level")
       }).then(res => {
@@ -271,45 +271,99 @@ export default {
       let decode16 = stringToHex(did13).substr(18);
       let typeJudge = decode16.substr(0, 2);
       this.typeFrist.type = decode16.substr(0, 2);
-      console.log(decode16)
+      console.log(decode16);
       // 第一种数据类型解析
-      if(typeJudge === "01"){
-        if(decode16.substr(2,4).length === 4){
-          let temperature = decode16.substr(2,4);
-          temperature = temperature.split('').reverse().join('')
-          //温度值低字节
-          this.typeFrist.lowTemperature = parseInt(temperature.substr(2,2),16).toString(10);
-          //温度值高字节
-          this.typeFrist.TallTemperature = parseInt(temperature.substr(0,2),16).toString(10);
-          console.log(parseInt(temperature.substr(0,2),16))
-          console.log(this.typeFrist)
-        }
-        if(decode16.substr(6,4).length === 4){
-          let malfunction = decode16.substr(6,4);
-          let a = ''
-          malfunction = parseInt((malfunction),16).toString(2);
-          for(var i = 0; i < 16 - malfunction.length; i++){
-            a += 0;
-          }
-          malfunction = a + malfunction;
-          for(var i = 0; i < malfunction.length; i++){
-            if(this){}
-          }
-        }
-      }
-      //第二种数据类型
+      // if(typeJudge === "01"){
+      //   if(decode16.substr(2,4).length === 4){
+      //     let temperature = decode16.substr(2,4);
+      //     temperature = temperature.split('').reverse().join('')
+      //     //温度值低字节
+      //     this.typeFrist.lowTemperature = parseInt(temperature.substr(2,2),16).toString(10);
+      //     //温度值高字节
+      //     this.typeFrist.TallTemperature = parseInt(temperature.substr(0,2),16).toString(10);
+      //     console.log(parseInt(temperature.substr(0,2),16))
+      //     console.log(this.typeFrist)
+      //   }
+      //   if(decode16.substr(6,4).length === 4){
+      //     let malfunction = decode16.substr(6,4);
+      //     let a = ''
+      //     malfunction = parseInt((malfunction),16).toString(2);
+      //     for(var i = 0; i < 16 - malfunction.length; i++){
+      //       a += 0;
+      //     }
+      //     malfunction = a + malfunction;
+      //     for(var i = 0; i < malfunction.length; i++){
+      //       if(this){}
+      //     }
+      //   }
+      // }
+      //第二种数据类型(TDS 历史 31 天水质数据)
       if (typeJudge === "02") {
         let inflowMsg = decode16.substr(1, 31);
-        let arr = [];
+        let inflowMsgArr = [];
         let pureMsg = decode16.substr(32, 31);
-        let arr2 = [];
+        let pureMsgArr = [];
         for (var i = 0; i < inflowMsg.length; i++) {
-          arr[i] = parseInt(inflowMsg.substr(i, 2), 16);
-          arr2[i] = parseInt(pureMsg.substr(i, 2), 16);
+          inflowMsgArr[i] = parseInt(inflowMsg.substr(i, 2), 16);
+          pureMsgArr[i] = parseInt(pureMsg.substr(i, 2), 16);
         }
-        console.log(arr);
-        console.log(arr2);
-        //第一种数据类型
+        console.log(inflowMsgArr);
+        console.log(inflowMsgArr);
+        return;
+      }
+      //第三种数据类型(TOC 历史 31 天水质数据)
+      if (typeJudge === "01") {
+        let TocBeforeMsg = decode16.substr(1, 31);
+        let TocBeforeMsgArr = [];
+        let TocAfterMsg = decode16.substr(32, 31);
+        let ocAfterMsgArr = [];
+        for (var i = 0; i < TocBeforeMsg.length; i++) {
+          TocBeforeMsgArr[i] = parseInt(TocBeforeMsg.substr(i, 2), 16).toString(10) / 10;
+          ocAfterMsgArr[i] = parseInt(TocAfterMsg.substr(i, 2), 16).toString(10) / 10;
+        }
+        console.log(TocBeforeMsgArr);
+        console.log(ocAfterMsgArr);
+        return;
+      }
+      //第四种数据类型(NTU(浊度)历史 31 天水质数据)
+      if (typeJudge === "04") {
+        let NtuBeforeMsg = decode16.substr(1, 31);
+        let NtuBeforeMsgArr = [];
+        let NtuAfterMsg = decode16.substr(32, 31);
+        let NtuAfterMsgArr = [];
+        for (var i = 0; i < NtuBeforeMsg.length; i++) {
+          NtuBeforeMsgArr[i] = parseInt(NtuBeforeMsg.substr(i, 2), 16) / 10;
+          NtuAfterMsgArr[i] = parseInt(NtuAfterMsg.substr(i, 2), 16) / 10;
+        }
+        console.log(NtuBeforeMsgArr);
+        console.log(NtuAfterMsgArr);
+        return;
+      } //第五种数据类型(COD 历史 31 天水质数据)
+      if (typeJudge === "05") {
+        let CodBeforeMsg = decode16.substr(1, 31);
+        let CodBeforeMsgArr = [];
+        let CodAfterMsg = decode16.substr(32, 31);
+        let CodAfterMsgArr = [];
+        for (var i = 0; i < CodBeforeMsg.length; i++) {
+          CodBeforeMsgArr[i] = parseInt(CodBeforeMsg.substr(i, 2), 16) / 10;
+          CodAfterMsgArr[i] = parseInt(CodAfterMsg.substr(i, 2), 16) / 10;
+        }
+        console.log(CodBeforeMsgArr);
+        console.log(CodAfterMsgArr);
+        return;
+      } //第六种数据类型(RCRR 历史 31 天水质数据(余氯去除率))
+      if (typeJudge === "06") {
+        let RcrrBeforeMsg = decode16.substr(1, 31);
+        let RcrrBeforeMsgArr = [];
+        let RcrrAfterMsg = decode16.substr(32, 31);
+        let RcrrAfterMsgArr = [];
+        for (var i = 0; i < RcrrBeforeMsg.length; i++) {
+          RcrrBeforeMsgArr[i] = parseInt(RcrrBeforeMsg.substr(i, 2), 16);
+          RcrrAfterMsgArr[i] = parseInt(RcrrAfterMsg.substr(i, 2), 16);
+        }
+        console.log(RcrrBeforeMsgArr);
+        console.log(RcrrAfterMsgArr);
+        return;
       }
     }
   },

@@ -5,10 +5,10 @@ const install = function (Vue) {
       get() {
         return {
           // 双曲线表
-          line1: function (id,name) {
+          line1: function (id,name,maxNum,data,data2) {
             this.chart = echarts.init(document.getElementById(id))
             this.chart.clear()
-            var colors = ['#5793f3', '#d14a61', '#675bba']
+            var colors = ['#FFB402', '#3ADA85', '#675bba']
             const optionData = {
               color: colors,
               tooltip: {
@@ -30,7 +30,7 @@ const install = function (Vue) {
                   axisLine: {
                     onZero: false,
                     lineStyle: {
-                      color: colors[1]
+                      color: '#ffffff'
                     }
                   },
                   axisPointer: {
@@ -72,7 +72,12 @@ const install = function (Vue) {
                   splitLine: {
                     show: false
                   },
-                  max: 5,
+                  axisLine:{
+                    lineStyle:{
+                      color:'#ffffff'
+                    }
+                  },
+                  max: maxNum,
                   min: 0,
                   axisLable: {
                     formatter: '{value}'
@@ -86,13 +91,13 @@ const install = function (Vue) {
                   type: 'line',
                   // xAxisIndex: 1,
                   smooth: true,
-                  data: [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0]
+                  data: data
                 },
                 {
                   name: '2016 降水量',
                   type: 'line',
                   smooth: true,
-                  data: [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]
+                  data: data2
                 }
               ]
             }
