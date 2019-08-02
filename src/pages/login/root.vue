@@ -97,7 +97,7 @@ export default {
         passWord: this.dom.pwdDom.value
       }).then(res => {
         setTimeout(() => {
-          console.log(res.data.data);
+          console.log(res.data);
           if (res.data.code === 0) {
             this.event.setCookie(res.data.code, 7);
             this.$router.replace("/homepage");

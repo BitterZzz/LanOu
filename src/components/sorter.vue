@@ -29,7 +29,8 @@ export default {
       console.log(val);
     },
     handleCurrent(val) {
-      console.log(val);
+      //带有分页器的页面都是通过Information来触发父组件的函数
+      this.$emit('Information',val)
     }
   },
   mounted(){}

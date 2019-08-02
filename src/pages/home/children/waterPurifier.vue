@@ -69,7 +69,7 @@
               v-for="(item,index) in this.machineList"
               :key="index"
             >
-              <td> {{item.pdid}} </td>
+              <td>{{item.pdid}}</td>
               <td>
                 <div>在线状态: 在线</div>
                 <div>在线状态: 在线</div>
@@ -99,7 +99,7 @@
               </td>
               <td>
                 <div class="addres">
-                  <div>深圳市宝安区高新奇工业园2期1号楼</div>
+                  <div>{{item.installationAdderss}}</div>
                 </div>
               </td>
               <td>
@@ -108,14 +108,14 @@
                     <span>安装时间:</span>
                     <img src="../../../assets/img/time.png" alt @click="installation()" />
                   </div>
-                  <div class="installationDateI">2019-04-06</div>
-                  <div class="hhmmssI">14:23:12</div>
+                  <div class="installationDateI" style="height:40px">{{item.installTime}}</div>
+                  <!-- <div class="hhmmssI">14:23:12</div> -->
                   <div class="time-title">
                     <span>上传时间:</span>
                     <img src="../../../assets/img/time.png" alt @click="uploadtime()" />
                   </div>
-                  <div class="installationDateU">2019-04-06</div>
-                  <div class="hhmmssU">14:23:12</div>
+                  <div class="installationDateU">{{item.oderTime}}</div>
+                  <!-- <div class="hhmmssU">14:23:12</div> -->
                 </div>
               </td>
               <td>6</td>
@@ -131,7 +131,7 @@
           </table>
         </div>
       </div>
-      <sorter :pageMsg="sortPage"></sorter>
+      <sorter :pageMsg="sortPage" @Information="getWatchDid"></sorter>
     </div>
     <!-- 参数配置组件 -->
     <div v-if="checkJudge">
@@ -153,7 +153,7 @@ import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
 import maintain from "../../waterMange/maintain";
-import {stringToHex} from "../../../js/stringToHex";
+import { stringToHex } from "../../../js/stringToHex";
 export default {
   name: "water",
   data() {
@@ -178,11 +178,13 @@ export default {
       maintainJudge: false,
       curtainJudge: false,
       sortPage: {
-        pages: 2,
-        pageSize: 1,
-        total: 6
+        pages: 0,
+        pageSize: 0,
+        total: 0
       },
-      machineList: []
+      machineList: [],
+      did: {},
+      typeFrist:{}
     };
   },
   methods: {
@@ -233,22 +235,83 @@ export default {
     //获取相应did的字节
     getDid() {
       let _this = this;
-      this.$get("/getDidByPayload", { did: localStorage.getItem("did") }).then(
-        res => {
-          let didMsg = res.data.data;
-          console.log(didMsg);
-        }
-      );
+      this.$get("/getDidByPayload", { did: this.did.did }).then(res => {
+        let didMsg = res.data.data;
+        localStorage.setItem("decodeMsg", JSON.stringify(didMsg));
+      });
     },
-    // stringToHex(str) {
-    //   var val = "";
-    //   for (let i = 0; i < str.length; i++) {
-    //     if ((val == "")) val = str.charCodeAt(i).toString(16);
-    //     else val += str.charCodeAt(i).toString(16);
-    //   }
-    //   console.log(val);
-    //   return val;
-    // }
+    //获取该用户可查看的设备
+    getWatchDid(val='1') {
+      this.$get("/getLanOuProjectInfoBydid", {
+        pageNum: val,
+        pageSize: "4",
+        did: localStorage.did,
+        level: localStorage.getItem("level")
+      }).then(res => {
+        console.log(res.data.data);
+        this.machineList = res.data.data.list;
+        let str = "";
+        for (let i = 0; i < this.machineList.length; i++) {
+          if (str === "") {
+            str += this.machineList[0].pdid;
+          } else str += "," + this.machineList[i].pdid;
+        }
+        this.did.did = str;
+        this.sortPage.pageSize = res.data.data.pageSize;
+        this.sortPage.pages = res.data.data.pages;
+        this.sortPage.total = res.data.data.total;
+        this.getDid();
+      });
+    },
+    //对获取到的did字节进行解码
+    decode() {
+      let getDidMsg = JSON.parse(localStorage.getItem("decodeMsg"));
+      let did13 =
+        "ZZ       lK͍P     Z2432432333343234       !  ?abbbbbb`bbbbbbb`bbbb`bbbbb`````abbbbbb`bbbbbbb`bbbb`bbbbb`````";
+      let decode16 = stringToHex(did13).substr(18);
+      let typeJudge = decode16.substr(0, 2);
+      this.typeFrist.type = decode16.substr(0, 2);
+      console.log(decode16)
+      // 第一种数据类型解析
+      if(typeJudge === "01"){
+        if(decode16.substr(2,4).length === 4){
+          let temperature = decode16.substr(2,4);
+          temperature = temperature.split('').reverse().join('')
+          //温度值低字节
+          this.typeFrist.lowTemperature = parseInt(temperature.substr(2,2),16).toString(10);
+          //温度值高字节
+          this.typeFrist.TallTemperature = parseInt(temperature.substr(0,2),16).toString(10);
+          console.log(parseInt(temperature.substr(0,2),16))
+          console.log(this.typeFrist)
+        }
+        if(decode16.substr(6,4).length === 4){
+          let malfunction = decode16.substr(6,4);
+          let a = ''
+          malfunction = parseInt((malfunction),16).toString(2);
+          for(var i = 0; i < 16 - malfunction.length; i++){
+            a += 0;
+          }
+          malfunction = a + malfunction;
+          for(var i = 0; i < malfunction.length; i++){
+            if(this){}
+          }
+        }
+      }
+      //第二种数据类型
+      if (typeJudge === "02") {
+        let inflowMsg = decode16.substr(1, 31);
+        let arr = [];
+        let pureMsg = decode16.substr(32, 31);
+        let arr2 = [];
+        for (var i = 0; i < inflowMsg.length; i++) {
+          arr[i] = parseInt(inflowMsg.substr(i, 2), 16);
+          arr2[i] = parseInt(pureMsg.substr(i, 2), 16);
+        }
+        console.log(arr);
+        console.log(arr2);
+        //第一种数据类型
+      }
+    }
   },
   //封装的组件
   components: {
@@ -259,27 +322,14 @@ export default {
   },
   created() {
     this.machineID();
-    this.getDid();
+    this.getWatchDid();
+    this.decode();
   },
-  mounted() { 
+  mounted() {
     this.trDom = document.querySelectorAll(".el-icon-check");
     for (var i = 0; i < this.trDom.length; i++) {
       this.trDom[i].classList.remove("el-icon-check");
     }
-    this.$get("/getLanOuProjectInfoBydid", {
-      pageNum: "1",
-      pageSize: "4",
-      did: localStorage.did,
-      level: localStorage.getItem('level')
-    }).then(res => {
-      this.machineList = res.data.data.list
-      console.log(this.machineList)
-    });
-    // setTimeout(()=> {
-    //   this.machineList = this.machineList
-    // },1000)
-    var a = stringToHex("Z           t.   :  #2432432333343234       &  2");
-    console.log(a)
   }
 };
 </script>
