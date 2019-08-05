@@ -351,12 +351,21 @@
 import bus from '../../js/bus'
 export default {
   name:"parameter",
+  props:{
+    translateMsg:{
+      type:Object,
+      default:"未接收到参数"
+    }
+  },
   methods:{
     hidden(){
       //触发home中的getParam使其改变home中的Judge的值
       bus.$emit('getParam')
       this.$emit('hiddenSecond')
     }
+  },
+  mounted(){
+    console.log(translateMsg);
   }
 };
 </script>

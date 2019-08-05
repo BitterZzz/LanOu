@@ -35,57 +35,53 @@
                 <img src="../../assets/img/ppm2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts" class="echarts" style="width:280px;height:200px"></div>
+              <div id="table-echarts" class="echarts"></div>
             </div>
             <div class="table-box">
               <div class="table-TDS">
-                <img src="../../assets/img/ppm.png" alt />
+                <img src="../../assets/img/TOC_1.png" alt />
                 <span class="TDS-num">145</span>
               </div>
               <span>TOC</span>
               <div class="table-TDS table-TDS2">
-                <img src="../../assets/img/ppm2.png" alt />
+                <img src="../../assets/img/TOC_2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts2" style="width:280px;height:200px"></div>
+              <div id="table-echarts2" class="echarts"></div>
             </div>
             <div class="table-box">
               <div class="table-TDS">
-                <img src="../../assets/img/ppm.png" alt />
+                <img src="../../assets/img/ZD.png" alt />
                 <span class="TDS-num">145</span>
               </div>
               <span>浊度</span>
               <div class="table-TDS table-TDS2">
-                <img src="../../assets/img/ppm2.png" alt />
+                <img src="../../assets/img/ZD2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts3" class="echarts" style="width:280px;height:200px"></div>
+              <div id="table-echarts3" class="echarts"></div>
             </div>
           </div>
           <div class="data-table data-table2">
             <div class="table-box">
               <div class="table-TDS">
-                <img src="../../assets/img/ppm.png" alt />
+                <img src="../../assets/img/TOC_1.png" alt />
                 <span class="TDS-num">145</span>
               </div>
               <span>COD</span>
               <div class="table-TDS table-TDS2">
-                <img src="../../assets/img/ppm2.png" alt />
+                <img src="../../assets/img/TOC_2.png" alt />
                 <span class="TDS-num">145</span>
               </div>
-              <div id="table-echarts4" class="echarts" style="width:280px;height:200px"></div>
+              <div id="table-echarts4" class="echarts"></div>
             </div>
-            <div class="table-box">
+            <div class="table-box chlorine">
               <div class="table-TDS">
                 <img src="../../assets/img/ppm.png" alt />
                 <span class="TDS-num">145</span>
               </div>
               <span>余氯</span>
-              <div class="table-TDS table-TDS2">
-                <img src="../../assets/img/ppm2.png" alt />
-                <span class="TDS-num">145</span>
-              </div>
-              <div id="table-echarts5" class="echarts" style="width:280px;height:200px"></div>
+              <div id="table-echarts5" class="echarts" style="width:280px;height:192px"></div>
             </div>
           </div>
         </div>
@@ -259,8 +255,8 @@
               <div class="switch-main">
                 <ul>
                   <li v-for="list in relayList" :key="list.ID">
-                    <span class="state-span"> {{list.name}} </span>
-                    <span class="disconnect"> {{list.operation}} </span>
+                    <span class="state-span">{{list.name}}</span>
+                    <span class="disconnect">{{list.operation}}</span>
                   </li>
                 </ul>
               </div>
@@ -272,7 +268,7 @@
   </div>
 </template>
 <script>
-import bus from '../../js/bus'
+import bus from "../../js/bus";
 export default {
   name: "particulars",
   data() {
@@ -287,39 +283,41 @@ export default {
         { ID: 106, name: "阀头反冲洗信号开关", unit: "m³", num: "9.2" }
       ],
       relayList: [
-        { ID: 200, name:"进水电磁阀", operation:"断开" },
-        { ID: 201, name:"浓水电磁阀", operation:"断开" },
-        { ID: 202, name:"循环电磁阀", operation:"断开" },
-        { ID: 203, name:"排空电磁阀", operation:"断开" },
-        { ID: 204, name:"原水检测电磁阀", operation:"断开" },
-        { ID: 205, name:"纯水检测电磁阀", operation:"断开" },
-        { ID: 206, name:"水路关闭电磁阀", operation:"断开" },
-        { ID: 207, name:"原水泵", operation:"断开" },
-        { ID: 208, name:"高压泵", operation:"断开" },
-        { ID: 209, name:"取水泵", operation:"断开" },
-        { ID: 210, name:"UV", operation:"断开" },
-        ]
+        { ID: 200, name: "进水电磁阀", operation: "断开" },
+        { ID: 201, name: "浓水电磁阀", operation: "断开" },
+        { ID: 202, name: "循环电磁阀", operation: "断开" },
+        { ID: 203, name: "排空电磁阀", operation: "断开" },
+        { ID: 204, name: "原水检测电磁阀", operation: "断开" },
+        { ID: 205, name: "纯水检测电磁阀", operation: "断开" },
+        { ID: 206, name: "水路关闭电磁阀", operation: "断开" },
+        { ID: 207, name: "原水泵", operation: "断开" },
+        { ID: 208, name: "高压泵", operation: "断开" },
+        { ID: 209, name: "取水泵", operation: "断开" },
+        { ID: 210, name: "UV", operation: "断开" }
+      ]
     };
   },
-  methods:{
-    hidden(){
-      //触发home中的getParam使其改变home中的Judge的值
-      bus.$emit('getParam');
-      this.$emit('hidden');
+  props:{
+    translateMsg:{
+      type:Object,
+      default: '未获取到数据'
     }
   },
-  created(){
-    
+  methods: {
+    hidden() {
+      //触发home中的getParam使其改变home中的Judge的值
+      bus.$emit("getParam");
+      this.$emit("hidden");
+    }
   },
+  created() {},
   mounted() {
     //进水标准
-    let data = [150.0, 40.0, 50.0, 50.0, 150.0, 50.0, 50.0, 50.0, 30.0, 30.0, 30.0, 30.0];
-    let data2 = [30.0, 40.0, 50.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0]
-    this.$chart.line1("table-echarts",'ppm',300, data,data2);
-    this.$chart.line1("table-echarts2");
-    this.$chart.line1("table-echarts3");
-    this.$chart.line1("table-echarts4");
-    this.$chart.line1("table-echarts5");
+    this.$chart.line1("table-echarts", "ppm", 0, 300, this.translateMsg.inflowMsgArr, this.translateMsg.pureMsgArr);
+    this.$chart.line1("table-echarts2","mg/L", 0, 300, this.translateMsg.TocBeforeMsgArr, this.translateMsg.TocAfterMsgArr);
+    this.$chart.line1("table-echarts3","NTU", 0, 300, this.translateMsg.NtuBeforeMsgArr, this.translateMsg.NtuAfterMsgArr);
+    this.$chart.line1("table-echarts4","mg/L",0, 300, this.translateMsg.CodBeforeMsgArr, this.translateMsg.CodAfterMsgArr);
+    this.$chart.line1("table-echarts5","ppm",50, 300, [],this.translateMsg.RcrrBeforeMsgArr);
     this.$chart.line2("table-line2");
   }
 };
@@ -393,10 +391,15 @@ export default {
           // }
           display: flex;
           justify-content: space-around;
-
+          .chlorine{
+            width: 230px;
+            display: flex;
+            justify-content: center;
+          }
           .table-box {
             position: relative;
-            height: 300px;
+            box-sizing: border-box;
+            height: 276px;
             float: left;
             .table-TDS {
               display: inline-block;
@@ -423,17 +426,22 @@ export default {
               top: 60px;
               left: 0;
             }
+            .echarts {
+              // display: none;
+              width: 280px;
+              height: 200px;
+            }
             #table-echarts2 {
               position: absolute;
               top: 60px;
-              left: 0;
+              left: -10px;
             }
             #table-echarts3,
             #table-echarts4,
             #table-echarts5 {
               position: absolute;
               top: 60px;
-              left: 0;
+              left: -10px;
             }
           }
         }
@@ -618,7 +626,7 @@ export default {
         .operation-right {
           width: 44.4%;
           height: 100%;
-          padding-bottom:258PX; 
+          padding-bottom: 258px;
           background: #ffffff;
           float: right;
           margin-right: 4.8%;

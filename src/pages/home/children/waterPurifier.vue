@@ -133,11 +133,11 @@
       </div>
       <sorter :pageMsg="sortPage" @Information="getWatchDid"></sorter>
     </div>
-    <!-- 参数配置组件 -->
-    <div v-if="checkJudge">
-      <particulars @hidden="hiddenMachine()"></particulars>
-    </div>
     <!-- 查看组件 -->
+    <div v-if="checkJudge">
+      <particulars @hidden="hiddenMachine()" :translateMsg="this.transferMsg"></particulars>
+    </div>
+    <!-- 参数配置组件 -->
     <div v-if="detailsJudge">
       <parameter @hiddenSecond="detailshidden()"></parameter>
     </div>
@@ -184,7 +184,19 @@ export default {
       },
       machineList: [],
       did: {},
-      typeFrist: {}
+      typeFrist: {},
+      transferMsg: {
+        inflowMsgArr: [],
+        pureMsgArr: [],
+        TocBeforeMsgArr: [],
+        TocAfterMsgArr: [],
+        NtuBeforeMsgArr: [],
+        NtuAfterMsgArr: [],
+        CodBeforeMsgArr: [],
+        CodAfterMsgArr: [],
+        RcrrBeforeMsgArr: [],
+        RcrrAfterMsgArr: []
+      }
     };
   },
   methods: {
@@ -299,71 +311,110 @@ export default {
       // }
       //第二种数据类型(TDS 历史 31 天水质数据)
       if (typeJudge === "02") {
-        let inflowMsg = decode16.substr(1, 31);
+        let inflowMsg = decode16.substr(2, 62);
         let inflowMsgArr = [];
-        let pureMsg = decode16.substr(32, 31);
+        let pureMsg = decode16.substr(64, 62);
         let pureMsgArr = [];
         for (var i = 0; i < inflowMsg.length; i++) {
-          inflowMsgArr[i] = parseInt(inflowMsg.substr(i, 2), 16);
-          pureMsgArr[i] = parseInt(pureMsg.substr(i, 2), 16);
+          if (i % 2 === 0) {
+            inflowMsgArr[i] = parseInt(inflowMsg.substr(i, 2), 16);
+            pureMsgArr[i] = parseInt(pureMsg.substr(i, 2), 16);
+          }
         }
+        this.transferMsg.inflowMsgArr = inflowMsgArr;
+        this.transferMsg.pureMsgArr = pureMsgArr;
         console.log(inflowMsgArr);
         console.log(inflowMsgArr);
         return;
       }
       //第三种数据类型(TOC 历史 31 天水质数据)
-      if (typeJudge === "01") {
-        let TocBeforeMsg = decode16.substr(1, 31);
+      if (typeJudge === "03") {
+        let TocBeforeMsg = decode16.substr(2, 62);
         let TocBeforeMsgArr = [];
-        let TocAfterMsg = decode16.substr(32, 31);
-        let ocAfterMsgArr = [];
+        let TocAfterMsg = decode16.substr(64, 62);
+        let TocAfterMsgArr = [];
         for (var i = 0; i < TocBeforeMsg.length; i++) {
-          TocBeforeMsgArr[i] = parseInt(TocBeforeMsg.substr(i, 2), 16).toString(10) / 10;
-          ocAfterMsgArr[i] = parseInt(TocAfterMsg.substr(i, 2), 16).toString(10) / 10;
+          if (i % 2 === 0) {
+            TocBeforeMsgArr.push(parseInt(TocBeforeMsg.substr(i, 2), 16) / 10);
+            TocAfterMsgArr.push(parseInt(TocAfterMsg.substr(i, 2), 16) / 10);
+          }
         }
+        this.transferMsg.TocBeforeMsgArr = TocBeforeMsgArr;
+        this.transferMsg.TocAfterMsgArr = TocAfterMsgArr;
         console.log(TocBeforeMsgArr);
         console.log(ocAfterMsgArr);
         return;
       }
       //第四种数据类型(NTU(浊度)历史 31 天水质数据)
       if (typeJudge === "04") {
-        let NtuBeforeMsg = decode16.substr(1, 31);
+        let NtuBeforeMsg = decode16.substr(2, 62);
         let NtuBeforeMsgArr = [];
-        let NtuAfterMsg = decode16.substr(32, 31);
+        let NtuAfterMsg = decode16.substr(64, 62);
         let NtuAfterMsgArr = [];
         for (var i = 0; i < NtuBeforeMsg.length; i++) {
-          NtuBeforeMsgArr[i] = parseInt(NtuBeforeMsg.substr(i, 2), 16) / 10;
-          NtuAfterMsgArr[i] = parseInt(NtuAfterMsg.substr(i, 2), 16) / 10;
+          if (i % 2 === 0) {
+            NtuBeforeMsgArr.push(parseInt(NtuBeforeMsg.substr(i, 2), 16) / 10);
+            NtuAfterMsgArr.push(parseInt(NtuAfterMsg.substr(i, 2), 16) / 10);
+          }
         }
+        this.transferMsg.NtuBeforeMsgArr = NtuBeforeMsgArr;
+        this.transferMsg.NtuAfterMsgArr = NtuAfterMsgArr;
         console.log(NtuBeforeMsgArr);
         console.log(NtuAfterMsgArr);
         return;
       } //第五种数据类型(COD 历史 31 天水质数据)
       if (typeJudge === "05") {
-        let CodBeforeMsg = decode16.substr(1, 31);
+        let CodBeforeMsg = decode16.substr(2, 62);
         let CodBeforeMsgArr = [];
-        let CodAfterMsg = decode16.substr(32, 31);
+        let CodAfterMsg = decode16.substr(64, 62);
         let CodAfterMsgArr = [];
         for (var i = 0; i < CodBeforeMsg.length; i++) {
-          CodBeforeMsgArr[i] = parseInt(CodBeforeMsg.substr(i, 2), 16) / 10;
-          CodAfterMsgArr[i] = parseInt(CodAfterMsg.substr(i, 2), 16) / 10;
+          if (i % 2 === 0) {
+            CodBeforeMsgArr.push(parseInt(CodBeforeMsg.substr(i, 2), 16) / 10);
+            CodAfterMsgArr.push(parseInt(CodAfterMsg.substr(i, 2), 16) / 10);
+          }
         }
+        this.transferMsg.CodBeforeMsgArr = CodBeforeMsgArr;
+        this.transferMsg.CodAfterMsgArr = CodBeforeMsgArr;
         console.log(CodBeforeMsgArr);
         console.log(CodAfterMsgArr);
         return;
       } //第六种数据类型(RCRR 历史 31 天水质数据(余氯去除率))
-      if (typeJudge === "06") {
-        let RcrrBeforeMsg = decode16.substr(1, 31);
+      if (typeJudge === "01") {
+        let RcrrBeforeMsg = decode16.substr(2, 62);
         let RcrrBeforeMsgArr = [];
-        let RcrrAfterMsg = decode16.substr(32, 31);
+        let RcrrAfterMsg = decode16.substr(64, 62);
         let RcrrAfterMsgArr = [];
         for (var i = 0; i < RcrrBeforeMsg.length; i++) {
-          RcrrBeforeMsgArr[i] = parseInt(RcrrBeforeMsg.substr(i, 2), 16);
-          RcrrAfterMsgArr[i] = parseInt(RcrrAfterMsg.substr(i, 2), 16);
+          if (i % 2 === 0) {
+            RcrrBeforeMsgArr.push(parseInt(RcrrBeforeMsg.substr(i, 2), 16));
+            RcrrAfterMsgArr.push(parseInt(RcrrAfterMsg.substr(i, 2), 16));
+          }
         }
+        this.transferMsg.RcrrBeforeMsgArr = RcrrBeforeMsgArr;
+        this.transferMsg.RcrrAfterMsgArr = RcrrAfterMsgArr;
         console.log(RcrrBeforeMsgArr);
         console.log(RcrrAfterMsgArr);
+        console.log(this.transferMsg);
         return;
+      }
+      //第七种数据类型(滤芯滤料)
+      if (typeJudge === "07") {
+        let typeSevent = decode16.substr(2, 8);
+        console.log(typeSevent);
+        let typeSeventArr = [];
+        for (var i = 0; i < typeSevent.length; i++) {
+          if (i % 2 === 0) {
+            typeSeventArr.push(parseInt(typeSevent.substr(i, 2), 16));
+          }
+        }
+        console.log(typeSeventArr);
+        let a =
+          typeSeventArr[0] /
+          (typeSeventArr[1] / 10) /
+          typeSeventArr[2] /
+          typeSeventArr[3];
+        console.log(a);
       }
     }
   },
