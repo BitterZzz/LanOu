@@ -17,7 +17,7 @@
         <li>
           <i>*</i>
           <span>用户名 :</span>
-          <input type="text" id="username" name="username" />
+          <input type="text" id="username" name="username" maxlength="11" />
         </li>
         <li>
           <i>*</i>
@@ -28,7 +28,7 @@
       <ul class="userPassword">
         <li>
           <span class="upleft">手机 :</span>
-          <input type="text" id="phone" name="phone" />
+          <input id="phone" type="text" maxlength="11" />
         </li>
         <li>
           <span>邮箱 :</span>
@@ -52,21 +52,25 @@
     <div class="restrict">
       <h2>基本权限：</h2>
       <div class="choice">
-        <div v-for="item in check" :key="item.id">
-          <input type="checkbox" name id @click="robotShow(item)" />
-          <span>{{item.value}}</span>
-        </div>
+        <el-checkbox-group
+          v-model="checkedCities"
+          v-for="city in cities"
+          :key="city.id"
+          @change="change"
+        >
+          <el-checkbox :label="city">{{city.authorityName}}</el-checkbox>
+        </el-checkbox-group>
       </div>
     </div>
     <div class="robot">
       <h2>指定查看机器：</h2>
       <div>
-        <button type="submit" class="submit" @click="All_selected()">全部机器</button>
+        <button type="submit" class="submit" @click="SelectId()">全部机器</button>
         <br />
         <input type="text" name="text" id="rotID" />
         <div class="append" @click="appendFile()">+ 添加</div>
         <div class="reveal" v-if="showReveal">
-          <div v-for="item in append" :key="item.id">{{item}}</div>
+          <div class="botId" v-for="item in append" :key="item.id">{{item}}</div>
         </div>
       </div>
     </div>
@@ -80,82 +84,148 @@
 </template>
 
 <script>
-import { format } from 'path';
+import { format, relative } from "path";
+import Axios from "axios";
 export default {
   name: "appendPage",
   data() {
     return {
-      check: [
-        { id: 1, value: "查看水质曲线" },
-        { id: 2, value: "查看用水曲线" },
-        { id: 3, value: "查看滤芯寿命" },
-        { id: 4, value: "查看设备状态" },
-        { id: 5, value: "查看安装信息" },
-        { id: 6, value: "查看工作日志" },
-        { id: 7, value: "设置机器参数" },
-        { id: 8, value: "设置机器安装信息" },
-        { id: 9, value: "查看角色管理" },
-        { id: 10, value: "查看用户管理 " },
-        { id: 11, value: "查看后台操作日志" }
-      ],
       robotId: [],
-      check2: [],
+      check: [],
       showReveal: false,
-      append: []
+      append: [],
+      checkedCities: [],
+      cities: [],
+      DidInfo: [],
+      charaID: [],
+      checkId: "",
+      emailInfo: "",
+      userInfo: "",
+      passInfo: "",
+      phoneInfo: "",
+      roleInfo: "",
+      sectionInfo: ""
     };
   },
   methods: {
-    robotShow(item) {
-      this.check2.push(item.id);
-      console.log(this.check2);
-    },
+    // 返回
     backHome() {
       this.$emit("sonPage");
     },
+    // 添加did
     appendFile() {
-      let dom = document.querySelector("#rotID").value;
-      if (dom === "") {
+      let botID = document.querySelector("#rotID");
+      if (botID.value === "") {
         return;
-      } else if (dom !== "") {
+      } else if (botID.value !== "") {
         this.showReveal = true;
-        this.append.push(dom);
-        console.log(dom);
+        this.DidInfo = botID.value;
+        this.append.push(botID.value);
       }
+      // 获取全部did
+      this.charaID = this.append.join(",");
+      console.log(this.charaID);
+    },
+    // 全部机器did
+    SelectId() {
+      console.log(1);
+      this.$get("/getLanOuByDid", {
+        sak: 1
+      }).then(res => {
+        console.log(res.data);
+      });
+    },
 
-      console.log(this.append);
-    },
-    All_selected() {
-      this.showReveal = false;
-    },
     // 提交新增页面
     submitAction() {
-      let phone = document.querySelector("#phone");
-       let format = /^[1][3,4,5,7,8][0-9]{9}$/;
-      if (phone.value !== format) {
-        this.$message({
-          message: "手机号输入错误"
-        });
-      }
-    },
-    settingUp() {
-      let phone = document.querySelector("#phone");
+      let username = document.querySelector("#username");
       let password = document.querySelector("#password");
-      let format = /^[1][3,4,5,7,8][0-9]{9}$/;
-      if (format.test(phone.value)) {
+      let phone = document.querySelector("#phone");
+      let email = document.querySelector("#email");
+      let role = document.querySelector("#role");
+      let section = document.querySelector("#section");
+      let userNorm = /^[a-zA-Z0-9]{8,16}$/;
+      let phoneNorm = /^[1][3,4,5,6,7,8][0-9]{9}$/;
+      if (
+        username.value === "" ||
+        password.value === "" ||
+        phone.value === "" ||
+        email.value === "" ||
+        role.value === "" ||
+        section.value === ""
+      ) {
         this.$message({
-          message: "手机号输入错误"
+          message: "用户名,密码,手机号,角色,邮箱,部门不能为空",
+          type: "warning"
         });
+        return;
       }
+      if (!userNorm.test(password.value)) {
+        this.$message({
+          message: "密码输入错误",
+          type: "warning"
+        });
+        return;
+      }
+      if (!phoneNorm.test(phone.value)) {
+        this.$message({
+          message: "手机号输入错误",
+          type: "warning"
+        });
+        return;
+      }
+      Axios.post("/addLanOuAccountInfo", {
+        dept: section.value,
+        lanOuDid: this.charaID,
+        mail: email.value,
+        passWord: password.value,
+        phone: phone.value,
+        position: " ",
+        relationId: this.levelId,
+        role: role.value,
+        userName: username.value,
+        workUnit: ""
+      }).then(res => {
+        console.log(res);
+        this.$message({
+          message: "添加成功",
+          type: "success"
+        });
+      });
+    },
+    // 获取菜单信息
+    checkAction() {
+      this.$get("/getLanOuAuthority?levelId=0", {
+        levelId: 0
+      }).then(res => {
+        console.log(res.data.data);
+        let data = res.data.data;
+        this.cities = data.slice(4, 15);
+        console.log(this.cities);
+      });
+    },
+
+    // 获取checkId
+    change(res) {
+      // console.log(res);
+      let relative = [];
+
+      for (var i = 0; i < res.length; i++) {
+        relative[i] = res[i].id;
+      }
+      //  arr = relative.join(",")
+      this.checkId = relative.join(",");
+      console.log(this.checkId);
     }
   },
   mounted() {},
   created() {
-    this.settingUp();
+    this.checkAction();
   }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 #addPage {
   position: absolute;
   top: 0;
@@ -269,35 +339,22 @@ export default {
     .choice {
       position: relative;
       top: -1px;
-      width: 908px;
-      // border: 1px solid red;
+      max-width: 898px;
 
-      div {
-        //    border: 1px solid blue;
-        line-height: 28px;
-        font-size: 16px;
-        float: left;
-        display: flex;
+      font-size: 16px;
+      .el-checkbox-group {
+        width: 150px;
         margin-bottom: 11px;
-        margin-right: 24px;
-
-        input {
+        margin-right: 23px;
+        float: left;
+        .el-checkbox__inner {
           width: 16px;
           height: 16px;
-          position: relative;
-          top: 6px;
-          border-radius: 5px;
-          margin-right: 8px;
         }
-        span {
-          display: inline-block;
-          min-width: 120px;
+        .el-checkbox__label {
+          font-size: 18px;
           color: #333333;
-          font-size: 16px;
         }
-      }
-      div:nth-child(8) {
-        margin-right: 48px;
       }
     }
   }
