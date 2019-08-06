@@ -3,7 +3,7 @@
     <header id="header" class="clearfix">
       <div class="header-box clearfix">
         <div class="title">
-          <img src="../../assets/img/back.png" @click="hidden()"/>
+          <img src="../../assets/img/back.png" @click="hidden()" />
           <span>机器详情</span>
         </div>
         <div class="IdBox">
@@ -125,7 +125,7 @@
                     <input type="text" class="year" />
                     <p>-</p>
                   </div>
-                  <span>:</span>
+                  <span style="width:4px"></span>
                 </div>
               </div>
             </div>
@@ -189,7 +189,7 @@
     <section id="filter-wrapper">
       <div id="filter">
         <div class="filter-header">滤芯滤料寿命</div>
-        <ul>
+        <ul class="clearfix">
           <li>
             <div class="sand-header">石英砂使用寿命设置</div>
             <div class="sand-content clearfix">
@@ -341,32 +341,25 @@
                 </div>
               </div>
             </div>
-          </li>                                                                      
+          </li>
         </ul>
       </div>
     </section>
   </div>
 </template>
 <script>
-import bus from '../../js/bus'
+import bus from "../../js/bus";
 export default {
-  name:"parameter",
-  props:{
-    translateMsg:{
-      type:Object,
-      default:"未接收到参数"
-    }
-  },
-  methods:{
-    hidden(){
+  name: "parameter",
+  props: {},
+  methods: {
+    hidden() {
       //触发home中的getParam使其改变home中的Judge的值
-      bus.$emit('getParam')
-      this.$emit('hiddenSecond')
+      bus.$emit("getParam");
+      this.$emit("hiddenSecond");
     }
   },
-  mounted(){
-    console.log(translateMsg);
-  }
+  mounted() {}
 };
 </script>
 <style lang="scss" scoped>
@@ -528,6 +521,10 @@ export default {
               .data-set {
                 float: left;
                 width: 240px;
+                display: flex;
+                justify-content: space-around;
+                margin: auto 0;
+                // margin: auto 0;
                 .data-year {
                   float: left;
                   .year {
@@ -592,12 +589,15 @@ export default {
               justify-content: space-around;
               .content-title {
                 float: left;
+                width: 100px;
                 line-height: 40px;
                 font-size: 16px;
                 font-family: PingFangSC-Regular;
                 color: #333;
               }
               .content-box {
+                width: 244px;
+                float: left;
                 span {
                   float: left;
                   width: 46px;
@@ -675,6 +675,7 @@ export default {
               margin-top: 16px;
               span {
                 float: left;
+                width: 70px;
                 line-height: 40px;
                 margin-left: 20px;
                 color: #333;
@@ -687,17 +688,17 @@ export default {
                 .number {
                   width: 100px;
                   height: 40px;
-                  ::placeholder{
+                  ::placeholder {
                     color: #333;
                   }
                 }
-                b{
+                b {
                   color: #333;
                   font-size: 16px;
                   font-weight: bold;
                 }
               }
-              .second-input{
+              .second-input {
                 margin-right: 39px;
               }
             }

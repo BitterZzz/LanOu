@@ -113,10 +113,12 @@ const install = function (Vue) {
                 type: 'category',
                 data: ['1', '8', '15', '22', '30']
               },
-              yAxis: {
+              yAxis: [{
                 type: 'value',
-                splitLine: false
-              },
+                splitLine: false,
+                max:500,
+                min:0
+              }],
               series: [{
                 data: [820, 932, 901, 934, 1290, 1330, 1320],
                 type: 'line',

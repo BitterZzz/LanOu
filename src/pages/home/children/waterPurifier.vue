@@ -34,14 +34,6 @@
             <tr class="tr-header" align="center">
               <th>机器ID</th>
               <th class="down">
-                <!-- 机器状态
-                <i class="el-icon-caret-bottom"></i>
-                <div class="table-down">
-                  <i class="el-icon-caret-top"></i>
-                  <ul>
-                    <li v-for="item in tdList" :key="item.ID">{{item.name}}</li>
-                  </ul>
-                </div>-->
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link" style="color:#333333">
                     机器状态
@@ -283,7 +275,7 @@ export default {
       let decode16 = stringToHex(did13).substr(18);
       let typeJudge = decode16.substr(0, 2);
       this.typeFrist.type = decode16.substr(0, 2);
-      console.log(decode16);
+      console.log(stringToHex(did13).length);
       // 第一种数据类型解析
       // if(typeJudge === "01"){
       //   if(decode16.substr(2,4).length === 4){
@@ -380,7 +372,7 @@ export default {
         console.log(CodAfterMsgArr);
         return;
       } //第六种数据类型(RCRR 历史 31 天水质数据(余氯去除率))
-      if (typeJudge === "01") {
+      if (typeJudge === "06") {
         let RcrrBeforeMsg = decode16.substr(2, 62);
         let RcrrBeforeMsgArr = [];
         let RcrrAfterMsg = decode16.substr(64, 62);
