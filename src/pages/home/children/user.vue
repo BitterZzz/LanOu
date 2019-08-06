@@ -42,10 +42,18 @@
           <el-table-column prop="position" label="职位" show-overflow-tooltip></el-table-column>
           <el-table-column prop="workUnit" label="工作单位" show-overflow-tooltip></el-table-column>
           <el-table-column prop="productId" label="用户设备" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="isEnabled" label="账号状态" show-overflow-tooltip>
-            {{this.isEnabled === "0" ? '禁止': '可用'}}
-            <img :src="this.isEnabled === '0' ?  stop : ky" />
+          <el-table-column
+            prop="isEnabled"
+            label="账号状态"
+            :formatter="formatter"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span v-html="bs(scope.row)"></span>
+              <img v-html="bs(scope.row)" />
+            </template>
           </el-table-column>
+
           <el-table-column prop="createTime" label="注册时间" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作项" show-overflow-tooltip class="delete">
             <template slot-scope="scope">
@@ -131,6 +139,29 @@ export default {
     };
   },
   methods: {
+    formatter(row, column) {
+      if (row.isEnabled === "1") {
+        // return row.isEnabled + "<span>禁用</span>";
+      } else if (row.isEnabled === "0") {
+        return; // <div id="stop">
+        //     <span>禁用</span>
+        //     <img src="../../../assets/img/stop.png" />
+        //   </div>;
+      }
+    },
+    bs(row) {
+      if (row.isEnabled === "1") {
+        return (
+          "<span>可用<span>" +
+          "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABGdBTUEAALGPC/xhBQAAA1JJREFUSA3tVk9IlFEQn3nrrmWaJZhpZqbL7oK3Veui8O0mIV6lSxeTDikZ9kexhG6iUkoHg+wk1SFIz3kpXUyIaHcvXVREU7IsszAlXHXfNG/dT9flW3clgg4++HhvZn4zv/dv5n0A+21/B/7RDuBe4+YPaweSU/GUNGGW8hVB+hpYoZmPLs/qXmIlTGz1uguFgHoEqkaCE5EkhDAHRAMkNx5NlI5ORdpijRMitvm0BgRsB8RfRPQEEIYwCJ9UUDJBLhC4EbGG+zRA2TLu9PTGItT18YjR7tPuIYomSdS++nu9a7Z89KfuHNnnvSk7mnLI3AyAd3g6HWPO4dZI+57Gdq/W6PC7ye5z1ybqqLAhH79Wt5tPzBUX+jRrEuAHRHiw19nbve5OFNAQACiadg7NGE1AGCmVzgyikc90cXGJ2mNhovRoe19+Bl4UWX4syzYiWLIQXY3CbImGxDne4hQ+p2qQsm/B5VnZQu8ycPhc3SiSPKetWdlhnz6+hBesL63JRm6GxAcprYBT5DinzWsjp2idw+vqZvx1klDHWzsbtg+ptKOs3JPReCUbEicJcQwIJQF+USDrSHmmw+fucbzV8pUc2Wx+dxcJuEFBuDRROvyUbRSyS5rjoyJzkGMZNENiibDBhULqeJFi4mBUSRYcLPCW5el6TrX7jLsZQaqbNnvi2ZuCpp3KTcmQWJVBNvOFpmwFmyjxfA8gVqixRVgGVRVz+LUORtziXakJr1SZtxvKHBYQpfi2rdweGRKr2stnNs/fOR2q0mINsVLJJgQ/H0VTaKXOoWc6ZkePJvbFzyrWDn1YMCQOFXzCARCiNnNYS9UdFTnnZhVvxTsp4bLhShkc9qnlI+uP9Xgk6UGje5JrPSjMVzLSoGUB4K5uDxeE87ps1GccFre5Mh3BgHxoZI+r49J3TZU/m1eriQsOAxT2r0qmTmT3ufiRwGaSsm0dlrumSnxLui2yL/AWp5sxvRmQWnm1nfHKLGPiN/UsCsQOLoPqZXoupXwFgkLPIkjMFUJUcJW6yBcuDUG2jBV7HseLmhCxCqIeDTNhPRNUsxj5I8DZym8zQT9sBHvHz45MxyNV9oSJ9WDRvz7B9bV5sTg/M1k1yRd+v+3vwH+wA38AwRxBV6dcaVwAAAAASUVORK5CYII='>"
+        );
+      } else if (row.isEnabled === "0") {
+        return (
+          "<span>禁用<span>" +
+          "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABGdBTUEAALGPC/xhBQAAA8pJREFUSA3tVU1oVFcU/s6bF9Nq0ZgYLbjpolYxJm+C4EYhGRMVK6aL0i5EXaioWRSxGnXhH3Wh0ahQxd9WEBeFFKQbRVrNRIgbRZmJRgiktaiIxYJamzFxMnP87puMvMT7krgQN7nD8O4759zvO985994HjI7RCrynCsi74Gr8s4+gRbPhYC6g9Vzr8nmMzza8+PemLH2UGineiIj1JArwhbcKIpsgmEayp1A89EkEUwEppu0ebYeR6j4lX3b1DpfAsMR6xZtKXWcJXkPgX/g/he5MEqnb/+Eu36qi4yHZcsBZA9HltFyDykqJJf4einxIYo2XfQpx/yBAEf8rpToZHwpM4948VuQck0wjna6VBR33w+KdMIc2IwIpOEN/KbJaOxypwZFYsg2ZTC3L/jEK3LPaXDYmDD+UGKUV3zD7xchQ6fz2Tr0aPUBF+8KAjM/ESM2dP1nqFdwP1ZjiLg+LtxLn1MoWZn5BapK/+4s1ew+ObNXWiv2DwbTVazQ+aPYv42N/W6F6nv1uCFNtJUZx2XRmXIksTuRJpLr9GEv+HcRp8In6HXrV28vYLcbHmOP5eFbqJO0zUBKZ9cYWmPAcWoYb8ZhxD9I9t4Je9vAoSYWAP5LwFRUp9W2j0g0Saz8ajEWfJuBKime+kvYBOCbOTqw8m4Ln6H3xbAAYX7jJjrCfytIeYQx8pYNJzaLnmWcodJ4wSV42+NmYgsNeakeUCxyMmWQ/bo6WsP9Uy78/D0IG5/QLG2YZdsXAA4JOoBzeSOgOrmOJ91D39ly/CSuOKbsrVckdwThMiBQx+cmkbRtg73+xE6eR4CXJnzOHcUwiN9jfH3xS1U2m38ZKUp5VaaIvyzbs6g8FCnU252OR6XurvybGXuq2ZBd91+E4602QGezrdiqgKt1MgkM5KymrkgeRzTbQt9OPyTvg1LMTtxG5c/eNKTCxEstuFkjRyELWakv5V368aIbWjT5RAMBMuaObSPI9ZaTNu7Z4i5jIUl4kjRJDn7ENHvbNwyjdTZhq71eSx1iumMzvSA5ebHvXy2UzeV3GSXoTmqgLI7YqNoC+6r7etQToglNwWVuiS2xEQZuv1HWvcPVjaHpVGKmPH1xom+vFz0sx9pOfqLyO5fyNn8DT7OktvOx9iv8LFcUyERGnkud6DQm/ZswlvOpZLQs7H9nw8rbQUucDzNNcT4hHl/F7u5m9i9KUovUfP0YxmbZxJOxgdZrwJHFOvuWFOcwYEXEew/94lFR4VDfH7z0PMc96HMjcQGdHQtblNlc+fvQ5WoEPUoHXpXBeAdSX51sAAAAASUVORK5CYII=' />"
+        );
+      }
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -146,7 +177,7 @@ export default {
     // 勾选单个用户信息
     handleSelectAlone(useID) {
       let arr = [];
-      var checkEnabled = {};
+      let checkEnabled = {};
       for (var i = 0; i < useID.length; i++) {
         arr.push(useID[i].id);
         checkEnabled.did = useID[i].did;
@@ -155,29 +186,24 @@ export default {
         checkEnabled.userId = useID[i].userId;
       }
       this.checkEnabled.push(checkEnabled);
+      this.portionUserId = arr.join(",");
       console.log(this.checkEnabled);
       // console.log(checkEnabled);
-      this.portionUserId = arr.join(",");
       // console.log(this.portionUserId);
     },
     // 勾选全部用户信息
     handleSelectAll(allUserID) {
       let arry = [];
-      let checkEnabled = {};
-      let arr = [];
       for (let j = 0; j < allUserID.length; j++) {
+        let checkEnabled = {};
         arry.push(allUserID[j].id);
         checkEnabled.did = allUserID[j].did;
         checkEnabled.id = allUserID[j].id;
         checkEnabled.isEnabled = allUserID[j].isEnabled;
         checkEnabled.userId = allUserID[j].userId;
-        // this.checkEnabled.push(checkEnabled);
-        if(this.checkEnabled === '[]'){
-          this.checkEnabled.push(checkEnabled);
-          console.log(1111)
-        }
+        // console.log(checkEnabled);
+        this.checkEnabled.push(checkEnabled);
       }
-
       console.log(this.checkEnabled);
       this.portionUserId = arry.join(",");
       // console.log(this.portionUserId);
@@ -185,7 +211,7 @@ export default {
     // 函数封装
     capsulation(res) {
       this.tableData = res.data.data.list;
-
+      let tableBled = [];
       for (var i = 0; i < this.tableData.length; i++) {
         this.tableData[i].createTime = this.tableData[i].createTime.substring(
           0,
@@ -194,9 +220,11 @@ export default {
         // console.log(this.tableData[i].createTime);
       }
       for (var i = 0; i < this.tableData.length; i++) {
-        this.isEnabled = this.tableData[i].isEnabled;
-        // console.log(this.isEnabled);
+        tableBled.push(this.tableData[i].isEnabled);
+        // console.log(this.tableData[i].isEnabled);
       }
+      this.isEnabled = tableBled.join(",");
+      // console.log(this.isEnabled);
     },
     // 获取全部用户信息
     showUserInfo() {
@@ -214,10 +242,13 @@ export default {
         Axios.post("/updateByLanOuUserState", {
           did: this.checkEnabled[i].did,
           id: this.checkEnabled[i].id,
-          isEnabled: this.checkEnabled[i].isEnabled,
+          isEnabled: 1,
           userId: this.checkEnabled[i].userId
         }).then(res => {
           console.log(res);
+          
+          this.showUserInfo();
+          this.checkEnabled = [];
         });
       }
     },
@@ -231,6 +262,7 @@ export default {
           userId: this.checkEnabled[i].userId
         }).then(res => {
           console.log(res);
+          this.checkEnabled = [];
           this.showUserInfo();
         });
       }
@@ -336,6 +368,7 @@ export default {
       console.log("取消删除");
     }
   },
+  mounted() {},
   created() {
     this.showUserInfo();
   }

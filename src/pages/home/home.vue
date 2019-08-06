@@ -23,7 +23,7 @@
     </div>
     <div class="mainBox">
       <div class="nav">
-        <el-container style="height: 500px; ">
+        <el-container style="height: 500px;">
           <el-aside width="100%">
             <el-menu :default-openeds="['1']">
               <el-submenu index="1">
