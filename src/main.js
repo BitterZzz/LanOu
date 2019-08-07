@@ -12,11 +12,12 @@ import myCharts from './js/myCharts'
 //js中封装的cookie的方法
 import cookie from './js/cookie'
 //axios请求封装
-import {get,post,delet} from './request/api'
+import {get,post,delet,postBody} from './request/api'
 
 Vue.prototype.$get = get;
 Vue.prototype.$post = post;
-Vue.prototype.$delete = delet
+Vue.prototype.$delete = delet;
+Vue.prototype.$postBody = postBody;
 Vue.use(cookie);
 Vue.use(myCharts)
 Vue.use(ElementUI).use(animated)

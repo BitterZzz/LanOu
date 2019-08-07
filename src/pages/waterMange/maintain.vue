@@ -15,7 +15,7 @@
               <tr align="center" v-for="item in baseList" :key="item.id">
                 <td>{{item.name}}</td>
                 <td colspan="3">
-                  <input type="text" :placeholder="item.placehold" :disabled="item.disable"/>
+                  <input type="text" :placeholder="item.placehold" :disabled="item.disable" :value="item.value" class="inputFrist"/>
                 </td>
               </tr>
               <tr align="center">
@@ -23,13 +23,13 @@
                 <td align="left" colspan="3">
                   <div class="addres-box">
                     <div>
-                      <input type="text" class="addres"  />省
+                      <input type="text" class="addres InputAddres"  />省
                     </div>
                     <div>
-                      <input type="text" class="addres" />市
+                      <input type="text" class="addres InputAddres" />市
                     </div>
                     <div>
-                      <input type="text" class="addres" />区
+                      <input type="text" class="addres InputAddres" />区
                     </div>
                   </div>
                 </td>
@@ -195,13 +195,13 @@ export default {
         { id: 14, name: "小区" }
       ],
       baseList: [
-        { id: 20, name: "机器ID",placehold:"（机器通过wifi/GPRS传输，可修改，以便更换电控板）",disable:true },
-        { id: 21, name: "机器型号", placehold: "（机器通过wifi/GPRS传输）",disable:true },
-        { id: 22, name: "订单号",placehold:"",disable:false },
-        { id: 23, name: "订单日期",placehold:"",disable:false },
-        { id: 24, name: "生产日期",placehold:"",disable:false },
-        { id: 25, name: "安装日期",placehold:"",disable:false },
-        { id: 26, name: "客户全称",placehold:"",disable:false }
+        { id: 20, name: "机器ID",placehold:"（机器通过wifi/GPRS传输，可修改，以便更换电控板）",disable:true, value:this.item.pdid },
+        { id: 21, name: "机器型号", placehold: "（机器通过wifi/GPRS传输）",disable:true, value:this.item.puuid },
+        { id: 22, name: "订单号",placehold:"",disable:false,value:"" },
+        { id: 23, name: "订单日期",placehold:"",disable:false,value:"" },
+        { id: 24, name: "生产日期",placehold:"",disable:false,value:"" },
+        { id: 25, name: "安装日期",placehold:"",disable:false,value:"" },
+        { id: 26, name: "客户全称",placehold:"",disable:false,value:"" }
       ],
       vindicateList: [
         { id: 30, name: "项目适用方负责人" },
@@ -223,6 +223,12 @@ export default {
       ]
     };
   },
+  props:{
+    item:{
+      type:Object,
+      default:"未接受到数据"
+    }
+  },
   methods:{
     hidden(){
       this.$emit('maintain');
@@ -232,7 +238,10 @@ export default {
     document.querySelector('.addres').addEventListener('change',()=>{
       console.log(document.querySelector('.addres').value)
     },false)
-    console.log(document.querySelector('.addres'));
+    let dom = document.querySelectorAll('.inputFrist')
+    for(var i =0 ; i < dom.length; i++){
+      console.log(dom[i].value)
+    }
   }
 };
 </script>

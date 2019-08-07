@@ -313,7 +313,7 @@ export default {
   created() {},
   mounted() {
     //进水标准
-    this.$chart.line1("table-echarts", "ppm", 0, 300, this.translateMsg.inflowMsgArr, this.translateMsg.pureMsgArr);
+    this.$chart.line1("table-echarts", "ppm", 0, 500, this.translateMsg.inflowMsgArr, this.translateMsg.pureMsgArr);
     this.$chart.line1("table-echarts2","mg/L", 0, 300, this.translateMsg.TocBeforeMsgArr, this.translateMsg.TocAfterMsgArr);
     this.$chart.line1("table-echarts3","NTU", 0, 300, this.translateMsg.NtuBeforeMsgArr, this.translateMsg.NtuAfterMsgArr);
     this.$chart.line1("table-echarts4","mg/L",0, 300, this.translateMsg.CodBeforeMsgArr, this.translateMsg.CodAfterMsgArr);

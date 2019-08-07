@@ -64,8 +64,8 @@
               <td>{{item.pdid}}</td>
               <td>
                 <div>在线状态: 在线</div>
-                <div>在线状态: 在线</div>
-                <div>在线状态: 在线</div>
+                <div>故障状态: 在线</div>
+                <div>保养状态: 在线</div>
               </td>
               <td>
                 <div class="msg">
@@ -115,7 +115,7 @@
                 <div class="operation" @click="saveIndex(item)">
                   <p @click="showMachine()">查看</p>
                   <p @click="detailsShow()">参数配置</p>
-                  <p @click="maintainShow()">信息维护</p>
+                  <p @click="maintainShow(item)">信息维护</p>
                   <p>日志</p>
                 </div>
               </td>
@@ -134,7 +134,7 @@
       <parameter @hiddenSecond="detailshidden()"></parameter>
     </div>
     <div v-if="maintainJudge">
-      <maintain @maintain="maintainHidden()"></maintain>
+      <maintain @maintain="maintainHidden()" :item="this.baseMsg"></maintain>
     </div>
     <div class="curtain" v-if="curtainJudge"></div>
   </div>
@@ -146,6 +146,7 @@ import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
 import maintain from "../../waterMange/maintain";
 import { stringToHex } from "../../../js/stringToHex";
+import Axios from "axios";
 export default {
   name: "water",
   data() {
@@ -188,7 +189,8 @@ export default {
         CodAfterMsgArr: [],
         RcrrBeforeMsgArr: [],
         RcrrAfterMsgArr: []
-      }
+      },
+      baseMsg: {}
     };
   },
   methods: {
@@ -219,9 +221,11 @@ export default {
     detailshidden() {
       this.detailsJudge = false;
     },
-    maintainShow() {
+    maintainShow(item) {
       this.curtainJudge = true;
       this.maintainJudge = true;
+      this.baseMsg = item;
+      console.log(this.baseMsg);
     },
     maintainHidden() {
       this.curtainJudge = false;
@@ -231,7 +235,7 @@ export default {
       for (var i = 0; i < this.trDom.length; i++) {
         this.trDom[i].classList.remove("el-icon-check");
       }
-      this.trDom[item.ID].classList.add("el-icon-check");
+      this.trDom[item.ID - 1].classList.add("el-icon-check");
     },
     machineID() {
       // this.machineList = localStorage.getItem("did").split(",");
@@ -242,17 +246,27 @@ export default {
       this.$get("/getDidByPayload", { did: this.did.did }).then(res => {
         let didMsg = res.data.data;
         localStorage.setItem("decodeMsg", JSON.stringify(didMsg));
+        console.log(didMsg);
       });
     },
     //获取该用户可查看的设备
     getWatchDid(val = "1", pageSize = "4") {
-      this.$get("/getLanOuProjectInfoBydid", {
-        pageNum: val,
-        pageSize: pageSize,
-        did: localStorage.did,
-        level: localStorage.getItem("level")
-      }).then(res => {
-        console.log(res.data.data);
+      this.$postBody(
+        "/getLanOuProjectInfoBydid",
+        {
+          listMap: [
+            { did: "13", maintenanceState: "13324", guaranteState: "789787" }
+          ],
+          onlineDid: []
+        },
+        {
+          pageNum: val,
+          pageSize: pageSize,
+          did: localStorage.did,
+          level: localStorage.getItem("level"),
+          sak: "111"
+        }
+      ).then(res => {
         this.machineList = res.data.data.list;
         let str = "";
         for (let i = 0; i < this.machineList.length; i++) {
@@ -265,6 +279,7 @@ export default {
         this.sortPage.pages = res.data.data.pages;
         this.sortPage.total = res.data.data.total;
         this.getDid();
+        console.log(res.data.data);
       });
     },
     //对获取到的did字节进行解码
@@ -277,30 +292,87 @@ export default {
       this.typeFrist.type = decode16.substr(0, 2);
       console.log(stringToHex(did13).length);
       // 第一种数据类型解析
-      // if(typeJudge === "01"){
-      //   if(decode16.substr(2,4).length === 4){
-      //     let temperature = decode16.substr(2,4);
-      //     temperature = temperature.split('').reverse().join('')
-      //     //温度值低字节
-      //     this.typeFrist.lowTemperature = parseInt(temperature.substr(2,2),16).toString(10);
-      //     //温度值高字节
-      //     this.typeFrist.TallTemperature = parseInt(temperature.substr(0,2),16).toString(10);
-      //     console.log(parseInt(temperature.substr(0,2),16))
-      //     console.log(this.typeFrist)
-      //   }
-      //   if(decode16.substr(6,4).length === 4){
-      //     let malfunction = decode16.substr(6,4);
-      //     let a = ''
-      //     malfunction = parseInt((malfunction),16).toString(2);
-      //     for(var i = 0; i < 16 - malfunction.length; i++){
-      //       a += 0;
-      //     }
-      //     malfunction = a + malfunction;
-      //     for(var i = 0; i < malfunction.length; i++){
-      //       if(this){}
-      //     }
-      //   }
-      // }
+      if (typeJudge === "01") {
+        if (decode16.substr(2, 4).length === 4) {
+          let temperature = decode16.substr(2, 4);
+          temperature = temperature
+            .split("")
+            .reverse()
+            .join("");
+          //温度值低字节
+          this.typeFrist.lowTemperature = parseInt(
+            temperature.substr(2, 2),
+            16
+          ).toString(10);
+          //温度值高字节
+          this.typeFrist.TallTemperature = parseInt(
+            temperature.substr(0, 2),
+            16
+          ).toString(10);
+          console.log(parseInt(temperature.substr(0, 2), 16));
+          console.log(this.typeFrist);
+        }
+        if (decode16.substr(6, 4).length === 4) {
+          let malfunction = decode16.substr(6, 4);
+          let a = "";
+          malfunction = parseInt(malfunction, 16).toString(2);
+          for (var i = 0; i < 16 - malfunction.length; i++) {
+            a += 0;
+          }
+          malfunction = a + malfunction;
+          console.log();
+          let b = [];
+          if (malfunction[0] !== "0") {
+            b.push({
+              maintain: "石英砂保养",
+              malfunction: "进水压力传感器故障"
+            });
+          }
+          if (malfunction[1] !== "0") {
+            b.push({
+              maintain: "活性炭保养",
+              malfunction: "膜前压力传感器故障"
+            });
+          }
+          if (malfunction[2] !== "0") {
+            b.push({
+              maintain: "软化树脂保养",
+              malfunction: "取水压力传感器故障"
+            });
+          }
+          if (malfunction[3] !== "0") {
+            b.push({
+              maintain: "RO膜保养",
+              malfunction: "进水流量传感器故障"
+            });
+          }
+          if (malfunction[4] !== "0") {
+            b.push({
+              maintain: "再生盐保养",
+              malfunction: "进水压力传感器故障"
+            });
+          }
+          if (malfunction[5] !== "0") {
+            b.push({
+              maintain: "精密滤芯保养",
+              malfunction: "水质模块故障"
+            });
+          }
+          if (malfunction[6] !== "0") {
+            b.push({
+              maintain: "UV灯保养",
+              malfunction: "TDS模块故障"
+            });
+          }
+          if (malfunction[7] !== "0") {
+            b.push({
+              maintain: "石英砂保养",
+              malfunction: "液位置传感器故障"
+            });
+          }
+          console.log(b);
+        }
+      }
       //第二种数据类型(TDS 历史 31 天水质数据)
       if (typeJudge === "02") {
         let inflowMsg = decode16.substr(2, 62);
@@ -309,8 +381,8 @@ export default {
         let pureMsgArr = [];
         for (var i = 0; i < inflowMsg.length; i++) {
           if (i % 2 === 0) {
-            inflowMsgArr[i] = parseInt(inflowMsg.substr(i, 2), 16);
-            pureMsgArr[i] = parseInt(pureMsg.substr(i, 2), 16);
+            inflowMsgArr.push(parseInt(inflowMsg.substr(i, 2), 16) * 2);
+            pureMsgArr.push(parseInt(pureMsg.substr(i, 2), 16) * 2);
           }
         }
         this.transferMsg.inflowMsgArr = inflowMsgArr;
@@ -391,22 +463,36 @@ export default {
         return;
       }
       //第七种数据类型(滤芯滤料)
-      if (typeJudge === "07") {
-        let typeSevent = decode16.substr(2, 8);
-        console.log(typeSevent);
-        let typeSeventArr = [];
-        for (var i = 0; i < typeSevent.length; i++) {
-          if (i % 2 === 0) {
-            typeSeventArr.push(parseInt(typeSevent.substr(i, 2), 16));
-          }
-        }
-        console.log(typeSeventArr);
-        let a =
-          typeSeventArr[0] /
-          (typeSeventArr[1] / 10) /
-          typeSeventArr[2] /
-          typeSeventArr[3];
-        console.log(a);
+      // if (typeJudge === "07") {
+      //   let typeSevent = decode16.substr(2, 8);
+      //   console.log(typeSevent);
+      //   let typeSeventArr = [];
+      //   for (var i = 0; i < typeSevent.length; i++) {
+      //     if (i % 2 === 0) {
+      //       typeSeventArr.push(parseInt(typeSevent.substr(i, 2), 16));
+      //     }
+      //   }
+      //   console.log(typeSeventArr);
+      //   let a =
+      //     typeSeventArr[0] /
+      //     (typeSeventArr[1] / 10) /
+      //     typeSeventArr[2] /
+      //     typeSeventArr[3];
+      //   console.log(a);
+      // }
+      //第八种数据类型
+      if(typeJudge === "01"){
+        let typeEight = decode16.substr(2,58);
+        let typeEightObj = {};
+        typeEightObj.inflowMin = parseInt(typeEight.substr(0,2),16) / 10;
+        typeEightObj.inflowMax = parseInt(typeEight.substr(1,2),16) / 10;
+        typeEightObj.inflowNow = parseInt(typeEight.substr(3,4),16) / 10;
+        typeEightObj.SublayMin = parseInt(typeEight.substr(7,2),16) / 10;
+        typeEightObj.SublayMax = parseInt(typeEight.substr(9,2),16) / 10;
+        typeEightObj.SublayNow = parseInt(typeEight.substr(11,4),16) / 10;
+        typeEightObj.intakingMin = parseInt(typeEight.substr(15,2),16) / 10;
+        typeEightObj.intakingMax = parseInt(typeEight.substr(17,2),16) / 10;
+        typeEightObj.intakingNow = parseInt(typeEight.substr(19,4),16) / 10;
       }
     }
   },
