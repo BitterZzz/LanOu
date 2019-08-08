@@ -187,10 +187,7 @@ export default {
         workUnit: ""
       }).then(res => {
         console.log(res);
-        this.$message({
-          message: "添加成功",
-          type: "success"
-        });
+        this.$router.go(-1)
       });
     },
     // 获取菜单信息
