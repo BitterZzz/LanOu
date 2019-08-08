@@ -34,14 +34,6 @@
             <tr class="tr-header" align="center">
               <th>机器ID</th>
               <th class="down">
-                <!-- 机器状态
-                <i class="el-icon-caret-bottom"></i>
-                <div class="table-down">
-                  <i class="el-icon-caret-top"></i>
-                  <ul>
-                    <li v-for="item in tdList" :key="item.ID">{{item.name}}</li>
-                  </ul>
-                </div>-->
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link" style="color:#333333">
                     机器状态
@@ -69,11 +61,11 @@
               v-for="(item,index) in this.machineList"
               :key="index"
             >
-              <td> {{item.pdid}} </td>
+              <td>{{item.pdid}}</td>
               <td>
                 <div>在线状态: 在线</div>
-                <div>在线状态: 在线</div>
-                <div>在线状态: 在线</div>
+                <div>故障状态: 在线</div>
+                <div>保养状态: 在线</div>
               </td>
               <td>
                 <div class="msg">
@@ -99,7 +91,7 @@
               </td>
               <td>
                 <div class="addres">
-                  <div>深圳市宝安区高新奇工业园2期1号楼</div>
+                  <div>{{item.installationAdderss}}</div>
                 </div>
               </td>
               <td>
@@ -108,14 +100,14 @@
                     <span>安装时间:</span>
                     <img src="../../../assets/img/time.png" alt @click="installation()" />
                   </div>
-                  <div class="installationDateI">2019-04-06</div>
-                  <div class="hhmmssI">14:23:12</div>
+                  <div class="installationDateI" style="height:40px">{{item.installTime}}</div>
+                  <!-- <div class="hhmmssI">14:23:12</div> -->
                   <div class="time-title">
                     <span>上传时间:</span>
                     <img src="../../../assets/img/time.png" alt @click="uploadtime()" />
                   </div>
-                  <div class="installationDateU">2019-04-06</div>
-                  <div class="hhmmssU">14:23:12</div>
+                  <div class="installationDateU">{{item.oderTime}}</div>
+                  <!-- <div class="hhmmssU">14:23:12</div> -->
                 </div>
               </td>
               <td>6</td>
@@ -123,7 +115,7 @@
                 <div class="operation" @click="saveIndex(item)">
                   <p @click="showMachine()">查看</p>
                   <p @click="detailsShow()">参数配置</p>
-                  <p @click="maintainShow()">信息维护</p>
+                  <p @click="maintainShow(item)">信息维护</p>
                   <p>日志</p>
                 </div>
               </td>
@@ -131,18 +123,18 @@
           </table>
         </div>
       </div>
-      <sorter :pageMsg="sortPage"></sorter>
-    </div>
-    <!-- 参数配置组件 -->
-    <div v-if="checkJudge">
-      <particulars @hidden="hiddenMachine()"></particulars>
+      <sorter :pageMsg="sortPage" @Information="getWatchDid"></sorter>
     </div>
     <!-- 查看组件 -->
+    <div v-if="checkJudge">
+      <particulars @hidden="hiddenMachine()" :translateMsg="this.transferMsg"></particulars>
+    </div>
+    <!-- 参数配置组件 -->
     <div v-if="detailsJudge">
       <parameter @hiddenSecond="detailshidden()"></parameter>
     </div>
     <div v-if="maintainJudge">
-      <maintain @maintain="maintainHidden()"></maintain>
+      <maintain @maintain="maintainHidden()" :item="this.baseMsg"></maintain>
     </div>
     <div class="curtain" v-if="curtainJudge"></div>
   </div>
@@ -153,7 +145,8 @@ import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
 import maintain from "../../waterMange/maintain";
-import {stringToHex} from "../../../js/stringToHex";
+import { stringToHex } from "../../../js/stringToHex";
+import Axios from "axios";
 export default {
   name: "water",
   data() {
@@ -178,11 +171,26 @@ export default {
       maintainJudge: false,
       curtainJudge: false,
       sortPage: {
-        pages: 2,
+        pages: 1,
         pageSize: 1,
-        total: 6
+        total: 1
       },
-      machineList: []
+      machineList: [],
+      did: {},
+      typeFrist: {},
+      transferMsg: {
+        inflowMsgArr: [],
+        pureMsgArr: [],
+        TocBeforeMsgArr: [],
+        TocAfterMsgArr: [],
+        NtuBeforeMsgArr: [],
+        NtuAfterMsgArr: [],
+        CodBeforeMsgArr: [],
+        CodAfterMsgArr: [],
+        RcrrBeforeMsgArr: [],
+        RcrrAfterMsgArr: []
+      },
+      baseMsg: {}
     };
   },
   methods: {
@@ -213,9 +221,11 @@ export default {
     detailshidden() {
       this.detailsJudge = false;
     },
-    maintainShow() {
+    maintainShow(item) {
       this.curtainJudge = true;
       this.maintainJudge = true;
+      this.baseMsg = item;
+      console.log(this.baseMsg);
     },
     maintainHidden() {
       this.curtainJudge = false;
@@ -225,7 +235,7 @@ export default {
       for (var i = 0; i < this.trDom.length; i++) {
         this.trDom[i].classList.remove("el-icon-check");
       }
-      this.trDom[item.ID].classList.add("el-icon-check");
+      this.trDom[item.ID - 1].classList.add("el-icon-check");
     },
     machineID() {
       // this.machineList = localStorage.getItem("did").split(",");
@@ -233,22 +243,258 @@ export default {
     //获取相应did的字节
     getDid() {
       let _this = this;
-      this.$get("/getDidByPayload", { did: localStorage.getItem("did") }).then(
-        res => {
-          let didMsg = res.data.data;
-          console.log(didMsg);
-        }
-      );
+      this.$get("/getDidByPayload", { did: this.did.did }).then(res => {
+        let didMsg = res.data.data;
+        localStorage.setItem("decodeMsg", JSON.stringify(didMsg));
+        console.log(didMsg);
+      });
     },
-    // stringToHex(str) {
-    //   var val = "";
-    //   for (let i = 0; i < str.length; i++) {
-    //     if ((val == "")) val = str.charCodeAt(i).toString(16);
-    //     else val += str.charCodeAt(i).toString(16);
-    //   }
-    //   console.log(val);
-    //   return val;
-    // }
+    //获取该用户可查看的设备
+    getWatchDid(val = "1", pageSize = "4") {
+      this.$postBody(
+        "/getLanOuProjectInfoBydid",
+        {
+          listMap: [
+            { did: "13", maintenanceState: "13324", guaranteState: "789787" }
+          ],
+          onlineDid: []
+        },
+        {
+          pageNum: val,
+          pageSize: pageSize,
+          did: localStorage.did,
+          level: localStorage.getItem("level"),
+          sak: "111"
+        }
+      ).then(res => {
+        this.machineList = res.data.data.list;
+        let str = "";
+        for (let i = 0; i < this.machineList.length; i++) {
+          if (str === "") {
+            str += this.machineList[0].pdid;
+          } else str += "," + this.machineList[i].pdid;
+        }
+        this.did.did = str;
+        this.sortPage.pageSize = res.data.data.pageSize;
+        this.sortPage.pages = res.data.data.pages;
+        this.sortPage.total = res.data.data.total;
+        this.getDid();
+        console.log(res.data.data);
+      });
+    },
+    //对获取到的did字节进行解码
+    decode() {
+      let getDidMsg = JSON.parse(localStorage.getItem("decodeMsg"));
+      let did13 =
+        "ZZ       lK͍P     Z2432432333343234       !  ?abbbbbb`bbbbbbb`bbbb`bbbbb`````abbbbbb`bbbbbbb`bbbb`bbbbb`````";
+      let decode16 = stringToHex(did13).substr(18);
+      let typeJudge = decode16.substr(0, 2);
+      this.typeFrist.type = decode16.substr(0, 2);
+      console.log(stringToHex(did13).length);
+      // 第一种数据类型解析
+      if (typeJudge === "01") {
+        if (decode16.substr(2, 4).length === 4) {
+          let temperature = decode16.substr(2, 4);
+          temperature = temperature
+            .split("")
+            .reverse()
+            .join("");
+          //温度值低字节
+          this.typeFrist.lowTemperature = parseInt(
+            temperature.substr(2, 2),
+            16
+          ).toString(10);
+          //温度值高字节
+          this.typeFrist.TallTemperature = parseInt(
+            temperature.substr(0, 2),
+            16
+          ).toString(10);
+          console.log(parseInt(temperature.substr(0, 2), 16));
+          console.log(this.typeFrist);
+        }
+        if (decode16.substr(6, 4).length === 4) {
+          let malfunction = decode16.substr(6, 4);
+          let a = "";
+          malfunction = parseInt(malfunction, 16).toString(2);
+          for (var i = 0; i < 16 - malfunction.length; i++) {
+            a += 0;
+          }
+          malfunction = a + malfunction;
+          console.log();
+          let b = [];
+          if (malfunction[0] !== "0") {
+            b.push({
+              maintain: "石英砂保养",
+              malfunction: "进水压力传感器故障"
+            });
+          }
+          if (malfunction[1] !== "0") {
+            b.push({
+              maintain: "活性炭保养",
+              malfunction: "膜前压力传感器故障"
+            });
+          }
+          if (malfunction[2] !== "0") {
+            b.push({
+              maintain: "软化树脂保养",
+              malfunction: "取水压力传感器故障"
+            });
+          }
+          if (malfunction[3] !== "0") {
+            b.push({
+              maintain: "RO膜保养",
+              malfunction: "进水流量传感器故障"
+            });
+          }
+          if (malfunction[4] !== "0") {
+            b.push({
+              maintain: "再生盐保养",
+              malfunction: "进水压力传感器故障"
+            });
+          }
+          if (malfunction[5] !== "0") {
+            b.push({
+              maintain: "精密滤芯保养",
+              malfunction: "水质模块故障"
+            });
+          }
+          if (malfunction[6] !== "0") {
+            b.push({
+              maintain: "UV灯保养",
+              malfunction: "TDS模块故障"
+            });
+          }
+          if (malfunction[7] !== "0") {
+            b.push({
+              maintain: "石英砂保养",
+              malfunction: "液位置传感器故障"
+            });
+          }
+          console.log(b);
+        }
+      }
+      //第二种数据类型(TDS 历史 31 天水质数据)
+      if (typeJudge === "02") {
+        let inflowMsg = decode16.substr(2, 62);
+        let inflowMsgArr = [];
+        let pureMsg = decode16.substr(64, 62);
+        let pureMsgArr = [];
+        for (var i = 0; i < inflowMsg.length; i++) {
+          if (i % 2 === 0) {
+            inflowMsgArr.push(parseInt(inflowMsg.substr(i, 2), 16) * 2);
+            pureMsgArr.push(parseInt(pureMsg.substr(i, 2), 16) * 2);
+          }
+        }
+        this.transferMsg.inflowMsgArr = inflowMsgArr;
+        this.transferMsg.pureMsgArr = pureMsgArr;
+        console.log(inflowMsgArr);
+        console.log(inflowMsgArr);
+        return;
+      }
+      //第三种数据类型(TOC 历史 31 天水质数据)
+      if (typeJudge === "03") {
+        let TocBeforeMsg = decode16.substr(2, 62);
+        let TocBeforeMsgArr = [];
+        let TocAfterMsg = decode16.substr(64, 62);
+        let TocAfterMsgArr = [];
+        for (var i = 0; i < TocBeforeMsg.length; i++) {
+          if (i % 2 === 0) {
+            TocBeforeMsgArr.push(parseInt(TocBeforeMsg.substr(i, 2), 16) / 10);
+            TocAfterMsgArr.push(parseInt(TocAfterMsg.substr(i, 2), 16) / 10);
+          }
+        }
+        this.transferMsg.TocBeforeMsgArr = TocBeforeMsgArr;
+        this.transferMsg.TocAfterMsgArr = TocAfterMsgArr;
+        console.log(TocBeforeMsgArr);
+        console.log(ocAfterMsgArr);
+        return;
+      }
+      //第四种数据类型(NTU(浊度)历史 31 天水质数据)
+      if (typeJudge === "04") {
+        let NtuBeforeMsg = decode16.substr(2, 62);
+        let NtuBeforeMsgArr = [];
+        let NtuAfterMsg = decode16.substr(64, 62);
+        let NtuAfterMsgArr = [];
+        for (var i = 0; i < NtuBeforeMsg.length; i++) {
+          if (i % 2 === 0) {
+            NtuBeforeMsgArr.push(parseInt(NtuBeforeMsg.substr(i, 2), 16) / 10);
+            NtuAfterMsgArr.push(parseInt(NtuAfterMsg.substr(i, 2), 16) / 10);
+          }
+        }
+        this.transferMsg.NtuBeforeMsgArr = NtuBeforeMsgArr;
+        this.transferMsg.NtuAfterMsgArr = NtuAfterMsgArr;
+        console.log(NtuBeforeMsgArr);
+        console.log(NtuAfterMsgArr);
+        return;
+      } //第五种数据类型(COD 历史 31 天水质数据)
+      if (typeJudge === "05") {
+        let CodBeforeMsg = decode16.substr(2, 62);
+        let CodBeforeMsgArr = [];
+        let CodAfterMsg = decode16.substr(64, 62);
+        let CodAfterMsgArr = [];
+        for (var i = 0; i < CodBeforeMsg.length; i++) {
+          if (i % 2 === 0) {
+            CodBeforeMsgArr.push(parseInt(CodBeforeMsg.substr(i, 2), 16) / 10);
+            CodAfterMsgArr.push(parseInt(CodAfterMsg.substr(i, 2), 16) / 10);
+          }
+        }
+        this.transferMsg.CodBeforeMsgArr = CodBeforeMsgArr;
+        this.transferMsg.CodAfterMsgArr = CodBeforeMsgArr;
+        console.log(CodBeforeMsgArr);
+        console.log(CodAfterMsgArr);
+        return;
+      } //第六种数据类型(RCRR 历史 31 天水质数据(余氯去除率))
+      if (typeJudge === "06") {
+        let RcrrBeforeMsg = decode16.substr(2, 62);
+        let RcrrBeforeMsgArr = [];
+        let RcrrAfterMsg = decode16.substr(64, 62);
+        let RcrrAfterMsgArr = [];
+        for (var i = 0; i < RcrrBeforeMsg.length; i++) {
+          if (i % 2 === 0) {
+            RcrrBeforeMsgArr.push(parseInt(RcrrBeforeMsg.substr(i, 2), 16));
+            RcrrAfterMsgArr.push(parseInt(RcrrAfterMsg.substr(i, 2), 16));
+          }
+        }
+        this.transferMsg.RcrrBeforeMsgArr = RcrrBeforeMsgArr;
+        this.transferMsg.RcrrAfterMsgArr = RcrrAfterMsgArr;
+        console.log(RcrrBeforeMsgArr);
+        console.log(RcrrAfterMsgArr);
+        console.log(this.transferMsg);
+        return;
+      }
+      //第七种数据类型(滤芯滤料)
+      // if (typeJudge === "07") {
+      //   let typeSevent = decode16.substr(2, 8);
+      //   console.log(typeSevent);
+      //   let typeSeventArr = [];
+      //   for (var i = 0; i < typeSevent.length; i++) {
+      //     if (i % 2 === 0) {
+      //       typeSeventArr.push(parseInt(typeSevent.substr(i, 2), 16));
+      //     }
+      //   }
+      //   console.log(typeSeventArr);
+      //   let a =
+      //     typeSeventArr[0] /
+      //     (typeSeventArr[1] / 10) /
+      //     typeSeventArr[2] /
+      //     typeSeventArr[3];
+      //   console.log(a);
+      // }
+      //第八种数据类型
+      if(typeJudge === "01"){
+        let typeEight = decode16.substr(2,58);
+        let typeEightObj = {};
+        typeEightObj.inflowMin = parseInt(typeEight.substr(0,2),16) / 10;
+        typeEightObj.inflowMax = parseInt(typeEight.substr(1,2),16) / 10;
+        typeEightObj.inflowNow = parseInt(typeEight.substr(3,4),16) / 10;
+        typeEightObj.SublayMin = parseInt(typeEight.substr(7,2),16) / 10;
+        typeEightObj.SublayMax = parseInt(typeEight.substr(9,2),16) / 10;
+        typeEightObj.SublayNow = parseInt(typeEight.substr(11,4),16) / 10;
+        typeEightObj.intakingMin = parseInt(typeEight.substr(15,2),16) / 10;
+        typeEightObj.intakingMax = parseInt(typeEight.substr(17,2),16) / 10;
+        typeEightObj.intakingNow = parseInt(typeEight.substr(19,4),16) / 10;
+      }
+    }
   },
   //封装的组件
   components: {
@@ -259,27 +505,14 @@ export default {
   },
   created() {
     this.machineID();
-    this.getDid();
+    this.getWatchDid();
+    this.decode();
   },
-  mounted() { 
+  mounted() {
     this.trDom = document.querySelectorAll(".el-icon-check");
     for (var i = 0; i < this.trDom.length; i++) {
       this.trDom[i].classList.remove("el-icon-check");
     }
-    this.$get("/getLanOuProjectInfoBydid", {
-      pageNum: "1",
-      pageSize: "4",
-      did: localStorage.did,
-      level: localStorage.getItem('level')
-    }).then(res => {
-      this.machineList = res.data.data.list
-      console.log(this.machineList)
-    });
-    // setTimeout(()=> {
-    //   this.machineList = this.machineList
-    // },1000)
-    var a = stringToHex("Z           t.   :  #2432432333343234       &  2");
-    console.log(a)
   }
 };
 </script>

@@ -51,7 +51,7 @@ export default {
   methods: {
     //登录判断
     login() {
-      var userVerity = /^[1][3,4,5,7,8][0-9]{9}$/;
+      var userVerity = /^[1][3,4,5,6,7,8][0-9]{9}$/;
       var pwdVerity = /^[\w_-]{6,16}$/;
       if (this.dom.userDom.value === "") {
         this.$message({
@@ -97,7 +97,7 @@ export default {
         passWord: this.dom.pwdDom.value
       }).then(res => {
         setTimeout(() => {
-          console.log(res.data.data);
+          console.log(res.data);
           if (res.data.code === 0) {
             this.event.setCookie(res.data.code, 7);
             this.$router.replace("/homepage");

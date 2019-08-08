@@ -25,6 +25,20 @@ export function post (url, params) {
   })
 }
 
+export function postBody (url, body, params){
+  return new Promise((resolve,reject) => {
+    Axios.post(url,body,{
+      params:params
+    })
+    .then(res=>{
+      resolve(res)
+    })
+    .catch(err => {
+      reject(err.data)
+    })
+  })
+}
+
 export function delet (url, params) {
   return new Promise((resolve, reject) => {
     Axios.delete(url, {

@@ -5,10 +5,10 @@ const install = function (Vue) {
       get() {
         return {
           // 双曲线表
-          line1: function (id,name) {
+          line1: function (id, name, minNum, maxNum, data, data2) {
             this.chart = echarts.init(document.getElementById(id))
             this.chart.clear()
-            var colors = ['#5793f3', '#d14a61', '#675bba']
+            var colors = ['#FFB402', '#3ADA85', '#675bba']
             const optionData = {
               color: colors,
               tooltip: {
@@ -30,7 +30,7 @@ const install = function (Vue) {
                   axisLine: {
                     onZero: false,
                     lineStyle: {
-                      color: colors[1]
+                      color: '#ffffff'
                     }
                   },
                   axisPointer: {
@@ -41,7 +41,7 @@ const install = function (Vue) {
                       }
                     }
                   },
-                  data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                  data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
                 },
                 {
                   type: 'category',
@@ -65,15 +65,20 @@ const install = function (Vue) {
                 }
               ],
               yAxis: [
-                { 
-                  name:name,
+                {
+                  name: name,
                   type: 'value',
                   boundaryGap: [0, '100%'],
                   splitLine: {
                     show: false
                   },
-                  max: 5,
-                  min: 0,
+                  axisLine: {
+                    lineStyle: {
+                      color: '#ffffff'
+                    }
+                  },
+                  max: maxNum,
+                  min: minNum,
                   axisLable: {
                     formatter: '{value}'
                   }
@@ -86,20 +91,20 @@ const install = function (Vue) {
                   type: 'line',
                   // xAxisIndex: 1,
                   smooth: true,
-                  data: [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0]
+                  data: data
                 },
                 {
                   name: '2016 降水量',
                   type: 'line',
                   smooth: true,
-                  data: [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]
+                  data: data2
                 }
               ]
             }
 
             this.chart.setOption(optionData)
           },
-          //但曲线表
+          // 但曲线表
           line2: function (id) {
             this.chart = echarts.init(document.getElementById(id))
             this.chart.clear()
@@ -108,10 +113,12 @@ const install = function (Vue) {
                 type: 'category',
                 data: ['1', '8', '15', '22', '30']
               },
-              yAxis: {
+              yAxis: [{
                 type: 'value',
-                splitLine:false
-              },
+                splitLine: false,
+                max:500,
+                min:0
+              }],
               series: [{
                 data: [820, 932, 901, 934, 1290, 1330, 1320],
                 type: 'line',
