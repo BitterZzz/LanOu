@@ -188,7 +188,8 @@ export default {
         CodBeforeMsgArr: [],
         CodAfterMsgArr: [],
         RcrrBeforeMsgArr: [],
-        RcrrAfterMsgArr: []
+        RcrrAfterMsgArr: [],
+        typeEight: {}
       },
       baseMsg: {}
     };
@@ -225,7 +226,6 @@ export default {
       this.curtainJudge = true;
       this.maintainJudge = true;
       this.baseMsg = item;
-      console.log(this.baseMsg);
     },
     maintainHidden() {
       this.curtainJudge = false;
@@ -243,10 +243,25 @@ export default {
     //获取相应did的字节
     getDid() {
       let _this = this;
-      this.$get("/getDidByPayload", { did: this.did.did }).then(res => {
+      this.$get("/getDidByPayload", { did: "100" }).then(res => {
         let didMsg = res.data.data;
+        let didMsgArr = [];
+        //将获取到的数据保存到localstorage
         localStorage.setItem("decodeMsg", JSON.stringify(didMsg));
-        console.log(didMsg);
+        let localMsg = JSON.parse(localStorage.getItem("decodeMsg"));
+        //遍历localStorage中的数据并保存到数组
+        for (var key in localMsg) {
+          didMsgArr.push(key + "|" + localMsg[key]);
+        }
+        let newDidMsgArr = [];
+        //遍历didMsgArr中的数据保存到newDidMsgArr
+        for (var i = 0; i < didMsgArr.length; i++) {
+          newDidMsgArr.push(didMsgArr[i].split("|"));
+          for (var j = 1; j < newDidMsgArr[i].length - 1; j++) {
+            let decodeMsg = newDidMsgArr[i][j].substr(2);
+            this.decode(decodeMsg);
+          }
+        }
       });
     },
     //获取该用户可查看的设备
@@ -278,19 +293,16 @@ export default {
         this.sortPage.pageSize = res.data.data.pageSize;
         this.sortPage.pages = res.data.data.pages;
         this.sortPage.total = res.data.data.total;
+        console.log(this.did.did);
         this.getDid();
-        console.log(res.data.data);
       });
     },
     //对获取到的did字节进行解码
-    decode() {
+    decode(did) {
       let getDidMsg = JSON.parse(localStorage.getItem("decodeMsg"));
-      let did13 =
-        "ZZ       lK͍P     Z2432432333343234       !  ?abbbbbb`bbbbbbb`bbbb`bbbbb`````abbbbbb`bbbbbbb`bbbb`bbbbb`````";
-      let decode16 = stringToHex(did13).substr(18);
+      let decode16 = stringToHex(did).substr(18);
       let typeJudge = decode16.substr(0, 2);
       this.typeFrist.type = decode16.substr(0, 2);
-      console.log(stringToHex(did13).length);
       // 第一种数据类型解析
       if (typeJudge === "01") {
         if (decode16.substr(2, 4).length === 4) {
@@ -309,8 +321,8 @@ export default {
             temperature.substr(0, 2),
             16
           ).toString(10);
-          console.log(parseInt(temperature.substr(0, 2), 16));
-          console.log(this.typeFrist);
+          // console.log(parseInt(temperature.substr(0, 2), 16));
+          // console.log(this.typeFrist);
         }
         if (decode16.substr(6, 4).length === 4) {
           let malfunction = decode16.substr(6, 4);
@@ -320,7 +332,6 @@ export default {
             a += 0;
           }
           malfunction = a + malfunction;
-          console.log();
           let b = [];
           if (malfunction[0] !== "0") {
             b.push({
@@ -406,7 +417,7 @@ export default {
         this.transferMsg.TocBeforeMsgArr = TocBeforeMsgArr;
         this.transferMsg.TocAfterMsgArr = TocAfterMsgArr;
         console.log(TocBeforeMsgArr);
-        console.log(ocAfterMsgArr);
+        console.log(TocAfterMsgArr);
         return;
       }
       //第四种数据类型(NTU(浊度)历史 31 天水质数据)
@@ -463,37 +474,90 @@ export default {
         return;
       }
       //第七种数据类型(滤芯滤料)
-      // if (typeJudge === "07") {
-      //   let typeSevent = decode16.substr(2, 8);
-      //   console.log(typeSevent);
-      //   let typeSeventArr = [];
-      //   for (var i = 0; i < typeSevent.length; i++) {
-      //     if (i % 2 === 0) {
-      //       typeSeventArr.push(parseInt(typeSevent.substr(i, 2), 16));
-      //     }
-      //   }
-      //   console.log(typeSeventArr);
-      //   let a =
-      //     typeSeventArr[0] /
-      //     (typeSeventArr[1] / 10) /
-      //     typeSeventArr[2] /
-      //     typeSeventArr[3];
-      //   console.log(a);
-      // }
-      //第八种数据类型
-      if(typeJudge === "01"){
-        let typeEight = decode16.substr(2,58);
-        let typeEightObj = {};
-        typeEightObj.inflowMin = parseInt(typeEight.substr(0,2),16) / 10;
-        typeEightObj.inflowMax = parseInt(typeEight.substr(1,2),16) / 10;
-        typeEightObj.inflowNow = parseInt(typeEight.substr(3,4),16) / 10;
-        typeEightObj.SublayMin = parseInt(typeEight.substr(7,2),16) / 10;
-        typeEightObj.SublayMax = parseInt(typeEight.substr(9,2),16) / 10;
-        typeEightObj.SublayNow = parseInt(typeEight.substr(11,4),16) / 10;
-        typeEightObj.intakingMin = parseInt(typeEight.substr(15,2),16) / 10;
-        typeEightObj.intakingMax = parseInt(typeEight.substr(17,2),16) / 10;
-        typeEightObj.intakingNow = parseInt(typeEight.substr(19,4),16) / 10;
+      if (typeJudge === "30") {
+        let typeSevent = decode16.substr(2, 112);
+        let typeSeventArr = [];
+        let typeBranch;
+        for (var i = 0; i < typeSevent.length; i++) {
+          if (i % 16 === 0) {
+            typeBranch = typeSevent.substr(i, 16);
+            typeSeventArr.push(typeBranch);
+          }
+        }
+        let arr = []
+        // let newTypeBranch = {}
+        // parseInt(typeSeventArr[0].substr(0, 4).split('').reverse().join(''),16)//进水指标
+        typeSeventArr.forEach((item,index) => {
+          console.log(item);
+          arr.push({inflow:parseInt(item.substr(0, 4).split('').reverse().join(''),16),purified:parseInt(item.substr(4, 4).split('').reverse().join(''),16)})
+        })
+        console.log(arr)
+
+        console.log(typeSeventArr);
       }
+      //第八种数据类型
+      if (typeJudge === "08") {
+        let typeEight = decode16.substr(2, 56);
+        let typeEightObj = {};
+        // 进水压力设置下限
+        typeEightObj.inflowMin = parseInt(typeEight.substr(0, 2), 16) / 100;
+        // 进水压力设置上限
+        typeEightObj.inflowMax = parseInt(typeEight.substr(1, 2), 16) / 100;
+        // 进水压力当前值
+        typeEightObj.inflowNow = parseInt(typeEight.substr(3, 4), 16) / 100;
+        // 膜前压力设置下限
+        typeEightObj.SublayMin = parseInt(typeEight.substr(7, 2), 16) / 100;
+        // 膜前压力设置上限
+        typeEightObj.SublayMax = parseInt(typeEight.substr(9, 2), 16) / 100;
+        // 膜前压力当前值
+        typeEightObj.SublayNow = parseInt(typeEight.substr(11, 4), 16) / 100;
+        // 取水压力下限值
+        typeEightObj.intakingMin = parseInt(typeEight.substr(15, 2), 16) / 100;
+        // 取水压力上限值
+        typeEightObj.intakingMax = parseInt(typeEight.substr(17, 2), 16) / 100;
+        // 取水压力当前值
+        typeEightObj.intakingNow = parseInt(typeEight.substr(19, 4), 16) / 100;
+        // 原水进水总量
+        typeEightObj.rawWater = parseInt(typeEight.substr(23, 4), 16) / 10;
+        // 纯水进水总量
+        typeEightObj.pureWater = parseInt(typeEight.substr(27, 4), 16) / 10;
+        // 年
+        typeEightObj.year = parseInt(typeEight.substr(31, 2), 16);
+        // 月
+        typeEightObj.month = parseInt(typeEight.substr(33, 2), 16);
+        // 日
+        typeEightObj.day = parseInt(typeEight.substr(35, 2), 16);
+        // 时
+        typeEightObj.hour = parseInt(typeEight.substr(37, 2), 16);
+        // 分
+        typeEightObj.minute = parseInt(typeEight.substr(39, 2), 16);
+        // 秒
+        typeEightObj.second = parseInt(typeEight.substr(41, 2), 16);
+        // 开关信号输入量
+        let switchThere = "";
+        let switchThereNum = "";
+        switchThere = parseInt(typeEight.substr(43, 2), 16).toString(2);
+        for (var i = 0; i < 8 - switchThere.length; i++) {
+          switchThereNum += 0;
+        }
+        switchThere = switchThereNum + switchThere;
+        typeEightObj.switch = switchThere;
+        // 继电器输出
+        let relayThere = "";
+        let relayThereNum = "";
+        relayThere = parseInt(typeEight.substr(45, 4), 16).toString(2);
+        for (var i = 0; i < 16 - relayThere.length; i++) {
+          relayThereNum += 0;
+        }
+        relayThere = relayThereNum + relayThere;
+        typeEightObj.relay = relayThere;
+        // 排空命令
+        typeEightObj.evacuation = parseInt(typeEight.substr(49, 2), 16);
+        // 恢复出厂设置
+        typeEightObj.rest = parseInt(typeEight.substr(53, 2), 16);
+        this.transferMsg.typeEight = typeEightObj;
+      }
+      localStorage.setItem("allTypeMsg", JSON.stringify(this.transferMsg));
     }
   },
   //封装的组件
@@ -506,7 +570,6 @@ export default {
   created() {
     this.machineID();
     this.getWatchDid();
-    this.decode();
   },
   mounted() {
     this.trDom = document.querySelectorAll(".el-icon-check");
