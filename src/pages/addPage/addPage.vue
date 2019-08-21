@@ -1,84 +1,86 @@
 <template>
-  <div id="addPage">
-    <div id="title">
-      <p>
-        您所在的位置 : 账号管理 > 账号列表 >
-        <a>新增账户</a>
-      </p>
-    </div>
-    <div class="toBack">
-      <div class="goHome">
-        <img @click="backHome()" src="../../assets/img/back.png" alt />
-        <span>返回列表</span>
+  <div>
+    <div id="addPage" v-for="item in sonData" :key="item.id">
+      <div id="title">
+        <p>
+          您所在的位置 : 账号管理 > 账号列表 >
+          <a>新增账户</a>
+        </p>
       </div>
-    </div>
-    <div class="import">
-      <ul class="userPassword">
-        <li>
-          <i>*</i>
-          <span>用户名 :</span>
-          <input type="text" id="username" name="username" maxlength="11" />
-        </li>
-        <li>
-          <i>*</i>
-          <span>密码 :</span>
-          <input type="password" id="password" name="password" placeholder="密码为8-16位的字母+数字组成" />
-        </li>
-      </ul>
-      <ul class="userPassword">
-        <li>
-          <span class="upleft">手机 :</span>
-          <input id="phone" type="text" maxlength="11" />
-        </li>
-        <li>
-          <span>邮箱 :</span>
-          <input type="email" name="email" id="email" />
-        </li>
-      </ul>
-      <ul class="userPassword">
-        <li>
-          <span class="upleft">角色 :</span>
-          <input type="text" id="role" name="role" />
-        </li>
-        <li>
-          <span>部门 :</span>
-          <input type="text" name="section" id="section" placeholder />
-        </li>
-      </ul>
-    </div>
-    <div class="alt">
-      <span>带 * 号为必填</span>
-    </div>
-    <div class="restrict">
-      <h2>基本权限：</h2>
-      <div class="choice">
-        <el-checkbox-group
-          v-model="checkedCities"
-          v-for="city in cities"
-          :key="city.id"
-          @change="change"
-        >
-          <el-checkbox :label="city">{{city.authorityName}}</el-checkbox>
-        </el-checkbox-group>
-      </div>
-    </div>
-    <div class="robot">
-      <h2>指定查看机器：</h2>
-      <div>
-        <button type="submit" class="submit" @click="SelectId()">全部机器</button>
-        <br />
-        <input type="text" name="text" id="rotID" />
-        <div class="append" @click="appendFile()">+ 添加</div>
-        <div class="reveal" v-if="showReveal">
-          <div class="botId" v-for="item in append" :key="item.id">{{item}}</div>
+      <div class="toBack">
+        <div class="goHome">
+          <img @click="backHome()" src="../../assets/img/back.png" alt />
+          <span>返回列表</span>
         </div>
       </div>
-    </div>
-    <div class="buttom">
-      <button type="submit" @click="submitAction()">
-        <img src="../../assets/img/root.png" alt srcset />
-        新增提交
-      </button>
+      <div class="import">
+        <ul class="userPassword">
+          <li>
+            <i>*</i>
+            <span>用户名 :</span>
+            <input type="text" id="username" name="username" maxlength="11" :value="item.userName" />
+          </li>
+          <li>
+            <i>*</i>
+            <span>密码 :</span>
+            <input type="password" id="password" name="password" placeholder="密码为8-16位的字母+数字组成" :value="item.passWord"  />
+          </li>
+        </ul>
+        <ul class="userPassword">
+          <li>
+            <span class="upleft">手机 :</span>
+            <input id="phone" type="text" maxlength="11"  :value="item.phone" />
+          </li>
+          <li>
+            <span>邮箱 :</span>
+            <input type="email" name="email" id="email"   :value="item.email"/>
+          </li>
+        </ul>
+        <ul class="userPassword">
+          <li>
+            <span class="upleft">角色 :</span>
+            <input type="text" id="role" name="role"  :value="item.role"/>
+          </li>
+          <li>
+            <span>部门 :</span>
+            <input type="text" name="section" id="section" placeholder  :value="item.dept" />
+          </li>
+        </ul>
+      </div>
+      <div class="alt">
+        <span>带 * 号为必填</span>
+      </div>
+      <div class="restrict">
+        <h2>基本权限：</h2>
+        <div class="choice">
+          <el-checkbox-group
+            v-model="checkedCities"
+            v-for="city in cities"
+            :key="city.id"
+            @change="change"
+          >
+            <el-checkbox :label="city">{{city.split(',')[0]}}</el-checkbox>
+          </el-checkbox-group>
+        </div>
+      </div>
+      <div class="robot">
+        <h2>指定查看机器：</h2>
+        <div>
+          <button type="submit" class="submit" @click="SelectId()">全部机器</button>
+          <br />
+          <input type="text" name="text" id="rotID" />
+          <div class="append" @click="appendFile()">+ 添加</div>
+          <div class="reveal" v-if="showReveal">
+            <div class="botId" v-for="item in append" :key="item.id">{{item}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="buttom">
+        <button type="submit" @click="submitAction()">
+          <img src="../../assets/img/root.png" alt srcset />
+          新增提交
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -86,6 +88,7 @@
 <script>
 import { format, relative } from "path";
 import Axios from "axios";
+import { setTimeout } from 'timers';
 export default {
   name: "appendPage",
   data() {
@@ -94,7 +97,7 @@ export default {
       check: [],
       showReveal: false,
       append: [],
-      checkedCities: [],
+      checkedCities: ["查看水质曲线,5"],
       cities: [],
       DidInfo: [],
       charaID: [],
@@ -104,8 +107,14 @@ export default {
       passInfo: "",
       phoneInfo: "",
       roleInfo: "",
-      sectionInfo: ""
+      sectionInfo: "",
+      Data: "",
     };
+  },
+  props: {
+    sonData: {
+      type: Array
+    }
   },
   methods: {
     // 返回
@@ -187,7 +196,7 @@ export default {
         workUnit: ""
       }).then(res => {
         console.log(res);
-        this.$router.go(-1)
+        this.$router.go(-1);
       });
     },
     // 获取菜单信息
@@ -195,16 +204,17 @@ export default {
       this.$get("/getLanOuAuthority?levelId=0", {
         levelId: 0
       }).then(res => {
-        console.log(res.data.data);
+        console.log(res.data.data,);
         let data = res.data.data;
         this.cities = data.slice(4, 15);
-        console.log(this.cities);
+        this.cities = this.cities.map((item) => {return item.authorityName + ',' + item.id});
+        console.log(this.cities,"citys");
       });
     },
-
+    
     // 获取checkId
     change(res) {
-      // console.log(res);
+      console.log(res);
       let relative = [];
 
       for (var i = 0; i < res.length; i++) {
@@ -213,11 +223,18 @@ export default {
       //  arr = relative.join(",")
       this.checkId = relative.join(",");
       console.log(this.checkId);
+    },
+    dataAction() {
+       this.checkedCities = this.sonData[0].relationId.split(',').map((item) => {
+         return 
+       });
+      // console.log(  this.checkedCities,"基本权限");
     }
   },
   mounted() {},
   created() {
     this.checkAction();
+    this.dataAction();
   }
 };
 </script>
