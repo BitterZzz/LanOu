@@ -312,17 +312,17 @@ export default {
     }
   }
   .equipMent {
-    width: 50%;
-    height: 828px;
+    width: 80%;
     float: left;
     border-right: 16px solid #f7f7f7;
     .on-line {
-      width: 705px;
+      width:100%;
       height: 121px;
       display: flex;
+      justify-content:space-around;
 
       .on {
-        width: 50%;
+        display:flex;
         height: 100%;
         position: relative;
         padding-top: 50px;
@@ -346,7 +346,6 @@ export default {
         }
       }
       .off {
-        width: 50%;
         height: 100%;
         position: relative;
         padding-top: 50px;
@@ -357,7 +356,6 @@ export default {
           position: relative;
           top: 5px;
           margin-right: 20px;
-          margin-left: 40px;
         }
         p {
           display: inline-block;
@@ -374,7 +372,6 @@ export default {
       width: 100%;
       height: 142px;
       line-height: 142px;
-
       left: 24px;
       font-size: 26px;
       color: #333;
@@ -446,7 +443,7 @@ export default {
           height: 54px;
           border-bottom: 1px solid #cccccc;
           a {
-            width: 27%;
+            width: 25%;
             display: inline-block;
             height: 54px;
             line-height: 54px;
@@ -531,7 +528,7 @@ export default {
           height: 54px;
           border-bottom: 1px solid #cccccc;
           a {
-            width: 27%;
+            width: 25%;
             display: inline-block;
             height: 54px;
             line-height: 54px;

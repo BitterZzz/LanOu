@@ -118,7 +118,7 @@ export default {
       border-bottom: 1px solid #ccc;
       a {
         display: inline-block;
-        width: 26%;
+        width: 25%;
         height: 53px;
         line-height: 53px;
         text-align: center;
@@ -143,7 +143,7 @@ export default {
       height: 58px;
       a {
         display: inline-block;
-        width: 26%;
+        width: 25%;
         height: 58px;
         line-height: 58px;
         text-align: center;

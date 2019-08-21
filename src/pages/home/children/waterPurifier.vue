@@ -191,7 +191,8 @@ export default {
         RcrrAfterMsgArr: [],
         typeEight: {}
       },
-      baseMsg: {}
+      baseMsg: {},
+      localDid:'',
     };
   },
   methods: {
@@ -243,7 +244,8 @@ export default {
     //获取相应did的字节
     getDid() {
       let _this = this;
-      this.$get("/getDidByPayload", { did: "100" }).then(res => {
+      this.$get("/getDidByPayload", { did: this.localDid }).then(res => {
+        console.log(res);
         let didMsg = res.data.data;
         let didMsgArr = [];
         //将获取到的数据保存到localstorage
@@ -293,8 +295,6 @@ export default {
         this.sortPage.pageSize = res.data.data.pageSize;
         this.sortPage.pages = res.data.data.pages;
         this.sortPage.total = res.data.data.total;
-        console.log(this.did.did);
-        this.getDid();
       });
     },
     //对获取到的did字节进行解码
@@ -381,7 +381,7 @@ export default {
               malfunction: "液位置传感器故障"
             });
           }
-          console.log(b);
+          // console.log(b);
         }
       }
       //第二种数据类型(TDS 历史 31 天水质数据)
@@ -398,8 +398,8 @@ export default {
         }
         this.transferMsg.inflowMsgArr = inflowMsgArr;
         this.transferMsg.pureMsgArr = pureMsgArr;
-        console.log(inflowMsgArr);
-        console.log(inflowMsgArr);
+        // console.log(inflowMsgArr);
+        // console.log(inflowMsgArr);
         return;
       }
       //第三种数据类型(TOC 历史 31 天水质数据)
@@ -416,8 +416,8 @@ export default {
         }
         this.transferMsg.TocBeforeMsgArr = TocBeforeMsgArr;
         this.transferMsg.TocAfterMsgArr = TocAfterMsgArr;
-        console.log(TocBeforeMsgArr);
-        console.log(TocAfterMsgArr);
+        // console.log(TocBeforeMsgArr);
+        // console.log(TocAfterMsgArr);
         return;
       }
       //第四种数据类型(NTU(浊度)历史 31 天水质数据)
@@ -434,8 +434,8 @@ export default {
         }
         this.transferMsg.NtuBeforeMsgArr = NtuBeforeMsgArr;
         this.transferMsg.NtuAfterMsgArr = NtuAfterMsgArr;
-        console.log(NtuBeforeMsgArr);
-        console.log(NtuAfterMsgArr);
+        // console.log(NtuBeforeMsgArr);
+        // console.log(NtuAfterMsgArr);
         return;
       } //第五种数据类型(COD 历史 31 天水质数据)
       if (typeJudge === "05") {
@@ -451,8 +451,8 @@ export default {
         }
         this.transferMsg.CodBeforeMsgArr = CodBeforeMsgArr;
         this.transferMsg.CodAfterMsgArr = CodBeforeMsgArr;
-        console.log(CodBeforeMsgArr);
-        console.log(CodAfterMsgArr);
+        // console.log(CodBeforeMsgArr);
+        // console.log(CodAfterMsgArr);
         return;
       } //第六种数据类型(RCRR 历史 31 天水质数据(余氯去除率))
       if (typeJudge === "06") {
@@ -468,9 +468,9 @@ export default {
         }
         this.transferMsg.RcrrBeforeMsgArr = RcrrBeforeMsgArr;
         this.transferMsg.RcrrAfterMsgArr = RcrrAfterMsgArr;
-        console.log(RcrrBeforeMsgArr);
-        console.log(RcrrAfterMsgArr);
-        console.log(this.transferMsg);
+        // console.log(RcrrBeforeMsgArr);
+        // console.log(RcrrAfterMsgArr);
+        // console.log(this.transferMsg);
         return;
       }
       //第七种数据类型(滤芯滤料)
@@ -488,12 +488,12 @@ export default {
         // let newTypeBranch = {}
         // parseInt(typeSeventArr[0].substr(0, 4).split('').reverse().join(''),16)//进水指标
         typeSeventArr.forEach((item,index) => {
-          console.log(item);
-          arr.push({inflow:parseInt(item.substr(0, 4).split('').reverse().join(''),16),purified:parseInt(item.substr(4, 4).split('').reverse().join(''),16)})
+          // console.log(item);
+          arr.push({inflow:parseInt(item.substr(index * 4, 4).split('').reverse().join(''),16),purified:parseInt(item.substr(4, 4).split('').reverse().join(''),16)})
         })
-        console.log(arr)
+        // console.log(arr)
 
-        console.log(typeSeventArr);
+        // console.log(typeSeventArr);
       }
       //第八种数据类型
       if (typeJudge === "08") {
@@ -568,6 +568,8 @@ export default {
     maintain
   },
   created() {
+    this.localDid = localStorage.getItem('did');
+    this.getDid();
     this.machineID();
     this.getWatchDid();
   },

@@ -105,6 +105,7 @@ export default {
             let _dataArr = [];
             localStorage.setItem("did", res.data.data[0].lanOuDid);
             localStorage.setItem("level",res.data.data[0].level)
+            console.log(res);
           }
         }, 2000);
       });
