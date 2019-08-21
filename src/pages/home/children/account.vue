@@ -38,7 +38,7 @@
 
           <el-table-column label="操作项" show-overflow-tooltip class="delete">
             <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.$index, scope.row)" type="text" size="small">编辑</el-button>
+              <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
               <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
             </template>
           </el-table-column>
@@ -47,7 +47,7 @@
     </div>
     <transition
       name="slide-fade"
-      enter-active-class=" animated fadeIn"
+      enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
       <div id="popup" v-if="showPopup">
@@ -85,7 +85,7 @@
       <div id="shadow" v-if="showShadow"></div>
     </transition>
 
-      <appendPage v-if="showPage" @sonPage="accountPage" />
+    <appendPage v-if="showPage"  @sonPage="accountPage" :sonData="sonData" />
     <sorter :pageMsg="sortPage" />
   </div>
 </template>
@@ -114,7 +114,10 @@ export default {
         pages: 1,
         pageSize: 1,
         total: 1
-      }
+      },
+      sonData:[
+        {relative:''}
+      ],
     };
   },
   methods: {
@@ -132,13 +135,14 @@ export default {
     },
     // 选择单个账户Id
     handleSelectAlone(val) {
+      console.log(val);
       let Alone = val;
       var arr = [];
       for (var i = 0; i < Alone.length; i++) {
         arr.push(Alone[i].id);
       }
       this.selectId = arr.join(",");
-      console.log(this.selectId);
+      // console.log(this.selectId);
     },
     // 选择全部用户信息
     handleSelectAll(val) {
@@ -167,8 +171,15 @@ export default {
       });
     },
     // 编辑页面
-    handleEdit() {
-      console.log("编辑");
+    handleEdit(res) {
+      console.log(res.id);
+      this.$get("/getLanOuAccountInfoById?id="+ res.id , {
+      },
+     ).then(res=>{
+           console.log(res.data.data)
+           this.sonData = res.data.data
+           this.showPage = true;
+      });
     },
     // 判断是否删除单个信息
     handleClick(value) {
@@ -234,6 +245,7 @@ export default {
     // 新增页面
     newAdd() {
       this.showPage = true;
+
     },
     // 页面传值 显示子页面
     accountPage() {
@@ -250,7 +262,7 @@ export default {
 #user {
   padding: 8px 24px 0 24px;
   box-sizing: border-box;
-  .el-checkbox__inner{
+  .el-checkbox__inner {
     z-index: 0;
   }
   #title {
