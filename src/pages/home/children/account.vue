@@ -152,7 +152,6 @@ export default {
         arr.push(handleId[i].id);
       }
       this.selectId = arr.join(",");
-      console.log(this.selectId);
     },
     // 获取所有账户信息
     showAccountInfo() {
@@ -161,13 +160,15 @@ export default {
         pageSize: 5
       }).then(res => {
         this.tableData = res.data.data.list;
+        this.sortPage.pageSize = res.data.data.pageSize;
+        this.sortPage.pages = res.data.data.pages;
+        this.sortPage.total = res.data.data.total;
         for (var i = 0; i < this.tableData.length; i++) {
           this.tableData[i].createTime = this.tableData[i].createTime.substring(
             0,
             10
           );
         }
-        console.log(this.tableData);
       });
     },
     // 编辑页面
@@ -176,7 +177,6 @@ export default {
       this.$get("/getLanOuAccountInfoById?id="+ res.id , {
       },
      ).then(res=>{
-           console.log(res.data.data)
            this.sonData = res.data.data
            this.showPage = true;
       });
@@ -184,14 +184,12 @@ export default {
     // 判断是否删除单个信息
     handleClick(value) {
       this.valueId = value.id;
-      console.log(this.valueId);
       this.showPopup = !this.showPopup;
       this.showShadow = !this.showShadow;
     },
 
     // 删除单个账户信息
     deleteInfo() {
-      console.log("确定删除");
       this.showPopup = false;
       this.showShadow = false;
       this.$delete("/deleteLanOuAccountInfo", {
@@ -202,7 +200,6 @@ export default {
     },
     // 取消删除单个账户信息
     cancelSelect() {
-      console.log("取消删除");
       this.showPopup = false;
       this.showShadow = false;
     },
@@ -226,10 +223,8 @@ export default {
       this.$delete("/deleteLanOuAccountInfo", {
         id: this.selectId
       }).then(res => {
-        console.log("删除所有账户信息");
         this.showAccountInfo();
       });
-      console.log("已经删除");
       this.selectId = "";
       this.showEntire = false;
       this.showShadow = false;

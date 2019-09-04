@@ -39,7 +39,9 @@ export default {
       this.nowPage = val;
     }
   },
-  mounted(){}
+  mounted(){
+    console.log(this.pageMsg,"pageMsg")
+  }
 };
 </script>
 <style lang="scss" scoped>
