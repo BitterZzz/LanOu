@@ -4,178 +4,161 @@
       <p>
         您所在的位置 : 首页 >
         <a>保养信息</a>
-
       </p>
     </div>
     <div class="toHome">
       <div class="goHome">
-        <img @click="backHome()" src="../../assets/img/back.png" alt="">
+        <img @click="backHome()" src="../../assets/img/back.png" alt />
         <span>返回列表</span>
       </div>
     </div>
     <div class="faultInfo">
-      <ul>
-        <li>
-          <a>状态</a>
-          <a>上报时间</a>
-          <a>设备ID</a>
-          <a>保养原因</a>
-        </li>
-        <li v-for="item in 8" :key="item.id">
-          <a>
-            <img :src="true ? greenAlarm : redAlarm " alt="" srcset="">
-          </a>
-          <a>2019-03-19</a>
-          <a>SZ191-001</a>
-          <a>石英砂更换</a>
-        </li>
-      </ul>
+      <table border="1" cellspacing="0">
+        <tr>
+          <th>状态</th>
+          <th>上报时间</th>
+          <th>设备ID</th>
+          <th>保养类型</th>
+        </tr>
+        <tr v-for="item in protectMsg" :key="item.id">
+          <td>
+            <img src alt />
+          </td>
+          <td>{{item.produceTime.split(' ')[0]}}</td>
+          <td>{{item.pdid}}</td>
+          <td>{{item.guranteState}}</td>
+        </tr>
+      </table>
     </div>
-    <sorter />
+    <sorter :pageMsg="sortPage" @Information="getMaintainMsg" />
   </div>
 </template>
 
 <script>
-  import redAlarm from '../../assets/img/untreated.png'
-  import greenAlarm from '../../assets/img/dispose.png'
-  import sorter from '../../components/sorter'
-  export default {
-    components: {
-      sorter,
-    },
-    data() {
-      return {
-        redAlarm: redAlarm,
-        greenAlarm: greenAlarm,
-      }
-    },
+import redAlarm from "../../assets/img/untreated.png";
+import greenAlarm from "../../assets/img/dispose.png";
+import sorter from "../../components/sorter";
+export default {
+  components: {
+    sorter
+  },
+  data() {
+    return {
+      redAlarm: redAlarm,
+      greenAlarm: greenAlarm,
+      sortPage: {
+        pages: 1,
+        pageSize: 1,
+        total: 1
+      },
+      protectMsg:[]
+    };
+  },
 
-    methods: {
-      backHome() {
-        this.$emit('mainHidden');
-      }
+  methods: {
+    backHome() {
+      this.$emit("mainHidden");
+    },
+    getMaintainMsg(val = "1", pageSize = "8") {
+      let data = {
+        typeVo: 1,
+        pageNum: val,
+        pageSize: pageSize
+      };
+      this.$post(this.$api.getLanOuProjectInfo, data).then(res => {
+        console.log(res);
+        this.protectMsg = res.data.data.list;
+        this.sortPage.pages = res.data.data.pages;
+        this.sortPage.total = res.data.data.total;
+        this.sortPage.pageSize = res.data.data.pageSize;
+      });
     }
+  },
+  created() {
+    this.getMaintainMsg();
   }
-
+};
 </script>
 
 <style lang="scss" scoped>
-  #maintain {
-    width: 100%;
-    height: 100%;
+#maintain {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #fff;
+  top: 0;
+  padding: 8px 24px 0;
+  box-sizing: border-box;
+
+  #title {
+    width: 330px;
+    height: 22px;
+    left: -4px;
     position: absolute;
-    background: #fff;
-    top: 0;
-    padding: 8px 24px 0;
-    box-sizing: border-box;
+    top: -38px;
+    background: #f7f7f7;
 
-    #title {
-      width: 330px;
-      height: 22px;
-      left: -4px;
-      position: absolute;
-      top: -38px;
-      background: #f7f7f7;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 16px;
+      color: #999999;
 
-      p {
-        font-family: PingFangSC-Regular;
+      a {
         font-size: 16px;
-        color: #999999;
-
-        a {
-          font-size: 16px;
-          color: #3999f9;
-        }
+        color: #3999f9;
       }
     }
-
-    .toHome {
-      width: 100%;
-      height: 80px;
-      background: #EEEEEE;
-      margin-bottom: 20px;
-
-      .goHome {
-        display: flex;
-        align-items: center;
-        color: #333;
-        font-size: 22px;
-        font-weight: 400;
-        padding-left: 18px;
-        padding-top: 17px;
-        box-sizing: border-box;
-
-        img {
-          width: 43px;
-          height: 43px;
-          margin-right: 16px;
-          cursor: pointer;
-        }
-      }
-    }
-
-    .faultInfo {
-      width: 80%;
-      height: 59.9%;
-      border: 1px solid #cccccc;
-      margin: 0 auto;
-      border-bottom: none;
-
-      li {
-        width:100%;
-        height:53px;
-        border-bottom: 1px solid #ccc;
-
-        a {
-          display: inline-block;
-          width: 25%;
-          height: 53px;
-          line-height: 53px;
-          text-align: center;
-          font-size: 18px;
-          color: #333333;
-          font-weight: 400;
-          border-right: 1px solid #cccccc;
-
-          img {
-            position: relative;
-            top: 8px;
-          }
-        }
-
-        a:nth-child(1) {
-          width: 20%;
-        }
-
-        a:nth-child(4) {
-          border-right: none;
-        }
-
-      }
-
-      li:nth-child(1) {
-        width: 100%;
-        height: 58px;
-
-        a {
-          display: inline-block;
-          width: 25%;
-          height: 58px;
-          line-height: 58px;
-          text-align: center;
-          border-right: 1px solid #cccccc;
-        }
-
-        a:nth-child(1) {
-          width: 20%;
-        }
-
-        a:nth-child(4) {
-          border-right: none;
-        }
-      }
-    }
-
   }
 
+  .toHome {
+    width: 100%;
+    height: 80px;
+    background: #eeeeee;
+    margin-bottom: 20px;
+
+    .goHome {
+      display: flex;
+      align-items: center;
+      color: #333;
+      font-size: 22px;
+      font-weight: 400;
+      padding-left: 18px;
+      padding-top: 17px;
+      box-sizing: border-box;
+
+      img {
+        width: 43px;
+        height: 43px;
+        margin-right: 16px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .faultInfo {
+    width: 80%;
+    height: 59.9%;
+    margin: 0 auto;
+    border-bottom: none;
+    table {
+      width: 100%;
+      text-align: center;
+      tr {
+        th {
+          font-family: PingFangSC-Medium;
+          height: 54px;
+          color: #333333;
+          font-size: 16px;
+        }
+        th:nth-child(1) {
+          width: 16%;
+        }
+        td {
+          color: #333333;
+          height: 54px;
+        }
+      }
+    }
+  }
+}
 </style>

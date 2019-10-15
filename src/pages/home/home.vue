@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <div class="header">
-      <div class>
+      <div class="clearfix">
         <p class="logo">
           <img src="../../assets/img/LOGO.png" alt title="蓝鸥" />
         </p>
@@ -141,10 +141,10 @@ export default {
   }
   .header {
     width: 100%;
-    height: 112px;
     background: #2488dd;
     color: #fff;
     padding-top: 22px;
+    padding-bottom:20px;
     box-sizing: border-box;
 
     .logo {

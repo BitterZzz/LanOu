@@ -13,24 +13,40 @@
       </div>
     </div>
     <div class="faultInfo">
-      <ul>
+      <!-- <ul>
         <li>
           <a>状态</a>
           <a>上报时间</a>
           <a>设备ID</a>
           <a>故障原因</a>
         </li>
-        <li v-for="item in 8" :key="item.id">
+        <li v-for="item in falutMsgList" :key="item.id">
           <a>
             <img :src="true ? greenAlarm : redAlarm " alt srcset />
           </a>
-          <a>2019-03-19</a>
-          <a>SZ191-001</a>
+          <a>{{item.produceTime.split(' ')[0]}}</a>
+          <a>{{item.pdid}}</a>
           <a>石英砂更换</a>
         </li>
-      </ul>
+      </ul>-->
+      <table border="1" cellspacing="0">
+        <tr>
+          <th>状态</th>
+          <th>上报时间</th>
+          <th>设备ID</th>
+          <th>故障类型</th>
+        </tr>
+        <tr v-for="item in falutMsgList" :key="item.id">
+          <td>
+            <img src alt />
+          </td>
+          <td>{{item.produceTime.split(' ')[0]}}</td>
+          <td>{{item.pdid}}</td>
+          <td>{{item.maintenanceState}}</td>
+        </tr>
+      </table>
     </div>
-    <sorter />
+    <sorter :pageMsg="sortPage" @Information="getFaultMsg" />
   </div>
 </template>
 
@@ -45,14 +61,37 @@ export default {
   data() {
     return {
       redAlarm: redAlarm,
-      greenAlarm: greenAlarm
+      greenAlarm: greenAlarm,
+      falutMsgList: [],
+      sortPage: {
+        pages: 1,
+        pageSize: 1,
+        total: 1
+      }
     };
   },
 
   methods: {
     backHome() {
       this.$emit("faultHidden");
+    },
+    getFaultMsg(val = "1", pageSize = "8") {
+      let data = {
+        typeVo: 1,
+        pageNum: val,
+        pageSize: pageSize
+      };
+      this.$post(this.$api.getLanOuProjectInfo, data).then(res => {
+        console.log(res);
+        this.falutMsgList = res.data.data.list;
+        this.sortPage.pages = res.data.data.pages;
+        this.sortPage.total = res.data.data.total;
+        this.sortPage.pageSize = res.data.data.pageSize;
+      });
     }
+  },
+  created() {
+    this.getFaultMsg();
   }
 };
 </script>
@@ -112,48 +151,23 @@ export default {
     border: 1px solid #cccccc;
     margin: 0 auto;
     border-bottom: none;
-    li {
+    table {
       width: 100%;
-      height: 53px;
-      border-bottom: 1px solid #ccc;
-      a {
-        display: inline-block;
-        width: 25%;
-        height: 53px;
-        line-height: 53px;
-        text-align: center;
-        font-size: 18px;
-        color: #333333;
-        font-weight: 400;
-        border-right: 1px solid #cccccc;
-        img {
-          position: relative;
-          top: 8px;
+      text-align: center;
+      tr {
+        th {
+          font-family: PingFangSC-Medium;
+          height: 54px;
+          color: #333333;
+          font-size: 16px;
         }
-      }
-      a:nth-child(1) {
-        width: 20%;
-      }
-      a:nth-child(4) {
-        border-right: none;
-      }
-    }
-    li:nth-child(1) {
-      width: 100%;
-      height: 58px;
-      a {
-        display: inline-block;
-        width: 25%;
-        height: 58px;
-        line-height: 58px;
-        text-align: center;
-        border-right: 1px solid #cccccc;
-      }
-      a:nth-child(1) {
-        width: 20%;
-      }
-      a:nth-child(4) {
-        border-right: none;
+        th:nth-child(1) {
+          width: 16%;
+        }
+        td {
+          color: #333333;
+          height: 54px;
+        }
       }
     }
   }

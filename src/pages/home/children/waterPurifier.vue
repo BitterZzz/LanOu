@@ -13,20 +13,21 @@
           <div class="ckeck">
             <el-dropdown trigger="click">
               <span class="el-dropdown-link">
-                机器ID
+                <span ref="searchType">机器ID</span>
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>机器ID</el-dropdown-item>
-                <el-dropdown-item>安装地址</el-dropdown-item>
-                <el-dropdown-item>故障状态</el-dropdown-item>
-                <el-dropdown-item>保养状态</el-dropdown-item>
+                <el-dropdown-item
+                  v-for="(item,index) in liList"
+                  :key="item.Id"
+                  @click.native="searchJudge(index)"
+                >{{item.name}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-          <input type="text" class="search-value" placeholder="请输入内容" />
+          <input type="text" class="search-value" placeholder="请输入内容" value ref="searchInput" />
         </div>
-        <button type="submit" class="search-btn">搜索</button>
+        <button type="submit" class="search-btn" @click="searchMsg">搜索</button>
       </div>
       <div class="detalis">
         <div class="table-box">
@@ -42,9 +43,9 @@
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
                       icon="el-icon-check"
-                      v-for="item in tdList"
+                      v-for="(item,index) in tdList"
                       :key="item.ID"
-                      @click.native="dropdown(item)"
+                      @click.native="dropdown(item,index)"
                     >{{item.name}}</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -58,7 +59,7 @@
             <tr
               class="tr-main"
               align="center"
-              v-for="(item,index) in this.machineList"
+              v-for="(item,index) in this.nowArrMsg[0]"
               :key="index"
             >
               <td>{{item.pdid}}</td>
@@ -71,22 +72,34 @@
                 <div class="msg">
                   <div>水温 X℃</div>
                   <div>
-                    TDS(ppm)原水:XX
-                    <span class="bar"></span> 纯水:XX
+                    TDS(ppm)原水:{{item.waterDecode.inflowMsgArr.length === 0 ? "" : item.waterDecode.inflowMsgArr[30]}}
+                    <span
+                      class="bar"
+                    ></span>
+                    纯水:{{item.waterDecode.pureMsgArr.length === 0 ? "" : item.waterDecode.pureMsgArr[30]}}
                   </div>
                   <div>
-                    TOC(mg/l)原水:XX
-                    <span class="bar"></span> 纯水:XX
+                    TOC(mg/l)原水:{{item.waterDecode.TocBeforeMsgArr.length === 0 ? "" : item.waterDecode.TocBeforeMsgArr[30]}}
+                    <span
+                      class="bar"
+                    ></span>
+                    纯水:{{item.waterDecode.TocAfterMsgArr.length === 0 ? "" : item.waterDecode.TocAfterMsgArr[30]}}
                   </div>
                   <div>
-                    浊度(NTU)原水:XX
-                    <span class="bar"></span> 纯水:XX
+                    浊度(NTU)原水:{{item.waterDecode.NtuBeforeMsgArr.length === 0 ? "" : item.waterDecode.NtuBeforeMsgArr[30]}}
+                    <span
+                      class="bar"
+                    ></span>
+                    纯水:{{item.waterDecode.NtuAfterMsgArr.length === 0 ? "" : item.waterDecode.NtuAfterMsgArr[30]}}
                   </div>
                   <div>
-                    COD(mg/l)原水:XX
-                    <span class="bar"></span> 纯水:XX
+                    COD(mg/l)原水:{{item.waterDecode.CodBeforeMsgArr.length === 0 ? "" : item.waterDecode.CodBeforeMsgArr[30]}}
+                    <span
+                      class="bar"
+                    ></span>
+                    纯水:{{item.waterDecode.CodAfterMsgArr.length === 0 ? "" : item.waterDecode.CodAfterMsgArr[30]}}
                   </div>
-                  <div>余氧(mg/l)去除率:XX%</div>
+                  <div>余氧(mg/l)去除率:{{item.waterDecode.RcrrBeforeMsgArr.length === 0 ? "" : item.waterDecode.RcrrBeforeMsgArr[30]}}%</div>
                 </div>
               </td>
               <td>
@@ -110,11 +123,11 @@
                   <!-- <div class="hhmmssU">14:23:12</div> -->
                 </div>
               </td>
-              <td>6</td>
+              <td>{{item.bindUser}}</td>
               <td>
                 <div class="operation" @click="saveIndex(item)">
-                  <p @click="showMachine()">查看</p>
-                  <p @click="detailsShow()">参数配置</p>
+                  <p @click="showMachine(index)">查看</p>
+                  <p @click="detailsShow(index)">参数配置</p>
                   <p @click="maintainShow(item)">信息维护</p>
                   <p>日志</p>
                 </div>
@@ -123,15 +136,15 @@
           </table>
         </div>
       </div>
-      <sorter :pageMsg="sortPage" @Information="getWatchDid"></sorter>
+      <sorter :pageMsg="sortPage" @Information="bindPage"></sorter>
     </div>
     <!-- 查看组件 -->
     <div v-if="checkJudge">
-      <particulars @hidden="hiddenMachine()" :translateMsg="this.transferMsg"></particulars>
+      <particulars @hidden="hiddenMachine()" :translateMsg="this.bindArrMsg"></particulars>
     </div>
     <!-- 参数配置组件 -->
     <div v-if="detailsJudge">
-      <parameter @hiddenSecond="detailshidden()"></parameter>
+      <parameter @hiddenSecond="detailshidden()" :allocationMsg="this.bindArrMsg"></parameter>
     </div>
     <div v-if="maintainJudge">
       <maintain @maintain="maintainHidden()" :item="this.baseMsg"></maintain>
@@ -140,28 +153,49 @@
   </div>
 </template>
 
-<script>
+// <script>
 import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
 import maintain from "../../waterMange/maintain";
 import { stringToHex } from "../../../js/stringToHex";
-import Axios from "axios";
+import { decode } from "../../../js/decode";
+import { decodeMsg } from "../../../js/decode";
 export default {
   name: "water",
   data() {
     return {
-      list: [{ ID: 123 }, { ID: 123 }, { ID: 123 }, { ID: 123 }],
       liList: [
-        { name: "机器Id", ID: 200 },
-        { name: "安装地址", ID: 300 },
-        { name: "故障状态", ID: 400 },
-        { name: "保养状态", ID: 500 }
+        {
+          name: "机器Id",
+          ID: 200
+        },
+        {
+          name: "安装地址",
+          ID: 300
+        },
+        {
+          name: "故障状态",
+          ID: 400
+        },
+        {
+          name: "保养状态",
+          ID: 500
+        }
       ],
       tdList: [
-        { name: "全部", ID: 1 },
-        { name: "在线", ID: 2 },
-        { name: "离线", ID: 3 }
+        {
+          name: "全部",
+          ID: 1
+        },
+        {
+          name: "在线",
+          ID: 2
+        },
+        {
+          name: "离线",
+          ID: 3
+        }
       ],
       test: "",
       dom: "",
@@ -178,21 +212,26 @@ export default {
       machineList: [],
       did: {},
       typeFrist: {},
-      transferMsg: {
-        inflowMsgArr: [],
-        pureMsgArr: [],
-        TocBeforeMsgArr: [],
-        TocAfterMsgArr: [],
-        NtuBeforeMsgArr: [],
-        NtuAfterMsgArr: [],
-        CodBeforeMsgArr: [],
-        CodAfterMsgArr: [],
-        RcrrBeforeMsgArr: [],
-        RcrrAfterMsgArr: [],
-        typeEight: {}
-      },
+      transferMsg: {},
       baseMsg: {},
-      localDid:'',
+      localDid: "",
+      //净水器管理展示所需数据
+      waterShow: [],
+      //当前数据
+      nowObjMsg: {
+        pdid: "", //机器ID
+        onLineState: "", //机器状态
+        guaranteState: "", //故障状态
+        maintenanceState: "", //保养状态
+        installationAdderss: "", //安装地址
+        installTime: "", //安装时间
+        oderTime: "", //上传时间
+        bindUser: [] //绑定用户
+      },
+      //存放当前数据的数组
+      nowArrMsg: [],
+      //点击获取到的数据
+      bindArrMsg: {}
     };
   },
   methods: {
@@ -209,16 +248,18 @@ export default {
       this.test = item.ID;
       console.log(this.test);
     },
-    showMachine() {
+    showMachine(index) {
       this.$emit("routerJudge");
       this.checkJudge = true;
+      this.bindArrMsg = this.nowArrMsg[0][index];
     },
     hiddenMachine() {
       this.checkJudge = false;
     },
-    detailsShow() {
+    detailsShow(index) {
       this.$emit("routerJudge");
       this.detailsJudge = true;
+      this.bindArrMsg = this.nowArrMsg[0][index];
     },
     detailshidden() {
       this.detailsJudge = false;
@@ -232,332 +273,247 @@ export default {
       this.curtainJudge = false;
       this.maintainJudge = false;
     },
-    dropdown(item) {
+    //筛选在线与离线
+    dropdown(item, index) {
       for (var i = 0; i < this.trDom.length; i++) {
         this.trDom[i].classList.remove("el-icon-check");
       }
       this.trDom[item.ID - 1].classList.add("el-icon-check");
+      let searchType = this.$refs.searchType.innerHTML;
+      let inputValue = this.$refs.searchInput.value;
+      let machineStatus = this.tdList[index].name;
+      console.log(machineStatus);
+      console.log(inputValue);
+      if (searchType === "机器ID") {
+        if (item.name === "在线") {
+          this.getWaterMsg(1, { pdid: inputValue, machineStatus: "1" });
+        } else if (item.name === "离线") {
+          this.getWaterMsg(1, { pdid: inputValue, machineStatus: "2" });
+        } else if (item.name === "全部") {
+          this.getWaterMsg(1, { pdid: inputValue, machineStatus: "0" });
+        }
+        return;
+      }
+      if (searchType === "安装地址") {
+        if (item.name === "在线") {
+          this.getWaterMsg(1, {
+            installationAdderss: inputValue,
+            machineStatus: "1"
+          });
+        } else if (item.name === "离线") {
+          this.getWaterMsg(1, {
+            installationAdderss: inputValue,
+            machineStatus: "2"
+          });
+        } else if (item.name === "全部") {
+          this.getWaterMsg(1, {
+            installationAdderss: inputValue,
+            machineStatus: "0"
+          });
+        }
+        return;
+      }
+      if (searchType === "故障状态") {
+        if (item.name === "在线") {
+          this.getWaterMsg(1, {
+            guaranteState: inputValue,
+            machineStatus: "1"
+          });
+        } else if (item.name === "离线") {
+          this.getWaterMsg(1, {
+            guaranteState: inputValue,
+            machineStatus: "2"
+          });
+        } else if (item.name === "全部") {
+          this.getWaterMsg(1, {
+            guaranteState: inputValue,
+            machineStatus: "0"
+          });
+        }
+        return;
+      }
+      if (searchType === "保养状态") {
+        if (item.name === "在线") {
+          this.getWaterMsg(1, {
+            maintenanceState: inputValue,
+            machineStatus: "1"
+          });
+        } else if (item.name === "离线") {
+          this.getWaterMsg(1, {
+            maintenanceState: inputValue,
+            machineStatus: "2"
+          });
+        } else if (item.name === "全部") {
+          this.getWaterMsg(1, {
+            maintenanceState: inputValue,
+            machineStatus: "0"
+          });
+        }
+        return;
+      }
     },
-    machineID() {
-      // this.machineList = localStorage.getItem("did").split(",");
+    getWatchDid() {},
+    //点击分页器触发获取页面信息
+    bindPage(val) {
+      console.log(val, "val");
+      this.getWaterMsg(val, { accountId: 1 });
     },
-    //获取相应did的字节
-    getDid() {
+    searchJudge(index) {
+      this.$refs.searchType.innerHTML = this.liList[index].name;
+    },
+    //获取到进入净水器的第页面数据
+    getWaterMsg(val = 1, obj) {
+      const custom = {
+        accountId: 1,
+        pageSize: 4,
+        guaranteState: "", //故障状态
+        installationAdderss: "", //安装地址
+        machineStatus: "", //机器状态
+        maintenanceState: "", //保养状态
+        pdid: "" //具体设备ID
+      };
+      for (var key in custom) {
+        if (key in obj) {
+          custom[key] = obj[key];
+        }
+      }
+      let body = {
+        guaranteState: custom.guaranteState,
+        installationAdderss: custom.installationAdderss,
+        machineStatus: custom.machineStatus,
+        maintenanceState: custom.maintenanceState,
+        pdid: custom.pdid
+      };
+      let data = {
+        accountId: custom.accountId,
+        pageNum: val,
+        pageSize: custom.pageSize
+      };
+      this.$postBody(this.$api.getLanOuProjectInfoSearch, body, data).then(
+        res => {
+          let resMsg = res.data.data;
+          let resMsgList = resMsg.list;
+          this.machineList = resMsg.list;
+          this.sortPage.pages = resMsg.pages;
+          this.sortPage.total = resMsg.total;
+          this.sortPage.pageSize = resMsg.pageSize;
+          this.showMsg(resMsg, resMsgList);
+          console.log(res,"我我我我我我我我我我我我我我我我我我哦我我我我");
+        }
+      );
+    },
+    //搜索
+    searchMsg() {
+      // search-value
+      let searchType = this.$refs.searchType.innerHTML;
+      let inputValue = this.$refs.searchInput.value;
+      console.log(inputValue);
+      if (searchType === "机器ID") {
+        this.getWaterMsg(1, { pdid: inputValue });
+        return;
+      }
+      if (searchType === "安装地址") {
+        this.getWaterMsg(1, { installationAdderss: inputValue });
+        return;
+      }
+      if (searchType === "故障状态") {
+        this.getWaterMsg(1, { guaranteState: inputValue });
+        return;
+      }
+      if (searchType === "保养状态") {
+        this.maintenanceState(1, { maintenanceState: inputValue });
+        return;
+      }
+    },
+    //展示数据重组
+    showMsg(resMsg, resMsgList) {
+      let nowArrMsg = [];
       let _this = this;
-      this.$get("/getDidByPayload", { did: this.localDid }).then(res => {
-        console.log(res);
-        let didMsg = res.data.data;
-        let didMsgArr = [];
-        //将获取到的数据保存到localstorage
-        localStorage.setItem("decodeMsg", JSON.stringify(didMsg));
-        let localMsg = JSON.parse(localStorage.getItem("decodeMsg"));
-        //遍历localStorage中的数据并保存到数组
-        for (var key in localMsg) {
-          didMsgArr.push(key + "|" + localMsg[key]);
-        }
-        let newDidMsgArr = [];
-        //遍历didMsgArr中的数据保存到newDidMsgArr
-        for (var i = 0; i < didMsgArr.length; i++) {
-          newDidMsgArr.push(didMsgArr[i].split("|"));
-          for (var j = 1; j < newDidMsgArr[i].length - 1; j++) {
-            let decodeMsg = newDidMsgArr[i][j].substr(2);
-            this.decode(decodeMsg);
-          }
-        }
+      let a = resMsgList.map(item => {
+        return {
+          pdid: item.pdid,
+          installationAdderss: item.installationAdderss,
+          installTime: item.installTime,
+          oderTime: item.oderTime,
+          bindUser:
+            item.bindedUserList !== null
+              ? item.bindedUserList.map((item, index) => {
+                  return (function() {
+                    if (item.nick) {
+                      console.log(item.nick);
+                      return item.nick;
+                    }
+                    if (item.realName) {
+                      console.log(2);
+                      return item.realName;
+                    }
+                    if (item.uid) {
+                      console.log(3);
+                      return item.uid;
+                    }
+                    if (item.did) {
+                      console.log(4);
+                      return item.did;
+                    }
+                  })();
+                })
+              : "",
+          waterDecode: (function(item) {
+            //  let waterDecode = decode(item.waterInfo,decodeMsg)
+            let waterArrMsg = item.split("|-|");
+            let obj;
+            let msg;
+            let waterDecodeMsg = {
+              inflowMsgArr: [],
+              pureMsgArr: [],
+              TocBeforeMsgArr: [],
+              TocAfterMsgArr: [],
+              NtuBeforeMsgArr: [],
+              NtuAfterMsgArr: [],
+              CodBeforeMsgArr: [],
+              CodAfterMsgArr: [],
+              RcrrBeforeMsgArr: [],
+              RcrrAfterMsgArr: [],
+              typeSeventArr: [],
+              typeEightObj: {}
+            };
+            console.log(waterArrMsg, "item");
+            if (item !== "") {
+              for (var i = 0; i < waterArrMsg.length - 1; i++) {
+                msg = decode(waterArrMsg[i], decodeMsg);
+                for (var key in msg) {
+                  if (key in waterDecodeMsg) {
+                    waterDecodeMsg[key] = msg[key];
+                  }
+                }
+                obj = waterDecodeMsg;
+                let a = obj.typeEightObj;
+                console.log(obj, "obj");
+                console.log(obj.typeEightObj, "obj");
+              }
+            } else {
+              return {
+                inflowMsgArr: [],
+                pureMsgArr: [],
+                TocBeforeMsgArr: [],
+                TocAfterMsgArr: [],
+                NtuBeforeMsgArr: [],
+                NtuAfterMsgArr: [],
+                CodBeforeMsgArr: [],
+                CodAfterMsgArr: [],
+                RcrrBeforeMsgArr: [],
+                RcrrAfterMsgArr: [],
+                typeSeventArr: [],
+                typeEightObj: {}
+              };
+            }
+            return obj;
+          })(item.waterInfo)
+        };
       });
-    },
-    //获取该用户可查看的设备
-    getWatchDid(val = "1", pageSize = "4") {
-      this.$postBody(
-        "/getLanOuProjectInfoBydid",
-        {
-          listMap: [
-            { did: "13", maintenanceState: "13324", guaranteState: "789787" }
-          ],
-          onlineDid: []
-        },
-        {
-          pageNum: val,
-          pageSize: pageSize,
-          did: localStorage.did,
-          level: localStorage.getItem("level"),
-          sak: "111"
-        }
-      ).then(res => {
-        this.machineList = res.data.data.list;
-        let str = "";
-        for (let i = 0; i < this.machineList.length; i++) {
-          if (str === "") {
-            str += this.machineList[0].pdid;
-          } else str += "," + this.machineList[i].pdid;
-        }
-        this.did.did = str;
-        this.sortPage.pageSize = res.data.data.pageSize;
-        this.sortPage.pages = res.data.data.pages;
-        this.sortPage.total = res.data.data.total;
-      });
-    },
-    //对获取到的did字节进行解码
-    decode(did) {
-      let getDidMsg = JSON.parse(localStorage.getItem("decodeMsg"));
-      let decode16 = stringToHex(did).substr(18);
-      let typeJudge = decode16.substr(0, 2);
-      this.typeFrist.type = decode16.substr(0, 2);
-      // 第一种数据类型解析
-      if (typeJudge === "01") {
-        if (decode16.substr(2, 4).length === 4) {
-          let temperature = decode16.substr(2, 4);
-          temperature = temperature
-            .split("")
-            .reverse()
-            .join("");
-          //温度值低字节
-          this.typeFrist.lowTemperature = parseInt(
-            temperature.substr(2, 2),
-            16
-          ).toString(10);
-          //温度值高字节
-          this.typeFrist.TallTemperature = parseInt(
-            temperature.substr(0, 2),
-            16
-          ).toString(10);
-          // console.log(parseInt(temperature.substr(0, 2), 16));
-          // console.log(this.typeFrist);
-        }
-        if (decode16.substr(6, 4).length === 4) {
-          let malfunction = decode16.substr(6, 4);
-          let a = "";
-          malfunction = parseInt(malfunction, 16).toString(2);
-          for (var i = 0; i < 16 - malfunction.length; i++) {
-            a += 0;
-          }
-          malfunction = a + malfunction;
-          let b = [];
-          if (malfunction[0] !== "0") {
-            b.push({
-              maintain: "石英砂保养",
-              malfunction: "进水压力传感器故障"
-            });
-          }
-          if (malfunction[1] !== "0") {
-            b.push({
-              maintain: "活性炭保养",
-              malfunction: "膜前压力传感器故障"
-            });
-          }
-          if (malfunction[2] !== "0") {
-            b.push({
-              maintain: "软化树脂保养",
-              malfunction: "取水压力传感器故障"
-            });
-          }
-          if (malfunction[3] !== "0") {
-            b.push({
-              maintain: "RO膜保养",
-              malfunction: "进水流量传感器故障"
-            });
-          }
-          if (malfunction[4] !== "0") {
-            b.push({
-              maintain: "再生盐保养",
-              malfunction: "进水压力传感器故障"
-            });
-          }
-          if (malfunction[5] !== "0") {
-            b.push({
-              maintain: "精密滤芯保养",
-              malfunction: "水质模块故障"
-            });
-          }
-          if (malfunction[6] !== "0") {
-            b.push({
-              maintain: "UV灯保养",
-              malfunction: "TDS模块故障"
-            });
-          }
-          if (malfunction[7] !== "0") {
-            b.push({
-              maintain: "石英砂保养",
-              malfunction: "液位置传感器故障"
-            });
-          }
-          // console.log(b);
-        }
-      }
-      //第二种数据类型(TDS 历史 31 天水质数据)
-      if (typeJudge === "02") {
-        let inflowMsg = decode16.substr(2, 62);
-        let inflowMsgArr = [];
-        let pureMsg = decode16.substr(64, 62);
-        let pureMsgArr = [];
-        for (var i = 0; i < inflowMsg.length; i++) {
-          if (i % 2 === 0) {
-            inflowMsgArr.push(parseInt(inflowMsg.substr(i, 2), 16) * 2);
-            pureMsgArr.push(parseInt(pureMsg.substr(i, 2), 16) * 2);
-          }
-        }
-        this.transferMsg.inflowMsgArr = inflowMsgArr;
-        this.transferMsg.pureMsgArr = pureMsgArr;
-        // console.log(inflowMsgArr);
-        // console.log(inflowMsgArr);
-        return;
-      }
-      //第三种数据类型(TOC 历史 31 天水质数据)
-      if (typeJudge === "03") {
-        let TocBeforeMsg = decode16.substr(2, 62);
-        let TocBeforeMsgArr = [];
-        let TocAfterMsg = decode16.substr(64, 62);
-        let TocAfterMsgArr = [];
-        for (var i = 0; i < TocBeforeMsg.length; i++) {
-          if (i % 2 === 0) {
-            TocBeforeMsgArr.push(parseInt(TocBeforeMsg.substr(i, 2), 16) / 10);
-            TocAfterMsgArr.push(parseInt(TocAfterMsg.substr(i, 2), 16) / 10);
-          }
-        }
-        this.transferMsg.TocBeforeMsgArr = TocBeforeMsgArr;
-        this.transferMsg.TocAfterMsgArr = TocAfterMsgArr;
-        // console.log(TocBeforeMsgArr);
-        // console.log(TocAfterMsgArr);
-        return;
-      }
-      //第四种数据类型(NTU(浊度)历史 31 天水质数据)
-      if (typeJudge === "04") {
-        let NtuBeforeMsg = decode16.substr(2, 62);
-        let NtuBeforeMsgArr = [];
-        let NtuAfterMsg = decode16.substr(64, 62);
-        let NtuAfterMsgArr = [];
-        for (var i = 0; i < NtuBeforeMsg.length; i++) {
-          if (i % 2 === 0) {
-            NtuBeforeMsgArr.push(parseInt(NtuBeforeMsg.substr(i, 2), 16) / 10);
-            NtuAfterMsgArr.push(parseInt(NtuAfterMsg.substr(i, 2), 16) / 10);
-          }
-        }
-        this.transferMsg.NtuBeforeMsgArr = NtuBeforeMsgArr;
-        this.transferMsg.NtuAfterMsgArr = NtuAfterMsgArr;
-        // console.log(NtuBeforeMsgArr);
-        // console.log(NtuAfterMsgArr);
-        return;
-      } //第五种数据类型(COD 历史 31 天水质数据)
-      if (typeJudge === "05") {
-        let CodBeforeMsg = decode16.substr(2, 62);
-        let CodBeforeMsgArr = [];
-        let CodAfterMsg = decode16.substr(64, 62);
-        let CodAfterMsgArr = [];
-        for (var i = 0; i < CodBeforeMsg.length; i++) {
-          if (i % 2 === 0) {
-            CodBeforeMsgArr.push(parseInt(CodBeforeMsg.substr(i, 2), 16) / 10);
-            CodAfterMsgArr.push(parseInt(CodAfterMsg.substr(i, 2), 16) / 10);
-          }
-        }
-        this.transferMsg.CodBeforeMsgArr = CodBeforeMsgArr;
-        this.transferMsg.CodAfterMsgArr = CodBeforeMsgArr;
-        // console.log(CodBeforeMsgArr);
-        // console.log(CodAfterMsgArr);
-        return;
-      } //第六种数据类型(RCRR 历史 31 天水质数据(余氯去除率))
-      if (typeJudge === "06") {
-        let RcrrBeforeMsg = decode16.substr(2, 62);
-        let RcrrBeforeMsgArr = [];
-        let RcrrAfterMsg = decode16.substr(64, 62);
-        let RcrrAfterMsgArr = [];
-        for (var i = 0; i < RcrrBeforeMsg.length; i++) {
-          if (i % 2 === 0) {
-            RcrrBeforeMsgArr.push(parseInt(RcrrBeforeMsg.substr(i, 2), 16));
-            RcrrAfterMsgArr.push(parseInt(RcrrAfterMsg.substr(i, 2), 16));
-          }
-        }
-        this.transferMsg.RcrrBeforeMsgArr = RcrrBeforeMsgArr;
-        this.transferMsg.RcrrAfterMsgArr = RcrrAfterMsgArr;
-        // console.log(RcrrBeforeMsgArr);
-        // console.log(RcrrAfterMsgArr);
-        // console.log(this.transferMsg);
-        return;
-      }
-      //第七种数据类型(滤芯滤料)
-      if (typeJudge === "30") {
-        let typeSevent = decode16.substr(2, 112);
-        let typeSeventArr = [];
-        let typeBranch;
-        for (var i = 0; i < typeSevent.length; i++) {
-          if (i % 16 === 0) {
-            typeBranch = typeSevent.substr(i, 16);
-            typeSeventArr.push(typeBranch);
-          }
-        }
-        let arr = []
-        // let newTypeBranch = {}
-        // parseInt(typeSeventArr[0].substr(0, 4).split('').reverse().join(''),16)//进水指标
-        typeSeventArr.forEach((item,index) => {
-          // console.log(item);
-          arr.push({inflow:parseInt(item.substr(index * 4, 4).split('').reverse().join(''),16),purified:parseInt(item.substr(4, 4).split('').reverse().join(''),16)})
-        })
-        // console.log(arr)
-
-        // console.log(typeSeventArr);
-      }
-      //第八种数据类型
-      if (typeJudge === "08") {
-        let typeEight = decode16.substr(2, 56);
-        let typeEightObj = {};
-        // 进水压力设置下限
-        typeEightObj.inflowMin = parseInt(typeEight.substr(0, 2), 16) / 100;
-        // 进水压力设置上限
-        typeEightObj.inflowMax = parseInt(typeEight.substr(1, 2), 16) / 100;
-        // 进水压力当前值
-        typeEightObj.inflowNow = parseInt(typeEight.substr(3, 4), 16) / 100;
-        // 膜前压力设置下限
-        typeEightObj.SublayMin = parseInt(typeEight.substr(7, 2), 16) / 100;
-        // 膜前压力设置上限
-        typeEightObj.SublayMax = parseInt(typeEight.substr(9, 2), 16) / 100;
-        // 膜前压力当前值
-        typeEightObj.SublayNow = parseInt(typeEight.substr(11, 4), 16) / 100;
-        // 取水压力下限值
-        typeEightObj.intakingMin = parseInt(typeEight.substr(15, 2), 16) / 100;
-        // 取水压力上限值
-        typeEightObj.intakingMax = parseInt(typeEight.substr(17, 2), 16) / 100;
-        // 取水压力当前值
-        typeEightObj.intakingNow = parseInt(typeEight.substr(19, 4), 16) / 100;
-        // 原水进水总量
-        typeEightObj.rawWater = parseInt(typeEight.substr(23, 4), 16) / 10;
-        // 纯水进水总量
-        typeEightObj.pureWater = parseInt(typeEight.substr(27, 4), 16) / 10;
-        // 年
-        typeEightObj.year = parseInt(typeEight.substr(31, 2), 16);
-        // 月
-        typeEightObj.month = parseInt(typeEight.substr(33, 2), 16);
-        // 日
-        typeEightObj.day = parseInt(typeEight.substr(35, 2), 16);
-        // 时
-        typeEightObj.hour = parseInt(typeEight.substr(37, 2), 16);
-        // 分
-        typeEightObj.minute = parseInt(typeEight.substr(39, 2), 16);
-        // 秒
-        typeEightObj.second = parseInt(typeEight.substr(41, 2), 16);
-        // 开关信号输入量
-        let switchThere = "";
-        let switchThereNum = "";
-        switchThere = parseInt(typeEight.substr(43, 2), 16).toString(2);
-        for (var i = 0; i < 8 - switchThere.length; i++) {
-          switchThereNum += 0;
-        }
-        switchThere = switchThereNum + switchThere;
-        typeEightObj.switch = switchThere;
-        // 继电器输出
-        let relayThere = "";
-        let relayThereNum = "";
-        relayThere = parseInt(typeEight.substr(45, 4), 16).toString(2);
-        for (var i = 0; i < 16 - relayThere.length; i++) {
-          relayThereNum += 0;
-        }
-        relayThere = relayThereNum + relayThere;
-        typeEightObj.relay = relayThere;
-        // 排空命令
-        typeEightObj.evacuation = parseInt(typeEight.substr(49, 2), 16);
-        // 恢复出厂设置
-        typeEightObj.rest = parseInt(typeEight.substr(53, 2), 16);
-        this.transferMsg.typeEight = typeEightObj;
-      }
-      localStorage.setItem("allTypeMsg", JSON.stringify(this.transferMsg));
+      _this.nowArrMsg = [];
+      console.log(a, "a.waterDecode");
+      this.nowArrMsg.push(a);
     }
   },
   //封装的组件
@@ -568,10 +524,8 @@ export default {
     maintain
   },
   created() {
-    this.localDid = localStorage.getItem('did');
-    this.getDid();
-    this.machineID();
-    this.getWatchDid();
+    this.localDid = localStorage.getItem("did");
+    this.getWaterMsg(1, { accountId: 1 });
   },
   mounted() {
     this.trDom = document.querySelectorAll(".el-icon-check");
@@ -586,33 +540,40 @@ export default {
 #water {
   overflow: hidden;
   height: 100%;
+
   #header {
     .header-title {
       color: #999999;
       position: absolute;
       top: -38px;
+
       span {
         font-family: PingFangSC-Regular;
         font-size: 16px;
         color: #999999;
         letter-spacing: 0;
       }
+
       .span-thrid {
         color: #3999f9;
       }
     }
   }
+
   #content {
     margin: 0 auto;
+
     #search-box {
       margin-left: 24px;
       margin-top: 16px;
+
       .search {
         border: solid 1px #cccccc;
         border-radius: 5px;
         border-radius: 5px;
         box-sizing: border-box;
         float: left;
+
         .ckeck {
           position: relative;
           float: left;
@@ -624,39 +585,47 @@ export default {
           border-radius: 5px;
           box-sizing: border-box;
           cursor: pointer;
+
           span {
             font-size: 14px;
           }
+
           .downLable {
             position: absolute;
             width: 106px;
             left: 0;
             top: 42px;
             display: none;
+
             i {
               position: absolute;
               left: 38px;
               top: 0;
             }
+
             ul {
               position: absolute;
               width: 84px;
               background-color: #ffffff;
               box-shadow: 2px 2px 5px #cccccc;
               top: 10px;
+
               li {
                 width: 100%;
                 font-size: 12px;
               }
+
               .liColor {
                 background: #ecf9ff;
               }
             }
           }
         }
+
         .newCkeck {
           border: solid 1px #3999f9;
         }
+
         .search-value {
           display: inline-block;
           width: 400px;
@@ -667,6 +636,7 @@ export default {
           box-sizing: border-box;
         }
       }
+
       .search-btn {
         float: left;
         width: 120px;
@@ -677,13 +647,16 @@ export default {
         margin-left: 16px;
       }
     }
+
     .detalis {
       box-sizing: border-box;
       width: 100%;
       padding: 0 24px;
       padding-top: 16px;
+
       .table-box {
         cursor: pointer;
+
         .table-style {
           font-family: PingFangSC-Regular;
           border: 0;
@@ -691,13 +664,16 @@ export default {
           border-collapse: collapse;
           vertical-align: middle;
           color: #333333;
+
           .tr-header {
             color: #333333;
             font-size: 16px;
+
             th {
               padding: 16px 0;
               background: #eeeeee;
             }
+
             th:nth-child(2) {
               position: relative;
               // .table-down {
@@ -727,25 +703,32 @@ export default {
               // }
             }
           }
+
           .tr-main {
             display: table-row;
             color: #333333;
             font-size: 14px;
+
             td:nth-child(1) {
               padding: 64px 0;
               box-sizing: border-box;
             }
+
             td:nth-child(1) {
               width: 150px;
             }
+
             td:nth-child(2) {
               width: 164px;
             }
+
             td:nth-child(3) {
               width: 200px;
+
               .msg {
                 width: 196px;
                 text-align: left;
+
                 div {
                   .bar {
                     display: inline-block;
@@ -754,23 +737,30 @@ export default {
                 }
               }
             }
+
             td:nth-child(4) {
               width: 140px;
+
               .addres {
                 width: 92px;
                 text-align: left;
               }
             }
+
             td:nth-child(5) {
               width: 200px;
+
               .time {
                 width: 110px;
                 text-align: left;
+
                 div {
                   padding: 0 2px;
                 }
+
                 .time-title {
                   position: relative;
+
                   img {
                     position: absolute;
                     right: 16px;
@@ -781,14 +771,18 @@ export default {
                 }
               }
             }
+
             td:nth-child(6) {
               width: 150px;
             }
+
             td:nth-child(7) {
               width: 140px;
+
               .operation {
                 width: 56px;
                 text-align: left;
+
                 p {
                   margin: 10px 0;
                   color: #176fff;
@@ -800,15 +794,18 @@ export default {
         }
       }
     }
+
     .popup {
       position: absolute;
       left: 0;
       top: 0;
     }
+
     .el-dropdown-menu {
       width: 90px;
     }
   }
+
   .curtain {
     position: absolute;
     width: 100%;

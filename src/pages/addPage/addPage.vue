@@ -138,7 +138,7 @@ export default {
     // 全部机器did
     SelectId() {
       console.log(1);
-      this.$get("/getLanOuByDid", {
+      this.$get(this.$api.getLanOuByDid, {
         sak: 1
       }).then(res => {
         console.log(res.data);
@@ -183,7 +183,7 @@ export default {
         });
         return;
       }
-      Axios.post("/addLanOuAccountInfo", {
+      Axios.post(this.$api.addLanOuAccountInfo, {
         dept: section.value,
         lanOuDid: this.charaID,
         mail: email.value,
@@ -201,7 +201,7 @@ export default {
     },
     // 获取菜单信息
     checkAction() {
-      this.$get("/getLanOuAuthority?levelId=0", {
+      this.$get(this.$api.getLanOuAuthority, {
         levelId: 0
       }).then(res => {
         console.log(res.data.data,);

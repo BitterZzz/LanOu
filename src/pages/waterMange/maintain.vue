@@ -15,7 +15,14 @@
               <tr align="center" v-for="item in baseList" :key="item.id">
                 <td>{{item.name}}</td>
                 <td colspan="3">
-                  <input type="text" :placeholder="item.placehold" :disabled="item.disable" :value="item.value" class="inputFrist"/>
+                  <input
+                    type="text"
+                    :placeholder="item.placehold"
+                    :disabled="item.disable"
+                    :value="item.value"
+                    class="inputFrist"
+                    :ref="item.refName"
+                  />
                 </td>
               </tr>
               <tr align="center">
@@ -23,13 +30,16 @@
                 <td align="left" colspan="3">
                   <div class="addres-box">
                     <div>
-                      <input type="text" class="addres InputAddres"  />省
+                      <input type="text" class="addres InputAddres" ref="provoice" />
+                      <span>省</span>
                     </div>
                     <div>
-                      <input type="text" class="addres InputAddres" />市
+                      <input type="text" class="addres InputAddres" ref="city" />
+                      <span>市</span>
                     </div>
                     <div>
-                      <input type="text" class="addres InputAddres" />区
+                      <input type="text" class="addres InputAddres" ref="district" />
+                      <span>区</span>
                     </div>
                   </div>
                 </td>
@@ -37,9 +47,9 @@
               <tr align="center">
                 <td>客户性质</td>
                 <td colspan="3">
-                  <div class="clientCheck">
-                    <div class="check-box" v-for="item in checkList" :key="item.id">
-                      <input type="checkbox" class="check" />
+                  <div class="clientCheck" ref="clientNature">
+                    <div class="check-box" v-for="(item,index) in checkList" :key="item.id">
+                      <input type="checkbox" class="check" @click="checkMsg(index)" />
                       <span>{{item.name}}</span>
                     </div>
                   </div>
@@ -48,11 +58,11 @@
               <tr class="vindicatePelope" v-for="item in vindicateList" :key="item.id">
                 <td colspan="1" align="center">{{item.name}}</td>
                 <td colspan="1" align="center">
-                  <input type="text" />
+                  <input type="text" value :ref="item.refName" />
                 </td>
                 <td colspan="1" align="center">电话</td>
                 <td colspan="1" align="center">
-                  <input type="text" />
+                  <input type="text" value :ref="item.refPhone" />
                 </td>
               </tr>
             </tbody>
@@ -69,13 +79,18 @@
                 <td>1</td>
                 <td>水源</td>
                 <td>
-                  <div class="headwaters">
-                    <div class="headwaters-box" v-for="item in headwatersList" :key="item.id">
-                      {{item.name}}
+                  <div class="headwaters" ref="headwaters">
+                    <div
+                      class="headwaters-box"
+                      v-for="(item,index) in headwatersList"
+                      :key="item.id"
+                    >
+                      <span>{{item.name}}</span>
                       <input
                         type="checkbox"
                         style="width:20px;height:20px;vertical"
                         class="headwaters-check"
+                        @click="headwaterJudge(index)"
                       />
                     </div>
                   </div>
@@ -87,10 +102,10 @@
                 <td>水源压力</td>
                 <td>
                   <div class="pressure">
-                    <input type="text" class="pressureLine" />
+                    <input type="text" class="pressureLine" ref="minPressureLine" />
                     <span>MPa</span>
                     <i>~</i>
-                    <input type="text" class="pressureLine" />
+                    <input type="text" class="pressureLine" ref="maxPressureLine" />
                     <span>MPa(公斤力)</span>
                   </div>
                 </td>
@@ -98,10 +113,10 @@
               </tr>
               <tr>
                 <td>1</td>
-                <td>水源压力</td>
+                <td>日饮水量估算</td>
                 <td>
                   <div class="pressure">
-                    <input type="text" class="pressureLine" />
+                    <input type="text" class="pressureLine" ref="dayDrinking" />
                     <span>L/天(可按照2L/人·天计算)</span>
                   </div>
                 </td>
@@ -115,7 +130,11 @@
                     <input type="checkbox" />
                     <div class="positionted-box">
                       露天摆放位置描述:
-                      <input type="text" class="positionted-check" />
+                      <input
+                        type="text"
+                        class="positionted-check"
+                        ref="positionDescription"
+                      />
                     </div>
                   </div>
                   <div class="positionted">
@@ -140,13 +159,14 @@
                 <td>1</td>
                 <td>饮水末端建筑性质</td>
                 <td>
-                  <div class="headwaters">
-                    <div class="headwaters-box" v-for="item in natureList" :key="item.id">
-                      {{item.name}}
+                  <div class="headwaters" ref="buildingProperty">
+                    <div class="headwaters-box" v-for="(item,index) in natureList" :key="item.id">
+                      <span>{{item.name}}</span>
                       <input
                         type="checkbox"
                         style="width:20px;height:20px;vertical"
                         class="headwaters-check"
+                        @click="buildingProperty(index)"
                       />
                     </div>
                   </div>
@@ -160,10 +180,19 @@
                   <div class="condition-box">
                     设备间内，尺寸：
                     楼高:
-                    <input type="text" class="condition-check" />
-                    <span>米</span>
+                    <input
+                      type="text"
+                      class="condition-check"
+                      value
+                      ref="buildHeight"
+                    />
                     层，最高用水点高度:
-                    <input type="text" class="condition-check" />
+                    <input
+                      type="text"
+                      class="condition-check"
+                      value
+                      ref="maxWater"
+                    />
                     <span>米</span>
                   </div>
                 </td>
@@ -195,18 +224,77 @@ export default {
         { id: 14, name: "小区" }
       ],
       baseList: [
-        { id: 20, name: "机器ID",placehold:"（机器通过wifi/GPRS传输，可修改，以便更换电控板）",disable:true, value:this.item.pdid },
-        { id: 21, name: "机器型号", placehold: "（机器通过wifi/GPRS传输）",disable:true, value:this.item.puuid },
-        { id: 22, name: "订单号",placehold:"",disable:false,value:"" },
-        { id: 23, name: "订单日期",placehold:"",disable:false,value:"" },
-        { id: 24, name: "生产日期",placehold:"",disable:false,value:"" },
-        { id: 25, name: "安装日期",placehold:"",disable:false,value:"" },
-        { id: 26, name: "客户全称",placehold:"",disable:false,value:"" }
+        {
+          id: 20,
+          name: "机器ID",
+          placehold: "（机器通过wifi/GPRS传输，可修改，以便更换电控板）",
+          disable: true,
+          value: this.item.pdid,
+          refName: "robotId"
+        },
+        {
+          id: 21,
+          name: "机器型号",
+          placehold: "（机器通过wifi/GPRS传输）",
+          disable: true,
+          value: this.item.puuid,
+          refName: "machineModel"
+        },
+        {
+          id: 22,
+          name: "订单号",
+          placehold: "",
+          disable: false,
+          value: "10001",
+          refName: "orderNumber"
+        },
+        {
+          id: 23,
+          name: "订单日期",
+          placehold: "",
+          disable: false,
+          value: "",
+          refName: "orderDate"
+        },
+        {
+          id: 24,
+          name: "生产日期",
+          placehold: "",
+          disable: false,
+          value: "",
+          refName: "productionDate"
+        },
+        {
+          id: 25,
+          name: "安装日期",
+          placehold: "",
+          disable: false,
+          value: "",
+          refName: "installDate"
+        },
+        {
+          id: 26,
+          name: "客户全称",
+          placehold: "",
+          disable: false,
+          value: "",
+          refName: "customerName"
+        }
       ],
       vindicateList: [
-        { id: 30, name: "项目适用方负责人" },
-        { id: 31, name: "项目适用方维护人" },
-        { id: 32, name: "销售业务" }
+        {
+          id: 30,
+          name: "项目适用方负责人",
+          refName: "leadingCard",
+          refPhone: "leadingPhone"
+        },
+        {
+          id: 31,
+          name: "项目适用方维护人",
+          refName: "defender",
+          refPhone: "defenderPhone"
+        },
+        { id: 32, name: "销售业务", refName: "sales", refPhone: "salesPhone" }
       ],
       headwatersList: [
         { id: 40, name: "自来水" },
@@ -220,28 +308,211 @@ export default {
         { id: 52, name: "宿舍楼" },
         { id: 53, name: "食堂" },
         { id: 54, name: "其它" }
-      ]
+      ],
+      lanOuProjectInfo: {
+        pdid: "", //设备id
+        puuid: "", //产品型号id
+        pOderId: "", //订单号
+        oderTime: "", //订单时间
+        produceTime: "", //生产时间
+        installTime: "", //安装时间
+        clientName: "", //客户名称
+        installationAdderss: "", //安装地址
+        clientType: "", //客户性质,
+        leadingCard: "", //负责人
+        leadingPhone: "", //负责人手机号
+        defender: "", //维护人
+        defenderPhone: "", //维护人手机号
+        sales: "", //销售
+        salesPhone: "", //销售手机号
+        water: "", //水源
+        waterMsg: "", //水源备注
+        pressureWater: "", //水源压力
+        pressureWaterMsg: "", //水源压力备注
+        dayDrinking: "", //日饮量估计
+        dayDrinkingMsg: "", //日饮量估算配置
+        position: "", //摆放位置,
+        positionMsg: "", //摆放位置备注
+        architecturalType: "", //建筑性质
+        architecturalCondition: "", //建筑情况
+        orther: "", //其他
+        id: "",
+        userIds: ""
+      }
     };
   },
-  props:{
-    item:{
-      type:Object,
-      default:"未接受到数据"
+  props: {
+    item: {
+      type: Object,
+      default: "未接受到数据"
     }
   },
-  methods:{
-    hidden(){
-      this.$emit('maintain');
+  methods: {
+    hidden() {
+      this.$postBody(
+        this.$api.updateLanOuProjectInfo,
+        {
+          lanOuProjectInfo: this.lanOuProjectInfo
+        },
+        {}
+      ).then(res => {
+        console.log(res);
+      });
+      console.log(this.lanOuProjectInfo);      
+      this.$emit("maintain");
+
+    },
+    getMsg() {
+      //设备ID
+      let robotId = this.$refs.robotId[0].value;
+      // if(robotId === ""){
+      //   this.$message({
+      //     message:"机器ID不能为空"
+      //   })
+      // }
+      //机器型号
+      let machineModel = this.$refs.machineModel[0].value;
+      //订单号
+      let orderNumber = this.$refs.orderNumber[0].value;
+      //订单日期
+      let orderDate = this.$refs.orderDate[0].value;
+      //生产日期
+      let productionDate = this.$refs.productionDate[0].value;
+      //安装日期
+      let installDate = this.$refs.installDate[0].value;
+      //客户全称
+      let customerName = this.$refs.customerName[0].value;
+      //省
+      let provoice = this.$refs.provoice.value;
+      //市
+      let city = this.$refs.city.value;
+      //区
+      let district = this.$refs.district.value;
+      //项目试用方负责人
+      let leadingCard = this.$refs.leadingCard[0].value;
+      //项目方负责人手机号
+      let leadingPhone = this.$refs.leadingPhone[0].value;
+      //项目方维护人
+      let defender = this.$refs.defender[0].value;
+      //项目方维护人姓名
+      let defenderPhone = this.$refs.defenderPhone[0].value;
+      //销售业务
+      let sales = this.$refs.sales[0].value;
+      //销售业务电话
+      let salesPhone = this.$refs.salesPhone[0].value;
+      //水源压力
+      let pressureWater =
+        this.$refs.minPressureLine[0].value +
+        "~" +
+        this.$refs.maxPressureLine[0].value;
+      //水源压力备注
+      let pressureWaterMsg = "";
+      //日饮水量估计
+      let dayDrinking = this.$refs.dayDrinking[0].value;
+      //日饮水量估计备注
+      let dayDrinkingMsg = "";
+      //饮水末端建筑情况
+      let architecturalCondition =
+        this.$refs.buildHeight[0].value + "," + this.$refs.maxWater[0].value;
+      console.log(this.$refs.sales[0].value, "leadingCard");
+
+      this.lanOuProjectInfo.pdid = 666; //robotId;
+      this.lanOuProjectInfo.puuid = 666; //machineModel;
+      this.lanOuProjectInfo.pOderId = orderNumber;
+      this.lanOuProjectInfo.orderTime = orderDate;
+      this.lanOuProjectInfo.produceTime = productionDate;
+      this.lanOuProjectInfo.installTime = installDate;
+      this.lanOuProjectInfo.clientName = customerName;
+      this.lanOuProjectInfo.installationAdderss =
+        provoice + "省" + city + "市" + district + "区";
+      this.lanOuProjectInfo.leadingCard = leadingCard;
+      this.lanOuProjectInfo.leadingPhone = leadingPhone;
+      this.lanOuProjectInfo.defender = defender;
+      this.lanOuProjectInfo.defenderPhone = defenderPhone;
+      this.lanOuProjectInfo.sales = sales;
+      this.lanOuProjectInfo.salesPhone = salesPhone;
+      this.lanOuProjectInfo.pressureWater = pressureWater;
+      this.lanOuProjectInfo.pressureWaterMsg = pressureWaterMsg;
+      this.lanOuProjectInfo.dayDrinking = dayDrinking;
+      this.lanOuProjectInfo.dayDrinkingMsg = dayDrinkingMsg;
+      this.lanOuProjectInfo.architecturalCondition = architecturalCondition;
+      this.lanOuProjectInfo.orther = "";
+
+      console.log(robotId, machineModel, orderNumber);
+      console.log(provoice);
+    },
+    //客户性质判断
+    checkMsg(index) {
+      let _this = this;
+      let checkDom = this.$refs.clientNature.getElementsByClassName("check");
+      let representative = this.checkJudge(index, _this.checkList, checkDom);
+      this.lanOuProjectInfo.clientType = representative;
+      console.log(representative, "representative");
+    },
+    //水源判断
+    headwaterJudge(index) {
+      let _this = this;
+      let checkDom = this.$refs.headwaters.getElementsByClassName(
+        "headwaters-check"
+      );
+      let representative = this.checkJudge(
+        index,
+        _this.headwatersList,
+        checkDom
+      );
+      //水源
+      this.lanOuProjectInfo.water = representative;
+      //水源备注
+      this.lanOuProjectInfo.waterMsg = "";
+    },
+    //建筑性质!!!!!!!
+    buildingProperty(index) {
+      let _this = this;
+      let checkDom = this.$refs.buildingProperty.getElementsByClassName(
+        "headwaters-check"
+      );
+      let representative = this.checkJudge(index, _this.natureList, checkDom);
+      this.lanOuProjectInfo.architecturalType = "1"; //representative;
+    },
+    //摆放位置
+    positionPut() {
+      this.lanOuProjectInfo.position = "";
+      this.lanOuProjectInfo.positionMsg = "";
+      this.lanOuProjectInfo.id = "";
+      this.lanOuProjectInfo.userIds = "";
+    },
+    //判断点击哪个选择框
+    checkJudge(index, checkList, checkDom) {
+      console.log(checkDom);
+      let str = "";
+      let num;
+      for (var i = 0; i < checkDom.length; i++) {
+        checkDom[i].checked = false;
+      }
+      checkDom[index].checked = true;
+      if (checkDom[index].checked) {
+        str =
+          checkDom[index].nextElementSibling !== null
+            ? checkDom[index].nextElementSibling.innerHTML
+            : checkDom[index].previousElementSibling.innerHTML;
+        console.log(str);
+        for (var j = 0; j < checkList.length; j++) {
+          console.log(str, checkList[j].name);
+          if (str === checkList[j].name) {
+            console.log(j + 1);
+            num = j + 1;
+            return num;
+          }
+        }
+      }
     }
   },
-  mounted(){
-    document.querySelector('.addres').addEventListener('change',()=>{
-      console.log(document.querySelector('.addres').value)
-    },false)
-    let dom = document.querySelectorAll('.inputFrist')
-    for(var i =0 ; i < dom.length; i++){
-      console.log(dom[i].value)
-    }
+  mounted() {
+    this.getMsg();
+    this.checkJudge();
+    console.log(this.$refs.orderNumber);
+    console.log(this.$refs.orderNumber[0].value);
+    console.log();
   }
 };
 </script>
@@ -381,7 +652,7 @@ export default {
                   border-bottom: solid 1px #333333;
                 }
                 .positionted {
-                  width: 488px;
+                  width: 600px;
                   text-align: left;
                   input {
                     width: 20px;

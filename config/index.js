@@ -11,10 +11,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/': {
-        target:'http://192.168.1.74:18556',
-        changeOrigin:true,
-      }
+      // '/': {
+      //   // target:'http://192.168.1.237:7523',        
+      //   target:'http://192.168.1.52:18556',
+      //   // target:'http://192.168.1.74:18556',
+      //   changeOrigin:true,
+      // }
     },
 
     // Various Dev Server settings
@@ -48,7 +50,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

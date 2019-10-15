@@ -13,14 +13,17 @@ import myCharts from './js/myCharts'
 import cookie from './js/cookie'
 //axios请求封装
 import {get,post,delet,postBody} from './request/api'
+//api接口封装
+import Api from './request/allApi'
 
 Vue.prototype.$get = get;
 Vue.prototype.$post = post;
 Vue.prototype.$delete = delet;
 Vue.prototype.$postBody = postBody;
+Vue.prototype.$api = Api;
 Vue.use(cookie);
-Vue.use(myCharts)
-Vue.use(ElementUI).use(animated)
+Vue.use(myCharts);
+Vue.use(ElementUI).use(animated);
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

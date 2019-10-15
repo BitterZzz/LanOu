@@ -8,7 +8,7 @@
         </div>
         <div class="IdBox">
           <span>ID:</span>
-          <span>12345678</span>
+          <span>{{this.translateMsg.pdid}}</span>
         </div>
         <div class="popupBox">
           <span>型号:</span>
@@ -28,36 +28,36 @@
             <div class="table-box">
               <div class="table-TDS">
                 <img src="../../assets/img/ppm.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num">{{this.chartHeader.inflowMsgArr}}</span>
               </div>
               <span>TDS</span>
               <div class="table-TDS table-TDS2">
                 <img src="../../assets/img/ppm2.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num TDS-color">{{this.chartHeader.pureMsgArr}}</span>
               </div>
               <div id="table-echarts" class="echarts"></div>
             </div>
             <div class="table-box">
               <div class="table-TDS">
                 <img src="../../assets/img/TOC_1.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num">{{this.chartHeader.TocBeforeMsgArr}}</span>
               </div>
               <span>TOC</span>
               <div class="table-TDS table-TDS2">
                 <img src="../../assets/img/TOC_2.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num TDS-color">{{this.chartHeader.TocAfterMsgArr}}</span>
               </div>
               <div id="table-echarts2" class="echarts"></div>
             </div>
             <div class="table-box">
               <div class="table-TDS">
                 <img src="../../assets/img/ZD.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num">{{this.chartHeader.NtuBeforeMsgArr}}</span>
               </div>
               <span>浊度</span>
               <div class="table-TDS table-TDS2">
                 <img src="../../assets/img/ZD2.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num TDS-color">{{this.chartHeader.NtuAfterMsgArr}}</span>
               </div>
               <div id="table-echarts3" class="echarts"></div>
             </div>
@@ -66,19 +66,19 @@
             <div class="table-box">
               <div class="table-TDS">
                 <img src="../../assets/img/TOC_1.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num">{{this.chartHeader.CodBeforeMsgArr}}</span>
               </div>
               <span>COD</span>
               <div class="table-TDS table-TDS2">
                 <img src="../../assets/img/TOC_2.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num TDS-color">{{this.chartHeader.CodAfterMsgArr}}</span>
               </div>
               <div id="table-echarts4" class="echarts"></div>
             </div>
             <div class="table-box chlorine">
               <div class="table-TDS">
                 <img src="../../assets/img/ppm.png" alt />
-                <span class="TDS-num">145</span>
+                <span class="TDS-num TDS-style">{{this.chartHeader.RcrrBeforeMsgArr}}</span>
               </div>
               <span>余氯</span>
               <div id="table-echarts5" class="echarts" style="width:280px;height:192px"></div>
@@ -119,44 +119,44 @@
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">145</span>
+              <span class="inflow">{{this.typeSeventArr[0].inflow}}</span>
             </div>
             <div class="clearwater-box">
               <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">145</span>
+              <span class="clearwater">{{this.typeSeventArr[0].filterInflow}}</span>
             </div>
             <strong class="content-title">石英砂</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">145</span>
+              <span class="inflow">{{this.typeSeventArr[1].inflow}}</span>
             </div>
             <div class="clearwater-box">
               <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">145</span>
+              <span class="clearwater">{{this.typeSeventArr[1].filterInflow}}</span>
             </div>
             <strong class="content-title">活性炭</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">145</span>
+              <span class="inflow">{{this.typeSeventArr[2].inflow}}</span>
             </div>
             <div class="clearwater-box">
               <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">145</span>
+              <span class="clearwater">{{this.typeSeventArr[2].filterInflow}}</span>
             </div>
             <strong class="content-title">软化树脂</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">145</span>
+              <span class="inflow">{{this.typeSeventArr[3].inflow}}</span>
             </div>
             <div class="clearwater-box">
               <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">145</span>
+              <span class="clearwater">{{this.typeSeventArr[3].filterInflow}}</span>
             </div>
             <strong class="content-title">再生盐</strong>
           </div>
@@ -165,33 +165,33 @@
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">145</span>
+              <span class="inflow">{{this.typeSeventArr[4].inflow}}</span>
             </div>
             <div class="clearwater-box">
               <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">145</span>
+              <span class="clearwater">{{this.typeSeventArr[4].filterInflow}}</span>
             </div>
             <strong class="content-title">精密滤芯</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">145</span>
+              <span class="inflow">{{this.typeSeventArr[5].inflow}}</span>
             </div>
             <div class="clearwater-box">
               <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">145</span>
+              <span class="clearwater">{{this.typeSeventArr[5].filterInflow}}</span>
             </div>
             <strong class="content-title">RO膜</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">145</span>
+              <span class="inflow">{{this.typeSeventArr[6].inflow}}</span>
             </div>
             <div class="clearwater-box">
               <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">145</span>
+              <span class="clearwater">{{this.typeSeventArr[6].filterInflow}}</span>
             </div>
             <strong class="content-title" style="left:100px">UV</strong>
           </div>
@@ -209,27 +209,33 @@
                 <ul>
                   <li>
                     <span class="state-span">纯水箱低水位开关</span>
-                    <span class="disconnect">断开</span>
+                    <span class="disconnect" v-if="this.signal.substr(0,1) === '0'">断开</span>
+                    <span class="close" v-if="this.signal.substr(0,1) === '1'">闭合</span>
                   </li>
                   <li>
-                    <span class="state-span">纯水箱低水位开关</span>
-                    <span class="close">闭合</span>
+                    <span class="state-span">纯水箱中水位开关</span>
+                    <span class="disconnect" v-if="this.signal.substr(1,1) === '0'">断开</span>
+                    <span class="close" v-if="this.signal.substr(1,1) === '1'">闭合</span>
                   </li>
                   <li>
-                    <span class="state-span">纯水箱低水位开关</span>
-                    <span class="close">闭合</span>
+                    <span class="state-span">纯水箱高水位开关</span>
+                    <span class="disconnect" v-if="this.signal.substr(2,1) === '0'">断开</span>
+                    <span class="close" v-if="this.signal.substr(2,1) === '1'">闭合</span>
                   </li>
                   <li>
-                    <span class="state-span">纯水箱低水位开关</span>
-                    <span class="close">闭合</span>
+                    <span class="state-span">纯水箱防溢开关</span>
+                    <span class="disconnect" v-if="this.signal.substr(3,1) === '0'">断开</span>
+                    <span class="close" v-if="this.signal.substr(3,1) === '1'">闭合</span>
                   </li>
                   <li>
-                    <span class="state-span">纯水箱低水位开关</span>
-                    <span class="disconnect">断开</span>
+                    <span class="state-span">软水信号开关</span>
+                    <span class="disconnect" v-if="this.signal.substr(4,1) === '0'">断开</span>
+                    <span class="close" v-if="this.signal.substr(4,1) === '1'">闭合</span>
                   </li>
                   <li>
-                    <span class="state-span">纯水箱低水位开关</span>
-                    <span class="disconnect">断开</span>
+                    <span class="state-span">阀头反冲洗信号开关</span>
+                    <span class="disconnect" v-if="this.signal.substr(5,1) === '0'">断开</span>
+                    <span class="close" v-if="this.signal.substr(5,1) === '1'">闭合</span>
                   </li>
                 </ul>
               </div>
@@ -256,7 +262,8 @@
                 <ul>
                   <li v-for="list in relayList" :key="list.ID">
                     <span class="state-span">{{list.name}}</span>
-                    <span class="disconnect">{{list.operation}}</span>
+                    <span class="disconnect" v-if="list.onOff === '0'">断开</span>
+                    <span class="close" v-if="list.onOff === '1'">闭合</span>
                   </li>
                 </ul>
               </div>
@@ -283,24 +290,39 @@ export default {
         { ID: 106, name: "阀头反冲洗信号开关", unit: "m³", num: "9.2" }
       ],
       relayList: [
-        { ID: 200, name: "进水电磁阀", operation: "断开" },
-        { ID: 201, name: "浓水电磁阀", operation: "断开" },
-        { ID: 202, name: "循环电磁阀", operation: "断开" },
-        { ID: 203, name: "排空电磁阀", operation: "断开" },
-        { ID: 204, name: "原水检测电磁阀", operation: "断开" },
-        { ID: 205, name: "纯水检测电磁阀", operation: "断开" },
-        { ID: 206, name: "水路关闭电磁阀", operation: "断开" },
-        { ID: 207, name: "原水泵", operation: "断开" },
-        { ID: 208, name: "高压泵", operation: "断开" },
-        { ID: 209, name: "取水泵", operation: "断开" },
-        { ID: 210, name: "UV", operation: "断开" }
-      ]
+        { ID: 200, name: "进水电磁阀", onOff:"" },
+        { ID: 201, name: "浓水电磁阀", onOff:"" },
+        { ID: 202, name: "循环电磁阀", onOff:"" },
+        { ID: 203, name: "排空电磁阀", onOff:"" },
+        { ID: 204, name: "原水检测电磁阀", onOff:"" },
+        { ID: 205, name: "纯水检测电磁阀", onOff:"" },
+        { ID: 206, name: "水路关闭电磁阀", onOff:"" },
+        { ID: 207, name: "原水泵", onOff:"" },
+        { ID: 208, name: "高压泵", onOff:"" },
+        { ID: 209, name: "取水泵", onOff:"" },
+        { ID: 210, name: "UV", onOff:"" }
+      ],
+      chartHeader: {
+        inflowMsg: "",
+        pureMsgArr: "",
+        TocBeforeMsgArr: "",
+        TocAfterMsgArr: "",
+        NtuBeforeMsgArr: "",
+        NtuAfterMsgArr: "",
+        CodBeforeMsgArr: "",
+        CodAfterMsgArr: "",
+        RcrrBeforeMsgArr: "",
+        RcrrAfterMsgArr: "",
+        typeEightObj: {}
+      },
+      signal: {},
+      typeSeventArr: []
     };
   },
-  props:{
-    translateMsg:{
-      type:Object,
-      default: '未获取到数据'
+  props: {
+    translateMsg: {
+      type: Object,
+      default: "未获取到数据"
     }
   },
   methods: {
@@ -308,16 +330,104 @@ export default {
       //触发home中的getParam使其改变home中的Judge的值
       bus.$emit("getParam");
       this.$emit("hidden");
+    },
+    //获取到仪表盘所需的数据
+    dashBoardMsg() {
+      console.log(this.translateMsg, "this.translateMsg");
+    },
+    //水质曲线数据处理
+    WaterMsg() {
+      let _msg = this.translateMsg.waterDecode;
+      for (var key in _msg) {
+        if (key in this.chartHeader) {
+          if (_msg[key].length !== 0) {
+            this.chartHeader[key] = _msg[key][30];
+          }
+        }
+      }
+      console.log(this.chartHeader, "this.chartHeader2");
+    },
+    //进入数据判断是否存在
+    dataJudge() {
+      if (this.translateMsg.waterDecode.typeEightObj.switch) {
+        this.signal = this.translateMsg.waterDecode.typeEightObj.switch;
+        for(var i = 0; i < this.relayList.length; i++){
+          this.relayList[i].onOff = this.translateMsg.waterDecode.typeEightObj.relay.substr(i,1);
+        }
+        console.log(this.relayList,"我我我我我this.relayList")
+        console.log("我进入了this.translateMsg.waterDecode.typeEightObj");
+      } else {
+        this.signal = "222222";
+        for(var i = 0; i < this.relayList.length; i++){
+          this.relayList[i].onOff = "2";
+        }        
+        console.log("我进入了222222");
+      }
+      if (this.translateMsg.waterDecode.typeSeventArr[0] !== undefined) {
+        this.typeSeventArr = this.translateMsg.waterDecode.typeSeventArr;
+      } else {
+        this.typeSeventArr = [
+          { inflow: "", filterInflow: "" },
+          { inflow: "", filterInflow: "" },
+          { inflow: "", filterInflow: "" },
+          { inflow: "", filterInflow: "" },
+          { inflow: "", filterInflow: "" },
+          { inflow: "", filterInflow: "" },
+          { inflow: "", filterInflow: "" }
+        ];
+      }
+      console.log(this.typeSeventArr, "我我我我我我我undefined");
+      console.log(this.signal, "我我我我我我我this.signal");
     }
   },
-  created() {},
+  created() {
+    this.WaterMsg();
+    this.dataJudge();
+  },
   mounted() {
+    console.log(this.translateMsg, "translateMsg");
+    this.dashBoardMsg();
     //进水标准
-    this.$chart.line1("table-echarts", "ppm", 0, 500, this.translateMsg.inflowMsgArr, this.translateMsg.pureMsgArr);
-    this.$chart.line1("table-echarts2","mg/L", 0, 300, this.translateMsg.TocBeforeMsgArr, this.translateMsg.TocAfterMsgArr);
-    this.$chart.line1("table-echarts3","NTU", 0, 300, this.translateMsg.NtuBeforeMsgArr, this.translateMsg.NtuAfterMsgArr);
-    this.$chart.line1("table-echarts4","mg/L",0, 300, this.translateMsg.CodBeforeMsgArr, this.translateMsg.CodAfterMsgArr);
-    this.$chart.line1("table-echarts5","ppm",50, 300, [],this.translateMsg.RcrrBeforeMsgArr);
+    this.$chart.line1(
+      "table-echarts",
+      "ppm",
+      0,
+      500,
+      this.translateMsg.waterDecode.inflowMsgArr,
+      this.translateMsg.waterDecode.pureMsgArr
+    );
+    this.$chart.line1(
+      "table-echarts2",
+      "mg/L",
+      0,
+      5.0,
+      this.translateMsg.waterDecode.TocBeforeMsgArr,
+      this.translateMsg.waterDecode.TocAfterMsgArr
+    );
+    this.$chart.line1(
+      "table-echarts3",
+      "NTU",
+      0,
+      5.0,
+      this.translateMsg.waterDecode.NtuBeforeMsgArr,
+      this.translateMsg.waterDecode.NtuAfterMsgArr
+    );
+    this.$chart.line1(
+      "table-echarts4",
+      "mg/L",
+      0,
+      5.0,
+      this.translateMsg.waterDecode.CodBeforeMsgArr,
+      this.translateMsg.waterDecode.CodAfterMsgArr
+    );
+    this.$chart.line1(
+      "table-echarts5",
+      "ppm",
+      50,
+      100,
+      [],
+      this.translateMsg.waterDecode.RcrrBeforeMsgArr
+    );
     this.$chart.line2("table-line2");
   }
 };
@@ -391,7 +501,7 @@ export default {
           // }
           display: flex;
           justify-content: space-around;
-          .chlorine{
+          .chlorine {
             width: 230px;
             display: flex;
             justify-content: center;
@@ -399,16 +509,27 @@ export default {
           .table-box {
             position: relative;
             box-sizing: border-box;
+            width: 280px;
             height: 276px;
-            float: left;
+            // float: left;
             .table-TDS {
               display: inline-block;
               position: relative;
               .TDS-num {
                 position: absolute;
-                left: 38px;
-                top: 36px;
+                left: 52px;
+                top: 50px;
                 color: #ffb400;
+                transform: translate(-50%, -50%);
+              }
+              .TDS-style {
+                position: absolute;
+                left: 28px;
+                top: 30px;
+                color: #ffb400;
+              }
+              .TDS-color {
+                color: #3dda85;
               }
             }
             span {
@@ -509,8 +630,10 @@ export default {
             float: left;
             .inflow {
               position: absolute;
-              left: 38px;
-              top: 38px;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              color: #ffb400;
             }
           }
           .clearwater-box {
@@ -519,8 +642,10 @@ export default {
             margin-left: 20px;
             .clearwater {
               position: absolute;
-              left: 38px;
-              top: 38px;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              color: #3dda85;
             }
           }
           .content-title {

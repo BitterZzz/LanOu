@@ -88,12 +88,12 @@
       //请求登录
       RequestLogin() {
         var _this = this;
-        this.$post("/loginLanOu", {
+        this.$post(this.$api.login, {
           phone: this.dom.userDom.value,
           passWord: this.dom.pwdDom.value
         }).then(res => {
           // setTimeout(() => {
-            console.log(res.data);
+            console.log(res.data,"res.data");
             if (res.data.code === 0) {
               _this.$message({
                 message: "密码正确",
@@ -103,7 +103,13 @@
               this.$router.replace("/homepage");
               let _data = res.data.data;
               let _dataArr = [];
-              localStorage.setItem("did", res.data.data[0].lanOuDid);
+              let _didArr = [];
+              let _didStr = "";
+              for(var i =0;i < _data.length; i++){
+                _didArr.push(_data[i].id);
+              }
+              _didStr = _didArr.join(',');
+              localStorage.setItem("did", _didStr);
               localStorage.setItem("level", res.data.data[0].level)
               console.log(res);
             } else {
@@ -111,7 +117,6 @@
                 message: "账号或密码错误",
                 type: "error"
               });
-
             }
           // }, 2000);
         });

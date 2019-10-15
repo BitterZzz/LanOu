@@ -78,7 +78,7 @@
     <transition name="slide-fade" enter-active-class=" animated fadeIn" leave-active-class="animated fadeOut">
       <div id="shadow" v-if="showShadow"></div>
     </transition>
-    <sorter :pageMsg="sortPage"></sorter>
+    <sorter :pageMsg="sortPage" @Information="showUserInfo"></sorter>
   </div>
 </template>
 
@@ -205,21 +205,22 @@
         // console.log(this.isEnabled);
       },
       // 获取全部用户信息
-      showUserInfo() {
-        this.$get("/getLanOuUserInfo", {
-          pageNum: 1,
+      showUserInfo(val = 1) {
+        this.$get(this.$api.getLanOuUserInfo, {
+          pageNum: val,
           pageSize: 5
         }).then(res => {
           this.sortPage.pageSize = res.data.data.pageSize;
           this.sortPage.pages = res.data.data.pages;
           this.sortPage.total = res.data.data.total;
           this.capsulation(res);
+          console.log(111);
         });
       },
       // 启用
       startUsing() {
         for (var i = 0; i < this.checkEnabled.length; i++) {
-          Axios.post("/updateByLanOuUserState", {
+          Axios.post(this.$api.updateByLanOuUserState, {
             did: this.checkEnabled[i].did,
             id: this.checkEnabled[i].id,
             isEnabled: 1,
@@ -233,7 +234,7 @@
       // 禁用
       forbidden() {
         for (var i = 0; i < this.checkEnabled.length; i++) {
-          Axios.post("/updateByLanOuUserState", {
+          Axios.post(this.$api.updateByLanOuUserState, {
             did: this.checkEnabled[i].did,
             id: this.checkEnabled[i].id,
             isEnabled: "0",
@@ -260,7 +261,7 @@
       // 封装根据真实姓名realName查询
       reacNameSear() {
         console.log("真实姓名");
-        this.$get("/getLanOuUserInfo", {
+        this.$get(this.$api.getLanOuUserInfo, {
           pageNum: 1,
           pageSize: 5,
           realName: searchText.value
@@ -272,7 +273,7 @@
       // 封装根据手机号cellPhone查询
       cellPhoneSear() {
         console.log("手机号码");
-        this.$get("/getLanOuUserInfo", {
+        this.$get(this.$api.getLanOuUserInfo, {
           pageNum: 1,
           pageSize: 5,
           cellPhone: searchText.value
@@ -294,7 +295,7 @@
         this.showPopup = false;
         this.showShadow = false;
 
-        this.$delete("/deleteLanOuUser", {
+        this.$delete(this.$api.deleteLanOuUser, {
           id: this.deleteId
         }).then(res => {
           this.showUserInfo();
@@ -326,7 +327,7 @@
         console.log(this.portionUserId);
         this.showUserInfo();
 
-        this.$delete("/deleteLanOuUser", {
+        this.$delete(this.$api.deleteLanOuUser, {
           id: this.portionUserId
         }).then(res => {
           console.log("删除所有用户信息");

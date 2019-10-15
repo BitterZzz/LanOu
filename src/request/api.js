@@ -12,7 +12,6 @@ export function get (url, params) {
       })
   })
 }
-
 export function post (url, params) {
   return new Promise((resolve, reject) => {
     Axios.post(url, Qs.stringify(params))
@@ -34,7 +33,7 @@ export function postBody (url, body, params){
       resolve(res)
     })
     .catch(err => {
-      reject(err.data)
+      reject(err)
     })
   })
 }

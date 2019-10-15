@@ -155,11 +155,12 @@ export default {
     },
     // 获取所有账户信息
     showAccountInfo() {
-      this.$get("/getLanOuAccountInfo", {
+      this.$get(this.$api.getLanOuAccountInfo, {
         pageNum: 1,
         pageSize: 5
       }).then(res => {
         this.tableData = res.data.data.list;
+        console.log(res,"获取所有账户信息");
         this.sortPage.pageSize = res.data.data.pageSize;
         this.sortPage.pages = res.data.data.pages;
         this.sortPage.total = res.data.data.total;
@@ -174,7 +175,7 @@ export default {
     // 编辑页面
     handleEdit(res) {
       console.log(res.id);
-      this.$get("/getLanOuAccountInfoById?id="+ res.id , {
+      this.$get(this.$api.getLanOuAccountInfoById + "?id="+ res.id , {
       },
      ).then(res=>{
            this.sonData = res.data.data
@@ -192,7 +193,7 @@ export default {
     deleteInfo() {
       this.showPopup = false;
       this.showShadow = false;
-      this.$delete("/deleteLanOuAccountInfo", {
+      this.$delete(this.$api.deleteLanOuAccountInfo, {
         id: this.valueId
       }).then(res => {
         this.showAccountInfo();
@@ -220,7 +221,7 @@ export default {
     },
     // 确定删除选中的全部账户信息
     entireInfo() {
-      this.$delete("/deleteLanOuAccountInfo", {
+      this.$delete(this.$api.deleteLanOuAccountInfo, {
         id: this.selectId
       }).then(res => {
         this.showAccountInfo();
