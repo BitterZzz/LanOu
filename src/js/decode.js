@@ -130,8 +130,8 @@ export function decodeMsg(decode16) {
     console.log(inflowMsg,"inflowMsg")
     for (var i = 0; i < inflowMsg.length; i++) {
       if (i % 2 === 0) {
-        inflowMsgArr.push(parseInt(inflowMsg.substr(i, 2), 16));
-        pureMsgArr.push(parseInt(pureMsg.substr(i, 2), 16));
+        inflowMsgArr.push(parseInt(inflowMsg.substr(i, 2), 16) * 2);
+        pureMsgArr.push(parseInt(pureMsg.substr(i, 2), 16) * 2);
       }
     }
     return { inflowMsgArr: inflowMsgArr, pureMsgArr: pureMsgArr }
@@ -153,6 +153,7 @@ export function decodeMsg(decode16) {
   if (typeJudge === "04") {
     let NtuBeforeMsg = decode16.substr(2, 62);
     let NtuAfterMsg = decode16.substr(64, 62);
+    console.log(decode16,NtuBeforeMsg,NtuAfterMsg,"我是NtuBeforeMsg和NtuAfterMsg")
     for (var i = 0; i < NtuBeforeMsg.length; i++) {
       if (i % 2 === 0) {
         NtuBeforeMsgArr.push(parseInt(NtuBeforeMsg.substr(i, 2), 16) / 10);

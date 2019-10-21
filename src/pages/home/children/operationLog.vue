@@ -1,15 +1,5 @@
 <template>
-  <div id="Log">
-      <h1>日志</h1>
+  <div class="log">
+    日志
   </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
-</style>

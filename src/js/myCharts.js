@@ -12,9 +12,10 @@ const install = function (Vue) {
             const optionData = {
               color: colors,
               tooltip: {
-                trigger: 'none',
-                axisPointer: {
-                  type: 'cross'
+                show:true,
+                trigger: 'item',
+                axisPointer: function(params){
+                  return params;
                 }
               },
               // grid: {
@@ -41,7 +42,7 @@ const install = function (Vue) {
                       }
                     }
                   },
-                  data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                  data: ['23', '24', '25', '26', '27', '28', '29', '30', '31', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22']
                 },
                 {
                   type: 'category',

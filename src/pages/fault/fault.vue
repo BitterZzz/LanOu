@@ -9,36 +9,24 @@
     <div class="toHome">
       <div class="goHome">
         <img @click="backHome()" src="../../assets/img/back.png" alt />
-        <span>返回列表</span>
+        <span>故障信息</span>
+      </div>
+      <div class="title">
+        <img src="../../assets/img/untreated.png" alt />
+        <span>未处理</span>
       </div>
     </div>
     <div class="faultInfo">
-      <!-- <ul>
-        <li>
-          <a>状态</a>
-          <a>上报时间</a>
-          <a>设备ID</a>
-          <a>故障原因</a>
-        </li>
-        <li v-for="item in falutMsgList" :key="item.id">
-          <a>
-            <img :src="true ? greenAlarm : redAlarm " alt srcset />
-          </a>
-          <a>{{item.produceTime.split(' ')[0]}}</a>
-          <a>{{item.pdid}}</a>
-          <a>石英砂更换</a>
-        </li>
-      </ul>-->
       <table border="1" cellspacing="0">
         <tr>
           <th>状态</th>
           <th>上报时间</th>
           <th>设备ID</th>
-          <th>故障类型</th>
+          <th>故障原因</th>
         </tr>
         <tr v-for="item in falutMsgList" :key="item.id">
           <td>
-            <img src alt />
+            <img src="../../assets/img/untreated.png" alt />
           </td>
           <td>{{item.produceTime.split(' ')[0]}}</td>
           <td>{{item.pdid}}</td>
@@ -127,6 +115,9 @@ export default {
     height: 80px;
     background: #eeeeee;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     .goHome {
       display: flex;
       align-items: center;
@@ -134,7 +125,6 @@ export default {
       font-size: 22px;
       font-weight: 400;
       padding-left: 18px;
-      padding-top: 17px;
       box-sizing: border-box;
 
       img {
@@ -144,11 +134,16 @@ export default {
         cursor: pointer;
       }
     }
+    .title {
+      display: flex;
+      align-items: center;
+      padding-right: 28px;
+      color: #333333;
+    }
   }
   .faultInfo {
     width: 80%;
     height: 59.9%;
-    border: 1px solid #cccccc;
     margin: 0 auto;
     border-bottom: none;
     table {

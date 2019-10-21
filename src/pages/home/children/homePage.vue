@@ -33,14 +33,14 @@
             <li>
               <img src="../../../assets/img/untreated.png" alt srcset />
               <a>未处理</a>
-              <span>(2)</span>
+              <!-- <span>(2)</span> -->
             </li>
-            <li>
+            <!-- <li>
               <img src="../../../assets/img/dispose.png" alt srcset />
               <img src alt srcset />
               <a>处理中</a>
               <span>(2)</span>
-            </li>
+            </li> -->
             <li @click="faultShowAction()">
               <img src="../../../assets/img/more.png" alt srcset />
             </li>
@@ -72,14 +72,14 @@
             <li>
               <img src="../../../assets/img/untreated.png" alt srcset />
               <a>未处理</a>
-              <span>(2)</span>
+              <!-- <span>(2)</span> -->
             </li>
-            <li>
+            <!-- <li>
               <img src="../../../assets/img/dispose.png" alt srcset />
               <img src alt srcset />
               <a>处理中</a>
               <span>(2)</span>
-            </li>
+            </li> -->
             <li @click="mainShowAction()">
               <img src="../../../assets/img/more.png" alt srcset />
             </li>
@@ -91,7 +91,7 @@
               <th>状态</th>
               <th>上报时间</th>
               <th>设备ID</th>
-              <th>故障类型</th>
+              <th>故障原因</th>
             </tr>
             <tr class="stateBox" v-for="item in breakdown" :key="item.id">
               <td>
@@ -336,10 +336,11 @@ export default {
           justify-content: space-between;
           position: relative;
           left: 10px;
-          width: 320px;
+          // width: 320px;
 
-          li:nth-child(3) {
+          li:nth-child(2) {
             cursor: pointer;
+
           }
 
           li {
@@ -416,9 +417,9 @@ export default {
           justify-content: space-between;
           position: relative;
           left: 10px;
-          width: 320px;
+          // width: 320px;
 
-          li:nth-child(3) {
+          li:nth-child(2) {
             cursor: pointer;
           }
 

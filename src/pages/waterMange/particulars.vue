@@ -29,11 +29,17 @@
               <div class="table-TDS">
                 <img src="../../assets/img/ppm.png" alt />
                 <span class="TDS-num">{{this.chartHeader.inflowMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="aaa" width="102" height="102"></canvas>
+                </div>
               </div>
               <span>TDS</span>
               <div class="table-TDS table-TDS2">
                 <img src="../../assets/img/ppm2.png" alt />
                 <span class="TDS-num TDS-color">{{this.chartHeader.pureMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="bbb" width="102" height="102"></canvas>
+                </div>                
               </div>
               <div id="table-echarts" class="echarts"></div>
             </div>
@@ -41,11 +47,17 @@
               <div class="table-TDS">
                 <img src="../../assets/img/TOC_1.png" alt />
                 <span class="TDS-num">{{this.chartHeader.TocBeforeMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="ccc" width="102" height="102"></canvas>
+                </div>                 
               </div>
               <span>TOC</span>
               <div class="table-TDS table-TDS2">
                 <img src="../../assets/img/TOC_2.png" alt />
                 <span class="TDS-num TDS-color">{{this.chartHeader.TocAfterMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="ddd" width="102" height="102"></canvas>
+                </div>                 
               </div>
               <div id="table-echarts2" class="echarts"></div>
             </div>
@@ -53,11 +65,17 @@
               <div class="table-TDS">
                 <img src="../../assets/img/ZD.png" alt />
                 <span class="TDS-num">{{this.chartHeader.NtuBeforeMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="eee" width="102" height="102"></canvas>
+                </div>                 
               </div>
               <span>浊度</span>
               <div class="table-TDS table-TDS2">
                 <img src="../../assets/img/ZD2.png" alt />
                 <span class="TDS-num TDS-color">{{this.chartHeader.NtuAfterMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="fff" width="102" height="102"></canvas>
+                </div>                 
               </div>
               <div id="table-echarts3" class="echarts"></div>
             </div>
@@ -67,11 +85,17 @@
               <div class="table-TDS">
                 <img src="../../assets/img/TOC_1.png" alt />
                 <span class="TDS-num">{{this.chartHeader.CodBeforeMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="ggg" width="102" height="102"></canvas>
+                </div>                 
               </div>
               <span>COD</span>
               <div class="table-TDS table-TDS2">
                 <img src="../../assets/img/TOC_2.png" alt />
                 <span class="TDS-num TDS-color">{{this.chartHeader.CodAfterMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="jjj" width="102" height="102"></canvas>
+                </div>                 
               </div>
               <div id="table-echarts4" class="echarts"></div>
             </div>
@@ -79,6 +103,9 @@
               <div class="table-TDS">
                 <img src="../../assets/img/ppm.png" alt />
                 <span class="TDS-num TDS-style">{{this.chartHeader.RcrrBeforeMsgArr}}</span>
+                <div class="waterCavas">
+                  <canvas id="kkk" width="102" height="102"></canvas>
+                </div>                 
               </div>
               <span>余氯</span>
               <div id="table-echarts5" class="echarts" style="width:280px;height:192px"></div>
@@ -118,45 +145,77 @@
         <div class="Cartridge-content">
           <div class="content-meter">
             <div class="inflow-box">
-              <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">{{this.typeSeventArr[0].inflow}}</span>
+              <img src="../../assets/img/Hasthefilter.png" alt />
+              <span class="inflow">{{this.typeSeventArr[0].filterInflow}}</span>
+              <span class="scope">0-{{this.typeSeventArr[0].inflow}}</span>
+              <div class="dashBoard">
+                <canvas id="sand-canvas" width="84" height="84"></canvas>
+              </div>
             </div>
             <div class="clearwater-box">
-              <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">{{this.typeSeventArr[0].filterInflow}}</span>
+              <img src="../../assets/img/day.png" alt />
+              <span class="clearwater">{{this.typeSeventArr[0].clearDays}}</span>
+              <span class="day">0-{{this.typeSeventArr[0].usageDays}}</span>
+              <div class="dashBoard">
+                <canvas id="sand-canvasDay" width="84" height="84"></canvas>
+              </div>
             </div>
             <strong class="content-title">石英砂</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
-              <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">{{this.typeSeventArr[1].inflow}}</span>
+              <img src="../../assets/img/Hasthefilter.png" alt />
+              <span class="inflow">{{this.typeSeventArr[1].filterInflow}}</span>
+              <span class="scope">0-{{this.typeSeventArr[1].inflow}}</span>
+              <div class="dashBoard">
+                <canvas id="enough-canvas" width="84" height="84"></canvas>
+              </div>
             </div>
             <div class="clearwater-box">
-              <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">{{this.typeSeventArr[1].filterInflow}}</span>
+              <img src="../../assets/img/day.png" alt />
+              <span class="clearwater">{{this.typeSeventArr[1].clearDays}}</span>
+              <span class="day">0-{{this.typeSeventArr[1].usageDays}}</span>
+              <div class="dashBoard">
+                <canvas id="enough-canvasDay" width="84" height="84"></canvas>
+              </div>
             </div>
             <strong class="content-title">活性炭</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
-              <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">{{this.typeSeventArr[2].inflow}}</span>
+              <img src="../../assets/img/Hasthefilter.png" alt />
+              <span class="inflow">{{this.typeSeventArr[2].filterInflow}}</span>
+              <span class="scope">0-{{this.typeSeventArr[2].inflow}}</span>
+              <div class="dashBoard">
+                <canvas id="SR-canvas" width="84" height="84"></canvas>
+              </div>
             </div>
             <div class="clearwater-box">
-              <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">{{this.typeSeventArr[2].filterInflow}}</span>
+              <img src="../../assets/img/day.png" alt />
+              <span class="clearwater">{{this.typeSeventArr[2].clearDays}}</span>
+              <span class="day">0-{{this.typeSeventArr[2].usageDays}}</span>
+              <div class="dashBoard">
+                <canvas id="SR-canvasDay" width="84" height="84"></canvas>
+              </div>
             </div>
             <strong class="content-title">软化树脂</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
-              <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">{{this.typeSeventArr[3].inflow}}</span>
+              <img src="../../assets/img/Hasthefilter.png" alt />
+              <span class="inflow">{{this.typeSeventArr[3].filterInflow}}</span>
+              <span class="scope">0-{{this.typeSeventArr[3].inflow}}</span>
+              <div class="dashBoard">
+                <canvas id="salt-canvas" width="84" height="84"></canvas>
+              </div>
             </div>
             <div class="clearwater-box">
-              <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">{{this.typeSeventArr[3].filterInflow}}</span>
+              <img src="../../assets/img/day.png" alt />
+              <span class="clearwater">{{this.typeSeventArr[3].clearDays}}</span>
+              <span class="day">0-{{this.typeSeventArr[3].usageDays}}</span>
+              <div class="dashBoard">
+                <canvas id="salt-canvasDay" width="84" height="84"></canvas>
+              </div>
             </div>
             <strong class="content-title">再生盐</strong>
           </div>
@@ -164,34 +223,58 @@
         <div class="Cartridge-content">
           <div class="content-meter">
             <div class="inflow-box">
-              <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">{{this.typeSeventArr[4].inflow}}</span>
+              <img src="../../assets/img/Hasthefilter.png" alt />
+              <span class="inflow">{{this.typeSeventArr[4].filterInflow}}</span>
+              <span class="scope">0-{{this.typeSeventArr[4].inflow}}</span>
+              <div class="dashBoard">
+                <canvas id="filterElement-canvas" width="84" height="84"></canvas>
+              </div>
             </div>
             <div class="clearwater-box">
-              <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">{{this.typeSeventArr[4].filterInflow}}</span>
+              <img src="../../assets/img/day.png" alt />
+              <span class="clearwater">{{this.typeSeventArr[4].clearDays}}</span>
+              <span class="day">0-{{this.typeSeventArr[4].usageDays}}</span>
+              <div class="dashBoard">
+                <canvas id="filterElement-canvasDay" width="84" height="84"></canvas>
+              </div>
             </div>
             <strong class="content-title">精密滤芯</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
-              <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">{{this.typeSeventArr[5].inflow}}</span>
+              <img src="../../assets/img/Hasthefilter.png" alt />
+              <span class="inflow">{{this.typeSeventArr[5].filterInflow}}</span>
+              <span class="scope">0-{{this.typeSeventArr[5].inflow}}</span>
+              <div class="dashBoard">
+                <canvas id="RO-canvas" width="84" height="84"></canvas>
+              </div>
             </div>
             <div class="clearwater-box">
-              <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">{{this.typeSeventArr[5].filterInflow}}</span>
+              <img src="../../assets/img/day.png" alt />
+              <span class="clearwater">{{this.typeSeventArr[5].clearDays}}</span>
+              <span class="day">0-{{this.typeSeventArr[5].usageDays}}</span>
+              <div class="dashBoard">
+                <canvas id="RO-canvasDay" width="84" height="84"></canvas>
+              </div>
             </div>
             <strong class="content-title">RO膜</strong>
           </div>
           <div class="content-meter">
             <div class="inflow-box">
-              <img src="../../assets/img/ppm.png" alt />
-              <span class="inflow">{{this.typeSeventArr[6].inflow}}</span>
+              <img src="../../assets/img/Hasthefilter.png" alt />
+              <span class="inflow">{{this.typeSeventArr[6].filterInflow}}</span>
+              <span class="scope">0-{{this.typeSeventArr[6].inflow}}</span>
+              <div class="dashBoard">
+                <canvas id="UV-canvas" width="84" height="84"></canvas>
+              </div>
             </div>
             <div class="clearwater-box">
-              <img src="../../assets/img/ppm2.png" alt />
-              <span class="clearwater">{{this.typeSeventArr[6].filterInflow}}</span>
+              <img src="../../assets/img/day.png" alt />
+              <span class="clearwater">{{this.typeSeventArr[6].clearDays}}</span>
+              <span class="day">0-{{this.typeSeventArr[6].usageDays}}</span>
+              <div class="dashBoard">
+                <canvas id="UV-canvasDay" width="84" height="84"></canvas>
+              </div>
             </div>
             <strong class="content-title" style="left:100px">UV</strong>
           </div>
@@ -276,34 +359,35 @@
 </template>
 <script>
 import bus from "../../js/bus";
+import { initCanvas, waterCanvas } from "../../js/dashBoard";
 export default {
   name: "particulars",
   data() {
     return {
       AnalogList: [
-        { ID: 100, name: "纯水箱低水位开关", unit: "MPa", num: "9.2" },
-        { ID: 101, name: "纯水箱中水位开关", unit: "MPa", num: "9.2" },
-        { ID: 102, name: "纯水箱高水位开关", unit: "Mpa", num: "9.2" },
-        { ID: 103, name: "纯水箱防溢开关", unit: "m³/H", num: "9.2" },
-        { ID: 104, name: "软水信号开关", unit: "m³/H", num: "9.2" },
-        { ID: 105, name: "软水信号开关", unit: "m³", num: "9.2" },
-        { ID: 106, name: "阀头反冲洗信号开关", unit: "m³", num: "9.2" }
+        { ID: 100, name: "进水压力", unit: "MPa", num: "" },
+        { ID: 101, name: "膜前压力", unit: "MPa", num: "" },
+        { ID: 102, name: "取水压力", unit: "Mpa", num: "" },
+        { ID: 103, name: "进水流量", unit: "m³/H", num: "" },
+        { ID: 104, name: "净水流量", unit: "m³/H", num: "" },
+        { ID: 105, name: "累计进水总量", unit: "m³", num: "" },
+        { ID: 106, name: "累计净水总量", unit: "m³", num: "" }
       ],
       relayList: [
-        { ID: 200, name: "进水电磁阀", onOff:"" },
-        { ID: 201, name: "浓水电磁阀", onOff:"" },
-        { ID: 202, name: "循环电磁阀", onOff:"" },
-        { ID: 203, name: "排空电磁阀", onOff:"" },
-        { ID: 204, name: "原水检测电磁阀", onOff:"" },
-        { ID: 205, name: "纯水检测电磁阀", onOff:"" },
-        { ID: 206, name: "水路关闭电磁阀", onOff:"" },
-        { ID: 207, name: "原水泵", onOff:"" },
-        { ID: 208, name: "高压泵", onOff:"" },
-        { ID: 209, name: "取水泵", onOff:"" },
-        { ID: 210, name: "UV", onOff:"" }
+        { ID: 200, name: "进水电磁阀", onOff: "" },
+        { ID: 201, name: "浓水电磁阀", onOff: "" },
+        { ID: 202, name: "循环电磁阀", onOff: "" },
+        { ID: 203, name: "排空电磁阀", onOff: "" },
+        { ID: 204, name: "原水检测电磁阀", onOff: "" },
+        { ID: 205, name: "纯水检测电磁阀", onOff: "" },
+        { ID: 206, name: "水路关闭电磁阀", onOff: "" },
+        { ID: 207, name: "原水泵", onOff: "" },
+        { ID: 208, name: "高压泵", onOff: "" },
+        { ID: 209, name: "取水泵", onOff: "" },
+        { ID: 210, name: "UV", onOff: "" }
       ],
       chartHeader: {
-        inflowMsg: "",
+        inflowMsgArr: "",
         pureMsgArr: "",
         TocBeforeMsgArr: "",
         TocAfterMsgArr: "",
@@ -345,48 +429,164 @@ export default {
           }
         }
       }
-      console.log(this.chartHeader, "this.chartHeader2");
+
+      console.log(this.chartHeader, "this.chartHeader");
     },
     //进入数据判断是否存在
     dataJudge() {
       if (this.translateMsg.waterDecode.typeEightObj.switch) {
         this.signal = this.translateMsg.waterDecode.typeEightObj.switch;
-        for(var i = 0; i < this.relayList.length; i++){
-          this.relayList[i].onOff = this.translateMsg.waterDecode.typeEightObj.relay.substr(i,1);
+        for (var i = 0; i < this.relayList.length; i++) {
+          this.relayList[
+            i
+          ].onOff = this.translateMsg.waterDecode.typeEightObj.relay.substr(
+            i,
+            1
+          );
         }
-        console.log(this.relayList,"我我我我我this.relayList")
-        console.log("我进入了this.translateMsg.waterDecode.typeEightObj");
       } else {
         this.signal = "222222";
-        for(var i = 0; i < this.relayList.length; i++){
+        for (var i = 0; i < this.relayList.length; i++) {
           this.relayList[i].onOff = "2";
-        }        
-        console.log("我进入了222222");
+        }
       }
       if (this.translateMsg.waterDecode.typeSeventArr[0] !== undefined) {
         this.typeSeventArr = this.translateMsg.waterDecode.typeSeventArr;
+        console.log("获取到了this.translateMsg.waterDecode的数据");
       } else {
+        console.log("获取到自定义的数据");
         this.typeSeventArr = [
-          { inflow: "", filterInflow: "" },
-          { inflow: "", filterInflow: "" },
-          { inflow: "", filterInflow: "" },
-          { inflow: "", filterInflow: "" },
-          { inflow: "", filterInflow: "" },
-          { inflow: "", filterInflow: "" },
-          { inflow: "", filterInflow: "" }
+          { inflow: "", filterInflow: "", usageDays: "", clearDays: "" },
+          { inflow: "", filterInflow: "", usageDays: "", clearDays: "" },
+          { inflow: "", filterInflow: "", usageDays: "", clearDays: "" },
+          { inflow: "", filterInflow: "", usageDays: "", clearDays: "" },
+          { inflow: "", filterInflow: "", usageDays: "", clearDays: "" },
+          { inflow: "", filterInflow: "", usageDays: "", clearDays: "" },
+          { inflow: "", filterInflow: "", usageDays: "", clearDays: "" }
         ];
       }
-      console.log(this.typeSeventArr, "我我我我我我我undefined");
-      console.log(this.signal, "我我我我我我我this.signal");
+    },
+    //模拟量输入数据
+    analogQuantity() {
+      let _msg = this.translateMsg.waterDecode.typeEightObj;
+      this.AnalogList[0].num = _msg.inflowNow;
+      this.AnalogList[1].num = _msg.SublayNow;
+      this.AnalogList[2].num = _msg.intakingNow;
+      this.AnalogList[3].num = _msg.inflowNow;
+      this.AnalogList[4].num = _msg.inflowNow;
+      this.AnalogList[5].num = _msg.rawWater;
+      this.AnalogList[6].num = _msg.pureWater;
+    },
+    //仪表盘显示
+    canvas() {
+      let _msg = this.typeSeventArr;
+      console.log(_msg, "这是canvas的——msg");
+      initCanvas(
+        "sand-canvas",
+        _msg[0].filterInflow,
+        _msg[0].inflow,
+        "#3DDA85"
+      );
+      initCanvas(
+        "sand-canvasDay",
+        _msg[0].clearDays,
+        _msg[0].usageDays,
+        "#07DBFF"
+      );
+      initCanvas(
+        "enough-canvas",
+        _msg[1].filterInflow,
+        _msg[1].inflow,
+        "#3DDA85"
+      );
+      initCanvas(
+        "enough-canvasDay",
+        _msg[1].clearDays,
+        _msg[1].usageDays,
+        "#07DBFF"
+      );
+      initCanvas("SR-canvas", _msg[2].filterInflow, _msg[2].inflow, "#3DDA85");
+      initCanvas(
+        "SR-canvasDay",
+        _msg[2].clearDays,
+        _msg[2].usageDays,
+        "#07DBFF"
+      );
+      initCanvas(
+        "salt-canvas",
+        _msg[3].filterInflow,
+        _msg[3].inflow,
+        "#3DDA85"
+      );
+      initCanvas(
+        "salt-canvasDay",
+        _msg[3].clearDays,
+        _msg[3].usageDays,
+        "#07DBFF"
+      );
+      initCanvas(
+        "filterElement-canvas",
+        _msg[4].filterInflow,
+        _msg[4].inflow,
+        "#3DDA85"
+      );
+      initCanvas(
+        "filterElement-canvasDay",
+        _msg[4].clearDays,
+        _msg[4].usageDays,
+        "#07DBFF"
+      );
+      initCanvas("RO-canvas", _msg[5].filterInflow, _msg[5].inflow, "#3DDA85");
+      initCanvas(
+        "RO-canvasDay",
+        _msg[5].clearDays,
+        _msg[5].usageDays,
+        "#07DBFF"
+      );
+      initCanvas("UV-canvas", _msg[6].filterInflow, _msg[6].inflow, "#3DDA85");
+      initCanvas(
+        "UV-canvasDay",
+        _msg[6].clearDays,
+        _msg[6].usageDays,
+        "#07DBFF"
+      );
+    },
+    //水质曲线仪表盘
+    WaterDashBoard() {
+      //TDS 历史 31 天水质数据
+      let inflowMsgArr = this.translateMsg.waterDecode.inflowMsgArr;
+      let pureMsgArr = this.translateMsg.waterDecode.pureMsgArr;
+      //TOC 历史 31 天水质数据
+      let TocBeforeMsgArr = this.translateMsg.waterDecode.TocBeforeMsgArr;
+      let TocAfterMsgArr = this.translateMsg.waterDecode.TocAfterMsgArr;
+      //NTU(浊度)历史 31 天水质数据
+      let NtuBeforeMsgArr = this.translateMsg.waterDecode.NtuBeforeMsgArr;
+      let NtuAfterMsgArr = this.translateMsg.waterDecode.NtuAfterMsgArr;
+      //COD 历史 31 天水质数据
+      let CodBeforeMsgArr = this.translateMsg.waterDecode.CodBeforeMsgArr;
+      let CodAfterMsgArr = this.translateMsg.waterDecode.CodAfterMsgArr;
+      //RCRR 历史 31 天水质数据(余氯去除率)
+      let RcrrBeforeMsgArr = this.translateMsg.waterDecode.RcrrBeforeMsgArr;
+      waterCanvas("aaa", inflowMsgArr[30], 500,'#FFB400');
+      waterCanvas("bbb", pureMsgArr[30], 30,'#3DDA85');
+      waterCanvas("ccc", TocBeforeMsgArr[30], 10,'#FFB400');
+      waterCanvas("ddd", TocAfterMsgArr[30], 1,'#3DDA85');
+      waterCanvas("eee", NtuBeforeMsgArr[30], 5,'#FFB400');
+      waterCanvas("fff", NtuAfterMsgArr[30], 1.5,'#3DDA85');
+      waterCanvas("ggg", CodBeforeMsgArr[30], 10,'#FFB400');
+      waterCanvas("jjj", CodAfterMsgArr[30], 1,'#3DDA85');
+      waterCanvas("kkk", RcrrBeforeMsgArr[30], 500,'#FFB400');
     }
   },
   created() {
     this.WaterMsg();
     this.dataJudge();
+    this.analogQuantity();
   },
   mounted() {
+    this.canvas();
+    this.WaterDashBoard();
     console.log(this.translateMsg, "translateMsg");
-    this.dashBoardMsg();
     //进水标准
     this.$chart.line1(
       "table-echarts",
@@ -494,11 +694,7 @@ export default {
           }
         }
         .data-table {
-          // width: 1106px;
           margin-top: 50px;
-          // .table-box:nth-child(1){
-          //   margin-left: 4%;
-          // }
           display: flex;
           justify-content: space-around;
           .chlorine {
@@ -524,12 +720,18 @@ export default {
               }
               .TDS-style {
                 position: absolute;
-                left: 28px;
-                top: 30px;
+                left: 42px;
+                top: 40px;
                 color: #ffb400;
+                transform: translate(0, 0);
               }
               .TDS-color {
                 color: #3dda85;
+              }
+              .waterCavas {
+                position: absolute;
+                left: 0;
+                top: 0;
               }
             }
             span {
@@ -633,7 +835,20 @@ export default {
               left: 50%;
               top: 50%;
               transform: translate(-50%, -50%);
-              color: #ffb400;
+              color: #3dda85;
+            }
+            .scope {
+              position: absolute;
+              left: 50%;
+              bottom: 0;
+              transform: translate(-50%);
+              color: #3dda85;
+              font-size: 2px;
+            }
+            .dashBoard {
+              position: absolute;
+              left: 1px;
+              top: 16px;
             }
           }
           .clearwater-box {
@@ -645,12 +860,24 @@ export default {
               left: 50%;
               top: 50%;
               transform: translate(-50%, -50%);
-              color: #3dda85;
+              color: #07dbff;
+            }
+            .day {
+              position: absolute;
+              left: 50%;
+              bottom: 0;
+              transform: translate(-50%);
+              font-size: 8px;
+            }
+            .dashBoard {
+              position: absolute;
+              left: 1px;
+              top: 16.5px;
             }
           }
           .content-title {
             position: absolute;
-            left: 90px;
+            left: 76px;
             top: -34px;
           }
         }

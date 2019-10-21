@@ -9,7 +9,11 @@
     <div class="toHome">
       <div class="goHome">
         <img @click="backHome()" src="../../assets/img/back.png" alt />
-        <span>返回列表</span>
+        <span>保养信息</span>
+      </div>
+      <div class="title">
+        <img src="../../assets/img/untreated.png" alt="">
+        <span>未处理</span>
       </div>
     </div>
     <div class="faultInfo">
@@ -22,7 +26,7 @@
         </tr>
         <tr v-for="item in protectMsg" :key="item.id">
           <td>
-            <img src alt />
+            <img src="../../assets/img/untreated.png" alt />
           </td>
           <td>{{item.produceTime.split(' ')[0]}}</td>
           <td>{{item.pdid}}</td>
@@ -76,6 +80,7 @@ export default {
   },
   created() {
     this.getMaintainMsg();
+    console.log(this.protectMsg,"this.protectMsg");
   }
 };
 </script>
@@ -111,11 +116,12 @@ export default {
   }
 
   .toHome {
+    display: flex;
     width: 100%;
     height: 80px;
     background: #eeeeee;
     margin-bottom: 20px;
-
+    justify-content: space-between;
     .goHome {
       display: flex;
       align-items: center;
@@ -123,7 +129,6 @@ export default {
       font-size: 22px;
       font-weight: 400;
       padding-left: 18px;
-      padding-top: 17px;
       box-sizing: border-box;
 
       img {
@@ -132,6 +137,12 @@ export default {
         margin-right: 16px;
         cursor: pointer;
       }
+    }
+    .title {
+      display: flex;
+      align-items: center;
+      padding-right: 28px;
+      color: #333333;
     }
   }
 

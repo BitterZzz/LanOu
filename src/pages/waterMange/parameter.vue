@@ -36,7 +36,7 @@
                       <span @click="subtract()">-</span>
                       <input
                         ref="intakingMax"
-                        type="text"
+                        type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.intakingMax : 0"
                       />
@@ -50,7 +50,7 @@
                       <span @click="subtract()">-</span>
                       <input
                         ref="intakingMin"
-                        type="text"
+                        type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.intakingMin : 0"
                       />
@@ -71,7 +71,7 @@
                       <p @click="dayAdd()">+</p>
                       <input
                         ref="year"
-                        type="text"
+                        type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj.SublayMax ? '20' + this.allocationMsg.waterDecode.typeEightObj.year : ''"
                       />
@@ -82,7 +82,7 @@
                       <p @click="dayAdd()">+</p>
                       <input
                         ref="month"
-                        type="text"
+                        type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.month : 0"
                       />
@@ -93,7 +93,7 @@
                       <p @click="dayAdd()">+</p>
                       <input
                         ref="day"
-                        type="text"
+                        type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.day : 0"
                       />
@@ -123,7 +123,7 @@
                       <span @click="subtract()">-</span>
                       <input
                         ref="SublayMax"
-                        type="text"
+                        type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.SublayMax : 0"
                       />
@@ -137,7 +137,7 @@
                       <span @click="subtract()">-</span>
                       <input
                         ref="SublayMin"
-                        type="text"
+                        type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.SublayMin : 0"
                       />
@@ -158,7 +158,7 @@
                       <p @click="dayAdd()">+</p>
                       <input
                         ref="hour"
-                        type="text"
+                        type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.hour : 0"
                       />
@@ -169,7 +169,7 @@
                       <p @click="dayAdd()">+</p>
                       <input
                         ref="minute"
-                        type="text"
+                        type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.minute : 0"
                       />
@@ -180,7 +180,7 @@
                       <p @click="dayAdd()">+</p>
                       <input
                         ref="second"
-                        type="text"
+                        type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.second : 0"
                       />
@@ -210,7 +210,7 @@
                       <span @click="subtract()">-</span>
                       <input
                         ref="inflowMax"
-                        type="text"
+                        type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.inflowMax : 0"
                       />
@@ -224,7 +224,7 @@
                       <span @click="subtract()">-</span>
                       <input
                         ref="inflowMin"
-                        type="text"
+                        type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.inflowMin : 0"
                       />
@@ -243,7 +243,7 @@
                   <span @click="subtract()">-</span>
                   <input
                     ref="rawWater"
-                    type="text"
+                    type="number"
                     class="num"
                     :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.rawWater : 0"
                   />
@@ -258,7 +258,7 @@
                   <span @click="subtract()">-</span>
                   <input
                     ref="pureWater"
-                    type="text"
+                    type="number"
                     class="num"
                     :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.pureWater : 0"
                   />
@@ -282,14 +282,14 @@
               <div class="content-frist">
                 <span>净水流量:</span>
                 <div class="frist-input">
-                  <input type="text" class="number" :ref="item.ref" :value="item.filterInflow" />
+                  <input type="number" class="number" :ref="item.ref" :value="item.filterInflow" />
                   <b>m³</b>
                 </div>
               </div>
               <div class="content-frist">
                 <span>时间:</span>
                 <div class="frist-input second-input">
-                  <input type="text" class="number" :ref="item.refDay" :value="item.clearDays" />
+                  <input type="number" class="number" :ref="item.refDay" :value="item.clearDays" />
                   <b>D</b>
                 </div>
               </div>
@@ -481,13 +481,29 @@ export default {
       this.rest = "01";
       console.log("恢复出厂设置");
     },
-    //10进制转16进制
-    TenToSixteen(num, multiple = 1) {
-      return parseInt(num * multiple, 10).toString(16);
+    //10进制转16进制(value内容，multiple乘以的倍数，numberOfBytes字节数)
+    TenToSixteen(value, multiple = 1, numberOfBytes = 2) {
+      let zero = "";
+      let dataLength = parseInt(value * multiple, 10).toString(16).length;
+      if (dataLength < numberOfBytes) {
+        for (var i = 0; i < numberOfBytes - dataLength; i++) {
+          zero += 0;
+        }
+      }
+      let resultMsg = zero + parseInt(value * multiple, 10).toString(16);
+      return resultMsg;
     },
     //2进制转16进制
-    TwoToSixteen(num) {
-      return parseInt(num, 2).toString(16);
+    TwoToSixteen(value, numberOfBytes = 2) {
+      let zero = "";
+      let dataLength = parseInt(value, 2).toString(16).length;
+      if (dataLength < numberOfBytes) {
+        for (var i = 0; i < numberOfBytes - dataLength; i++) {
+          zero += 0;
+        }
+      }
+      let resultMsg = zero + parseInt(value, 2).toString(16);
+      return resultMsg;
     },
     //系统状态数据转为16进制
     systemState() {
@@ -501,7 +517,8 @@ export default {
       //进水压力当前值
       let inflowNow = this.TenToSixteen(
         this.allocationMsg.waterDecode.typeEightObj.inflowNow,
-        100
+        100,
+        4
       );
       //膜前压力设置下限
       let SublayMin = this.TenToSixteen(this.$refs.SublayMin.value, 100);
@@ -510,7 +527,8 @@ export default {
       //膜前压力当前值
       let SublayNow = this.TenToSixteen(
         this.allocationMsg.waterDecode.typeEightObj.SublayNow,
-        100
+        100,
+        4
       );
       //取水压力下限值
       let intakingMin = this.TenToSixteen(this.$refs.intakingMin.value, 100);
@@ -519,12 +537,13 @@ export default {
       //取水压力当前值
       let intakingNow = this.TenToSixteen(
         this.allocationMsg.waterDecode.typeEightObj.intakingNow,
-        100
+        100,
+        4
       );
       //原水进水总量
-      let rawWater = this.TenToSixteen(this.$refs.rawWater.value, 10);
+      let rawWater = this.TenToSixteen(this.$refs.rawWater.value, 10, 4);
       //纯水进水总量
-      let pureWater = this.TenToSixteen(this.$refs.pureWater.value, 10);
+      let pureWater = this.TenToSixteen(this.$refs.pureWater.value, 10, 4);
       //年
       let year = this.TenToSixteen(this.$refs.year.value.substr(2));
       //月
@@ -543,7 +562,8 @@ export default {
       );
       //继电器输出
       let relay = this.TwoToSixteen(
-        this.allocationMsg.waterDecode.typeEightObj.relay
+        this.allocationMsg.waterDecode.typeEightObj.relay,
+        4
       );
       //排空命令
       let evacuation = this.empty;
@@ -770,6 +790,11 @@ $height: 200px;
   left: -156px;
   top: -24px;
   z-index: 10000;
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+  }
   #header {
     .header-box {
       margin-top: 10px;
@@ -897,6 +922,11 @@ $height: 200px;
                       border: 0;
                       border: solid 1px #cecece;
                       box-sizing: border-box;
+                    }
+                    input::-webkit-outer-spin-button,
+                    input::-webkit-inner-spin-button {
+                      -webkit-appearance: none !important;
+                      margin: 0;
                     }
                   }
                 }

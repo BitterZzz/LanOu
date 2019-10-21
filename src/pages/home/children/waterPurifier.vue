@@ -65,8 +65,8 @@
               <td>{{item.pdid}}</td>
               <td>
                 <div>在线状态: 在线</div>
-                <div>故障状态: 在线</div>
-                <div>保养状态: 在线</div>
+                <div>故障状态: {{item.maintenanceState != "" ? "异常" : "正常"}}</div>
+                <div>保养状态: {{item.guaranteState != "" ? "异常" : "正常"}}</div>
               </td>
               <td>
                 <div class="msg">
@@ -123,7 +123,7 @@
                   <!-- <div class="hhmmssU">14:23:12</div> -->
                 </div>
               </td>
-              <td>{{item.bindUser}}</td>
+              <td>{{item.bindUser[0]}}</td>
               <td>
                 <div class="operation" @click="saveIndex(item)">
                   <p @click="showMachine(index)">查看</p>
@@ -153,7 +153,7 @@
   </div>
 </template>
 
-// <script>
+<script>
 import particulars from "../../waterMange/particulars";
 import sorter from "../../../components/sorter";
 import parameter from "../../waterMange/parameter";
@@ -167,7 +167,7 @@ export default {
     return {
       liList: [
         {
-          name: "机器Id",
+          name: "机器ID",
           ID: 200
         },
         {
@@ -391,6 +391,7 @@ export default {
       };
       this.$postBody(this.$api.getLanOuProjectInfoSearch, body, data).then(
         res => {
+          console.log(res, "我我我我是resres");
           let resMsg = res.data.data;
           let resMsgList = resMsg.list;
           this.machineList = resMsg.list;
@@ -398,7 +399,6 @@ export default {
           this.sortPage.total = resMsg.total;
           this.sortPage.pageSize = resMsg.pageSize;
           this.showMsg(resMsg, resMsgList);
-          console.log(res,"我我我我我我我我我我我我我我我我我我哦我我我我");
         }
       );
     },
@@ -407,7 +407,6 @@ export default {
       // search-value
       let searchType = this.$refs.searchType.innerHTML;
       let inputValue = this.$refs.searchInput.value;
-      console.log(inputValue);
       if (searchType === "机器ID") {
         this.getWaterMsg(1, { pdid: inputValue });
         return;
@@ -432,34 +431,32 @@ export default {
       let a = resMsgList.map(item => {
         return {
           pdid: item.pdid,
+          puuid: item.puuid,
           installationAdderss: item.installationAdderss,
           installTime: item.installTime,
           oderTime: item.oderTime,
+          maintenanceState: item.maintenanceState,
+          guaranteState: item.guaranteState,
           bindUser:
             item.bindedUserList !== null
               ? item.bindedUserList.map((item, index) => {
                   return (function() {
                     if (item.nick) {
-                      console.log(item.nick);
                       return item.nick;
                     }
                     if (item.realName) {
-                      console.log(2);
                       return item.realName;
                     }
                     if (item.uid) {
-                      console.log(3);
                       return item.uid;
                     }
                     if (item.did) {
-                      console.log(4);
                       return item.did;
                     }
                   })();
                 })
               : "",
           waterDecode: (function(item) {
-            //  let waterDecode = decode(item.waterInfo,decodeMsg)
             let waterArrMsg = item.split("|-|");
             let obj;
             let msg;
@@ -477,7 +474,6 @@ export default {
               typeSeventArr: [],
               typeEightObj: {}
             };
-            console.log(waterArrMsg, "item");
             if (item !== "") {
               for (var i = 0; i < waterArrMsg.length - 1; i++) {
                 msg = decode(waterArrMsg[i], decodeMsg);
@@ -488,8 +484,6 @@ export default {
                 }
                 obj = waterDecodeMsg;
                 let a = obj.typeEightObj;
-                console.log(obj, "obj");
-                console.log(obj.typeEightObj, "obj");
               }
             } else {
               return {
@@ -512,7 +506,6 @@ export default {
         };
       });
       _this.nowArrMsg = [];
-      console.log(a, "a.waterDecode");
       this.nowArrMsg.push(a);
     }
   },

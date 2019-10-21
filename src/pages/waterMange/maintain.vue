@@ -30,15 +30,15 @@
                 <td align="left" colspan="3">
                   <div class="addres-box">
                     <div>
-                      <input type="text" class="addres InputAddres" ref="provoice" />
+                      <input type="text" class="addres InputAddres" ref="provoice" value />
                       <span>省</span>
                     </div>
                     <div>
-                      <input type="text" class="addres InputAddres" ref="city" />
+                      <input type="text" class="addres InputAddres" ref="city" value />
                       <span>市</span>
                     </div>
                     <div>
-                      <input type="text" class="addres InputAddres" ref="district" />
+                      <input type="text" class="addres InputAddres" ref="district" value />
                       <span>区</span>
                     </div>
                   </div>
@@ -49,7 +49,7 @@
                 <td colspan="3">
                   <div class="clientCheck" ref="clientNature">
                     <div class="check-box" v-for="(item,index) in checkList" :key="item.id">
-                      <input type="checkbox" class="check" @click="checkMsg(index)" />
+                      <input type="checkbox" class="check" @click="checkMsg(index)" value />
                       <span>{{item.name}}</span>
                     </div>
                   </div>
@@ -91,6 +91,7 @@
                         style="width:20px;height:20px;vertical"
                         class="headwaters-check"
                         @click="headwaterJudge(index)"
+                        value
                       />
                     </div>
                   </div>
@@ -102,10 +103,10 @@
                 <td>水源压力</td>
                 <td>
                   <div class="pressure">
-                    <input type="text" class="pressureLine" ref="minPressureLine" />
+                    <input type="text" class="pressureLine" ref="minPressureLine" value="" />
                     <span>MPa</span>
                     <i>~</i>
-                    <input type="text" class="pressureLine" ref="maxPressureLine" />
+                    <input type="text" class="pressureLine" ref="maxPressureLine" value="" />
                     <span>MPa(公斤力)</span>
                   </div>
                 </td>
@@ -116,7 +117,7 @@
                 <td>日饮水量估算</td>
                 <td>
                   <div class="pressure">
-                    <input type="text" class="pressureLine" ref="dayDrinking" />
+                    <input type="text" class="pressureLine" ref="dayDrinking" value />
                     <span>L/天(可按照2L/人·天计算)</span>
                   </div>
                 </td>
@@ -127,28 +128,33 @@
                 <td>主机及水箱可摆放的位置</td>
                 <td>
                   <div class="positionted">
-                    <input type="checkbox" />
+                    <input type="checkbox" value />
                     <div class="positionted-box">
-                      露天摆放位置描述:
+                      露天摆放, 位置描述:
                       <input
                         type="text"
                         class="positionted-check"
                         ref="positionDescription"
+                        value
                       />
                     </div>
                   </div>
                   <div class="positionted">
-                    <input type="checkbox" />
+                    <input type="checkbox" value />
                     <div class="positionted-box">
                       设备间内，尺寸：
                       长:
-                      <input type="text" class="positionted-check2" />
+                      <input
+                        type="text"
+                        class="positionted-check2"
+                        value
+                      />
                       <span>米</span>
                       宽:
-                      <input type="text" class="positionted-check2" />
+                      <input type="text" class="positionted-check2" value />
                       <span>米</span>
                       高:
-                      <input type="text" class="positionted-check2" />
+                      <input type="text" class="positionted-check2" value />
                       <span>米</span>
                     </div>
                   </div>
@@ -167,6 +173,7 @@
                         style="width:20px;height:20px;vertical"
                         class="headwaters-check"
                         @click="buildingProperty(index)"
+                        value
                       />
                     </div>
                   </div>
@@ -349,6 +356,8 @@ export default {
   },
   methods: {
     hidden() {
+      console.log(this.lanOuProjectInfo, "我是this.lanOuProjectInfo");
+      this.getMsg();
       this.$postBody(
         this.$api.updateLanOuProjectInfo,
         {
@@ -358,23 +367,17 @@ export default {
       ).then(res => {
         console.log(res);
       });
-      console.log(this.lanOuProjectInfo);      
-      this.$emit("maintain");
-
+      console.log(this.lanOuProjectInfo);
+      // this.$emit("maintain");
     },
     getMsg() {
       //设备ID
       let robotId = this.$refs.robotId[0].value;
-      // if(robotId === ""){
-      //   this.$message({
-      //     message:"机器ID不能为空"
-      //   })
-      // }
-      //机器型号
+      // //机器型号
       let machineModel = this.$refs.machineModel[0].value;
-      //订单号
+      // //订单号
       let orderNumber = this.$refs.orderNumber[0].value;
-      //订单日期
+      // //订单日期
       let orderDate = this.$refs.orderDate[0].value;
       //生产日期
       let productionDate = this.$refs.productionDate[0].value;
@@ -407,17 +410,17 @@ export default {
         this.$refs.maxPressureLine[0].value;
       //水源压力备注
       let pressureWaterMsg = "";
-      //日饮水量估计
-      let dayDrinking = this.$refs.dayDrinking[0].value;
-      //日饮水量估计备注
-      let dayDrinkingMsg = "";
-      //饮水末端建筑情况
-      let architecturalCondition =
-        this.$refs.buildHeight[0].value + "," + this.$refs.maxWater[0].value;
-      console.log(this.$refs.sales[0].value, "leadingCard");
+      // //日饮水量估计
+      // let dayDrinking = this.$refs.dayDrinking[0].value;
+      // //日饮水量估计备注
+      // let dayDrinkingMsg = "";
+      // // 饮水末端建筑情况
+      // let architecturalCondition =
+      //   this.$refs.buildHeight[0].value + "," + this.$refs.maxWater[0].value;
+      // console.log(this.$refs.sales[0].value, "leadingCard");
 
-      this.lanOuProjectInfo.pdid = 666; //robotId;
-      this.lanOuProjectInfo.puuid = 666; //machineModel;
+      this.lanOuProjectInfo.pdid = robotId; //robotId;
+      this.lanOuProjectInfo.puuid = machineModel; //machineModel;
       this.lanOuProjectInfo.pOderId = orderNumber;
       this.lanOuProjectInfo.orderTime = orderDate;
       this.lanOuProjectInfo.produceTime = productionDate;
@@ -432,14 +435,12 @@ export default {
       this.lanOuProjectInfo.sales = sales;
       this.lanOuProjectInfo.salesPhone = salesPhone;
       this.lanOuProjectInfo.pressureWater = pressureWater;
-      this.lanOuProjectInfo.pressureWaterMsg = pressureWaterMsg;
-      this.lanOuProjectInfo.dayDrinking = dayDrinking;
-      this.lanOuProjectInfo.dayDrinkingMsg = dayDrinkingMsg;
-      this.lanOuProjectInfo.architecturalCondition = architecturalCondition;
-      this.lanOuProjectInfo.orther = "";
-
-      console.log(robotId, machineModel, orderNumber);
-      console.log(provoice);
+      // this.lanOuProjectInfo.pressureWaterMsg = pressureWaterMsg;
+      // this.lanOuProjectInfo.dayDrinking = dayDrinking;
+      // this.lanOuProjectInfo.dayDrinkingMsg = dayDrinkingMsg;
+      // this.lanOuProjectInfo.architecturalCondition = architecturalCondition;
+      // this.lanOuProjectInfo.orther = "";
+      console.log(this.lanOuProjectInfo.orderTime, "我是orderdate");
     },
     //客户性质判断
     checkMsg(index) {
@@ -508,11 +509,8 @@ export default {
     }
   },
   mounted() {
-    this.getMsg();
+    // this.getMsg();
     this.checkJudge();
-    console.log(this.$refs.orderNumber);
-    console.log(this.$refs.orderNumber[0].value);
-    console.log();
   }
 };
 </script>
