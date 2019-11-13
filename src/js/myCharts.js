@@ -11,24 +11,27 @@ const install = function (Vue) {
             var colors = ['#FFB402', '#3ADA85', '#675bba']
             const optionData = {
               color: colors,
+              grid: {
+                x: 40,
+                y: 80,
+                x1: 40,
+                y1: 30
+              },
               tooltip: {
-                show:true,
+                show: true,
                 trigger: 'item',
-                axisPointer: function(params){
+                axisPointer: function (params) {
                   return params;
                 }
               },
-              // grid: {
-              //   top: 70,
-              //   bottom: 50
-              // },
-              xAxis: [
-                {
+              xAxis: [{
                   type: 'category',
                   axisTick: {
                     alignWithLabel: true
                   },
                   axisLine: {
+                    symbol: ['none', 'path://M5,20 L5,5 L8,8 L5,2 L2,8 L5,5 L5.3,6 L5.3,20'],
+                    symbolSize: [35, 38],
                     onZero: false,
                     lineStyle: {
                       color: '#ffffff'
@@ -37,57 +40,58 @@ const install = function (Vue) {
                   axisPointer: {
                     label: {
                       formatter: function (params) {
-                        return '降水量  ' + params.value
-                          + (params.seriesData.length ? '：' + params.seriesData[0].data : '')
+                        return '降水量  ' + params.value +
+                          (params.seriesData.length ? '：' + params.seriesData[0].data : '')
                       }
                     }
+                  },
+                  axisTick: {
+                    inside: true,
                   },
                   data: ['23', '24', '25', '26', '27', '28', '29', '30', '31', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22']
                 },
                 {
                   type: 'category',
-                  // axisTick: {
-                  //   alignWithLabel: true
-                  // },
-                  // axisLine: {
-                  //   onZero: false,
-                  //   lineStyle: {
-                  //     color: colors[0]
-                  //   }
-                  // },
+                  axisLine:{
+                    lineStyle: {
+                      color: "#ffffff"
+                    }
+                  },
                   axisPointer: {
                     label: {
                       formatter: function (params) {
-                        return '降水量  ' + params.value
-                          + (params.seriesData.length ? '：' + params.seriesData[0].data : '')
+                        return '降水量  ' + params.value +
+                          (params.seriesData.length ? '：' + params.seriesData[0].data : '')
                       }
                     }
                   }
                 }
               ],
-              yAxis: [
-                {
-                  name: name,
-                  type: 'value',
-                  boundaryGap: [0, '100%'],
-                  splitLine: {
-                    show: false
-                  },
-                  axisLine: {
-                    lineStyle: {
-                      color: '#ffffff'
-                    }
-                  },
-                  max: maxNum,
-                  min: minNum,
-                  axisLable: {
-                    formatter: '{value}'
+              yAxis: [{
+                name: name,
+                type: 'value',
+                boundaryGap: [0, '100%'],
+                splitLine: {
+                  show: false
+                },
+                axisLine: {
+                  symbol: ['none', 'path://M5,20 L5,5 L8,8 L5,2 L2,8 L5,5 L5.3,6 L5.3,20'],
+                  symbolSize: [35, 38],
+                  lineStyle: {
+                    color: '#ffffff'
                   }
-
+                },
+                max: maxNum,
+                min: minNum,
+                axisLable: {
+                  formatter: '{value}'
+                },
+                axisTick: {
+                  inside: true,
                 }
-              ],
-              series: [
-                {
+
+              }],
+              series: [{
                   name: '2015 降水量',
                   type: 'line',
                   // xAxisIndex: 1,
@@ -106,22 +110,56 @@ const install = function (Vue) {
             this.chart.setOption(optionData)
           },
           // 但曲线表
-          line2: function (id) {
+          line2: function (id, value, minNum = 0, maxNum = 500) {
             this.chart = echarts.init(document.getElementById(id))
             this.chart.clear()
             const optionData = {
-              xAxis: {
-                type: 'category',
-                data: ['1', '8', '15', '22', '30']
+              grid: {
+                x: 50,
+                y: 20,
+                x2: 30,
+                y2: 20,
+                borderWidth: 1
               },
+              tooltip: {
+                show: true,
+                trigger: 'item',
+                axisPointer: function (params) {
+                  return params;
+                }
+              },              
+              xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30','31'],
+                splitNumber: 5,
+                axisLine: {
+                  symbol: ['none', 'path://M5,20 L5,5 L8,8 L5,2 L2,8 L5,5 L5.3,6 L5.3,20'],
+                  onZero: false,
+                  symbolSize: [35, 38]
+                },
+                axisTick: {
+                  alignWithLabel: true,
+                  length: 5,
+                  inside: true
+                }
+              }],
               yAxis: [{
                 type: 'value',
                 splitLine: false,
-                max:500,
-                min:0
+                max: maxNum,
+                min: minNum,
+                splitNumber:20,
+                axisTick: {
+                  inside: true
+                },
+                axisLine: {
+                  symbol: ['none', 'path://M5,20 L5,5 L8,8 L5,2 L2,8 L5,5 L5.3,6 L5.3,20'],
+                  symbolSize: [35, 38]
+                }
               }],
               series: [{
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                data: value,
                 type: 'line',
                 smooth: true
               }]
@@ -136,4 +174,5 @@ const install = function (Vue) {
 }
 
 export default {
-install}
+  install
+}

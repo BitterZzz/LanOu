@@ -96,17 +96,19 @@
                     </div>
                   </div>
                 </td>
-                <td></td>
+                <td>
+                  <input type="text" style="width:100%;height:35px;border:0;text-align:center" />
+                </td>
               </tr>
               <tr>
                 <td>1</td>
                 <td>水源压力</td>
                 <td>
                   <div class="pressure">
-                    <input type="text" class="pressureLine" ref="minPressureLine" value="" />
+                    <input type="text" class="pressureLine" ref="minPressureLine" value />
                     <span>MPa</span>
                     <i>~</i>
-                    <input type="text" class="pressureLine" ref="maxPressureLine" value="" />
+                    <input type="text" class="pressureLine" ref="maxPressureLine" value />
                     <span>MPa(公斤力)</span>
                   </div>
                 </td>
@@ -128,7 +130,7 @@
                 <td>主机及水箱可摆放的位置</td>
                 <td>
                   <div class="positionted">
-                    <input type="checkbox" value />
+                    <input type="checkbox" value ref="position" @click="positionPut(1)" />
                     <div class="positionted-box">
                       露天摆放, 位置描述:
                       <input
@@ -140,26 +142,39 @@
                     </div>
                   </div>
                   <div class="positionted">
-                    <input type="checkbox" value />
-                    <div class="positionted-box">
+                    <input type="checkbox" value ref="position2" @click="positionPut(2)" />
+                    <div class="positionted-box" id="positiontedBox">
                       设备间内，尺寸：
                       长:
                       <input
                         type="text"
                         class="positionted-check2"
                         value
+                        ref="positionDescription2"
                       />
                       <span>米</span>
                       宽:
-                      <input type="text" class="positionted-check2" value />
+                      <input
+                        type="text"
+                        class="positionted-check2"
+                        value
+                        ref="positionDescription3"
+                      />
                       <span>米</span>
                       高:
-                      <input type="text" class="positionted-check2" value />
+                      <input
+                        type="text"
+                        class="positionted-check2"
+                        value
+                        ref="positionDescription4"
+                      />
                       <span>米</span>
                     </div>
                   </div>
                 </td>
-                <td></td>
+                <td>
+                  <input type="text" style="width:100%;height:35px;border:0;text-align:center" />
+                </td>
               </tr>
               <tr>
                 <td>1</td>
@@ -178,7 +193,13 @@
                     </div>
                   </div>
                 </td>
-                <td>可多选</td>
+                <td>
+                  <input
+                    type="text"
+                    value="可多选"
+                    style="width:100%;height:35px;border:0;text-align:center"
+                  />
+                </td>
               </tr>
               <tr>
                 <td>1</td>
@@ -203,13 +224,19 @@
                     <span>米</span>
                   </div>
                 </td>
-                <td></td>
+                <td>
+                  <input type="text" style="width:100%;height:35px;border:0;text-align:center" />
+                </td>
               </tr>
               <tr style="height:80px">
                 <td>1</td>
                 <td>其他</td>
-                <td></td>
-                <td></td>
+                <td>
+                  <input type="text" style="width:100%;height:80px;border:0;text-align:center" />
+                </td>
+                <td>
+                  <input type="text" style="width:100%;height:80px;border:0;text-align:center" />
+                </td>
               </tr>
             </tbody>
           </table>
@@ -252,7 +279,7 @@ export default {
           name: "订单号",
           placehold: "",
           disable: false,
-          value: "10001",
+          value: "",
           refName: "orderNumber"
         },
         {
@@ -368,7 +395,9 @@ export default {
         console.log(res);
       });
       console.log(this.lanOuProjectInfo);
-      // this.$emit("maintain");
+      setTimeout(() => {
+        this.$emit("maintain");
+      }, 1000);
     },
     getMsg() {
       //设备ID
@@ -405,20 +434,18 @@ export default {
       let salesPhone = this.$refs.salesPhone[0].value;
       //水源压力
       let pressureWater =
-        this.$refs.minPressureLine[0].value +
+        this.$refs.minPressureLine.value +
         "~" +
-        this.$refs.maxPressureLine[0].value;
+        this.$refs.maxPressureLine.value;
       //水源压力备注
       let pressureWaterMsg = "";
-      // //日饮水量估计
-      // let dayDrinking = this.$refs.dayDrinking[0].value;
-      // //日饮水量估计备注
-      // let dayDrinkingMsg = "";
-      // // 饮水末端建筑情况
-      // let architecturalCondition =
-      //   this.$refs.buildHeight[0].value + "," + this.$refs.maxWater[0].value;
-      // console.log(this.$refs.sales[0].value, "leadingCard");
-
+      //日饮水量估计
+      let dayDrinking = this.$refs.dayDrinking.value;
+      //日饮水量估计备注
+      let dayDrinkingMsg = "";
+      // 饮水末端建筑情况
+      let architecturalCondition =
+        this.$refs.buildHeight.value + "," + this.$refs.maxWater.value;
       this.lanOuProjectInfo.pdid = robotId; //robotId;
       this.lanOuProjectInfo.puuid = machineModel; //machineModel;
       this.lanOuProjectInfo.pOderId = orderNumber;
@@ -435,11 +462,11 @@ export default {
       this.lanOuProjectInfo.sales = sales;
       this.lanOuProjectInfo.salesPhone = salesPhone;
       this.lanOuProjectInfo.pressureWater = pressureWater;
-      // this.lanOuProjectInfo.pressureWaterMsg = pressureWaterMsg;
-      // this.lanOuProjectInfo.dayDrinking = dayDrinking;
-      // this.lanOuProjectInfo.dayDrinkingMsg = dayDrinkingMsg;
-      // this.lanOuProjectInfo.architecturalCondition = architecturalCondition;
-      // this.lanOuProjectInfo.orther = "";
+      this.lanOuProjectInfo.pressureWaterMsg = pressureWaterMsg;
+      this.lanOuProjectInfo.dayDrinking = dayDrinking;
+      this.lanOuProjectInfo.dayDrinkingMsg = dayDrinkingMsg;
+      this.lanOuProjectInfo.architecturalCondition = architecturalCondition;
+      this.lanOuProjectInfo.orther = "";
       console.log(this.lanOuProjectInfo.orderTime, "我是orderdate");
     },
     //客户性质判断
@@ -476,11 +503,45 @@ export default {
       this.lanOuProjectInfo.architecturalType = "1"; //representative;
     },
     //摆放位置
-    positionPut() {
-      this.lanOuProjectInfo.position = "";
-      this.lanOuProjectInfo.positionMsg = "";
+    positionPut(number) {
       this.lanOuProjectInfo.id = "";
       this.lanOuProjectInfo.userIds = "";
+      if (number === 1) {
+        if (this.$refs.position.checked === true) {
+          this.$refs.position2.checked = false;
+          this.lanOuProjectInfo.position =
+            "1+" + this.$refs.positionDescription.value;
+          this.lanOuProjectInfo.positionMsg = "";
+          console.log(
+            this.lanOuProjectInfo.position,
+            "我是this.lanOuProjectInfo.position"
+          );
+        } else {
+          this.$refs.position2.checked = false;
+          this.lanOuProjectInfo.position = "";
+          this.lanOuProjectInfo.positionMsg = "";
+        }
+      } else if (number === 2) {
+        if (this.$refs.position2.checked === true) {
+          this.$refs.position.checked = false;
+          this.lanOuProjectInfo.position =
+            "设备间内+" +
+            this.$refs.positionDescription2.value +
+            "," +
+            this.$refs.positionDescription3.value +
+            "," +
+            this.$refs.positionDescription3.value;
+          this.lanOuProjectInfo.positionMsg = "";
+          console.log(
+            this.lanOuProjectInfo.position,
+            "我是positionDescription2"
+          );
+        } else {
+          this.$refs.position.checked = false;
+          this.lanOuProjectInfo.position = "";
+          this.lanOuProjectInfo.positionMsg = "";
+        }
+      }
     },
     //判断点击哪个选择框
     checkJudge(index, checkList, checkDom) {
@@ -491,7 +552,7 @@ export default {
         checkDom[i].checked = false;
       }
       checkDom[index].checked = true;
-      if (checkDom[index].checked) {
+      if (checkDom[index].checked === true) {
         str =
           checkDom[index].nextElementSibling !== null
             ? checkDom[index].nextElementSibling.innerHTML
@@ -510,7 +571,7 @@ export default {
   },
   mounted() {
     // this.getMsg();
-    this.checkJudge();
+    // this.checkJudge();
   }
 };
 </script>

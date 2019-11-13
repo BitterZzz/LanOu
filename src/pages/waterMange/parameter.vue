@@ -505,6 +505,13 @@ export default {
       let resultMsg = zero + parseInt(value, 2).toString(16);
       return resultMsg;
     },
+    //将字符串中的小写字母转成大写
+    toggleCase(str) {
+      str = str.replace(/([a-z]+)(.*?)/g, function(m, m1, m2) {
+        return m1.toUpperCase() + m2;
+      });
+      return str
+    },
     //系统状态数据转为16进制
     systemState() {
       let _this = this;
@@ -570,7 +577,7 @@ export default {
       //恢复出厂设置
       let rest = this.rest;
       result =
-        "08|08" +
+        "5A5A08" +
         inflowMin +
         inflowMax +
         inflowNow +
@@ -593,7 +600,8 @@ export default {
         evacuation +
         rest +
         this.allocationMsg.waterDecode.typeEightObj.rubbish;
-      console.log(result, year, Switch, evacuation, "我是result");
+      result = this.toggleCase(result)
+      console.log(result, "我是result");
       return result;
     },
     materialsLifetime() {
@@ -726,6 +734,7 @@ export default {
         AlluvUseDay +
         uvUseDay +
         this.allocationMsg.waterDecode.typeSeventArr[0].rubbish;
+    result = this.toggleCase(result)
       console.log(
         result,
         this.$refs.activeCarbon[0].value,
@@ -740,12 +749,10 @@ export default {
       let _msg = "";
       _msg = this.materialsLifetime() + "|-|" + this.systemState();
       console.log(_msg, "我是我是");
+      let _key = "UP/" + this.allocationMsg.puuid +"/" + this.allocationMsg.pdid + "/Data";
       let data = {
-        token: "4",
-        ack: 0,
-        did: this.allocationMsg.pdid,
-        dataType: 0,
-        dataLoad: this.materialsLifetime()
+        value:"/UP/e0Wa974Y/100045/Data",
+        key:this.materialsLifetime()
       };
       let data2 = {
         token: "4",
@@ -755,10 +762,9 @@ export default {
         dataLoad: this.systemState()
       };
       Axois({
-        url: _this.$api.issuedData,
-        method: "POST",
-        data: data,
-        headers: { sak: "444" }
+        url: "http://192.168.1.52:18556/test/sendMq",
+        method: "GET",
+        params: data,
       }).then(res => {
         console.log(res, "我是res");
       });

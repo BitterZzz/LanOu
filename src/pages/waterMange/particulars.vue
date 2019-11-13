@@ -39,7 +39,7 @@
                 <span class="TDS-num TDS-color">{{this.chartHeader.pureMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="bbb" width="102" height="102"></canvas>
-                </div>                
+                </div>
               </div>
               <div id="table-echarts" class="echarts"></div>
             </div>
@@ -49,7 +49,7 @@
                 <span class="TDS-num">{{this.chartHeader.TocBeforeMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="ccc" width="102" height="102"></canvas>
-                </div>                 
+                </div>
               </div>
               <span>TOC</span>
               <div class="table-TDS table-TDS2">
@@ -57,7 +57,7 @@
                 <span class="TDS-num TDS-color">{{this.chartHeader.TocAfterMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="ddd" width="102" height="102"></canvas>
-                </div>                 
+                </div>
               </div>
               <div id="table-echarts2" class="echarts"></div>
             </div>
@@ -67,7 +67,7 @@
                 <span class="TDS-num">{{this.chartHeader.NtuBeforeMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="eee" width="102" height="102"></canvas>
-                </div>                 
+                </div>
               </div>
               <span>浊度</span>
               <div class="table-TDS table-TDS2">
@@ -75,7 +75,7 @@
                 <span class="TDS-num TDS-color">{{this.chartHeader.NtuAfterMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="fff" width="102" height="102"></canvas>
-                </div>                 
+                </div>
               </div>
               <div id="table-echarts3" class="echarts"></div>
             </div>
@@ -87,7 +87,7 @@
                 <span class="TDS-num">{{this.chartHeader.CodBeforeMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="ggg" width="102" height="102"></canvas>
-                </div>                 
+                </div>
               </div>
               <span>COD</span>
               <div class="table-TDS table-TDS2">
@@ -95,7 +95,7 @@
                 <span class="TDS-num TDS-color">{{this.chartHeader.CodAfterMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="jjj" width="102" height="102"></canvas>
-                </div>                 
+                </div>
               </div>
               <div id="table-echarts4" class="echarts"></div>
             </div>
@@ -105,10 +105,10 @@
                 <span class="TDS-num TDS-style">{{this.chartHeader.RcrrBeforeMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="kkk" width="102" height="102"></canvas>
-                </div>                 
+                </div>
               </div>
               <span>余氯</span>
-              <div id="table-echarts5" class="echarts" style="width:280px;height:192px"></div>
+              <div id="table-echarts5" class="echarts" style="width:240px;height:220px"></div>
             </div>
           </div>
         </div>
@@ -119,19 +119,19 @@
             <div class="title-right">
               <p>
                 进水总量:
-                <span>1280m³</span>
+                <span>{{this.pureWater}}</span>
               </p>
               <p>
                 纯水总量:
-                <span>890m³</span>
+                <span>{{this.rawWater}}</span>
               </p>
             </div>
           </div>
           <div class="right-table">
             <div class="right-calendar">
-              <i class="el-icon-caret-left" style="color:#333"></i>
-              <span>2019-05</span>
-              <i class="el-icon-caret-right" style="color:#333"></i>
+              <i class="el-icon-caret-left" style="color:#333" @click="deleteMouth()"></i>
+              <span>{{this.allWaterTime}}</span>
+              <i class="el-icon-caret-right" style="color:#333" @click="addMouth()"></i>
             </div>
             <div class="table-box">
               <div id="table-line2" style="width:320px;height:400px"></div>
@@ -292,33 +292,33 @@
                 <ul>
                   <li>
                     <span class="state-span">纯水箱低水位开关</span>
-                    <span class="disconnect" v-if="this.signal.substr(0,1) === '0'">断开</span>
-                    <span class="close" v-if="this.signal.substr(0,1) === '1'">闭合</span>
-                  </li>
-                  <li>
-                    <span class="state-span">纯水箱中水位开关</span>
-                    <span class="disconnect" v-if="this.signal.substr(1,1) === '0'">断开</span>
-                    <span class="close" v-if="this.signal.substr(1,1) === '1'">闭合</span>
-                  </li>
-                  <li>
-                    <span class="state-span">纯水箱高水位开关</span>
                     <span class="disconnect" v-if="this.signal.substr(2,1) === '0'">断开</span>
                     <span class="close" v-if="this.signal.substr(2,1) === '1'">闭合</span>
                   </li>
                   <li>
-                    <span class="state-span">纯水箱防溢开关</span>
+                    <span class="state-span">纯水箱中水位开关</span>
                     <span class="disconnect" v-if="this.signal.substr(3,1) === '0'">断开</span>
                     <span class="close" v-if="this.signal.substr(3,1) === '1'">闭合</span>
                   </li>
                   <li>
-                    <span class="state-span">软水信号开关</span>
+                    <span class="state-span">纯水箱高水位开关</span>
                     <span class="disconnect" v-if="this.signal.substr(4,1) === '0'">断开</span>
                     <span class="close" v-if="this.signal.substr(4,1) === '1'">闭合</span>
                   </li>
                   <li>
-                    <span class="state-span">阀头反冲洗信号开关</span>
+                    <span class="state-span">纯水箱防溢开关</span>
                     <span class="disconnect" v-if="this.signal.substr(5,1) === '0'">断开</span>
                     <span class="close" v-if="this.signal.substr(5,1) === '1'">闭合</span>
+                  </li>
+                  <li>
+                    <span class="state-span">软水信号开关</span>
+                    <span class="disconnect" v-if="this.signal.substr(6,1) === '0'">断开</span>
+                    <span class="close" v-if="this.signal.substr(6,1) === '1'">闭合</span>
+                  </li>
+                  <li>
+                    <span class="state-span">阀头反冲洗信号开关</span>
+                    <span class="disconnect" v-if="this.signal.substr(7,1) === '0'">断开</span>
+                    <span class="close" v-if="this.signal.substr(7,1) === '1'">闭合</span>
                   </li>
                 </ul>
               </div>
@@ -376,15 +376,15 @@ export default {
       relayList: [
         { ID: 200, name: "进水电磁阀", onOff: "" },
         { ID: 201, name: "浓水电磁阀", onOff: "" },
-        { ID: 202, name: "循环电磁阀", onOff: "" },
-        { ID: 203, name: "排空电磁阀", onOff: "" },
-        { ID: 204, name: "原水检测电磁阀", onOff: "" },
-        { ID: 205, name: "纯水检测电磁阀", onOff: "" },
-        { ID: 206, name: "水路关闭电磁阀", onOff: "" },
-        { ID: 207, name: "原水泵", onOff: "" },
-        { ID: 208, name: "高压泵", onOff: "" },
-        { ID: 209, name: "取水泵", onOff: "" },
-        { ID: 210, name: "UV", onOff: "" }
+        { ID: 202, name: "取水电磁阀", onOff: "" },
+        { ID: 203, name: "循环电磁阀", onOff: "" },
+        { ID: 204, name: "排空电磁阀", onOff: "" },
+        { ID: 205, name: "原水检测电磁阀", onOff: "" },
+        { ID: 206, name: "纯水检测电磁阀", onOff: "" },
+        { ID: 208, name: "原水泵", onOff: "" },
+        { ID: 209, name: "高压泵", onOff: "" },
+        { ID: 210, name: "取水泵", onOff: "" },
+        { ID: 211, name: "水路闭合电磁阀", onOff: "" }
       ],
       chartHeader: {
         inflowMsgArr: "",
@@ -400,7 +400,18 @@ export default {
         typeEightObj: {}
       },
       signal: {},
-      typeSeventArr: []
+      typeSeventArr: [],
+      //用水曲线年月
+      allWaterTime: "",
+      time: {
+        year: "",
+        day: "",
+        mouth: ""
+      },
+      //rawWater原水进水总量
+      rawWater: "",
+      //pureWater纯水进水总量
+      pureWater: ""
     };
   },
   props: {
@@ -434,8 +445,17 @@ export default {
     },
     //进入数据判断是否存在
     dataJudge() {
+      //pureWater纯水进水总量,rawWater原水进水总量
       if (this.translateMsg.waterDecode.typeEightObj.switch) {
         this.signal = this.translateMsg.waterDecode.typeEightObj.switch;
+        this.rawWater =
+          this.translateMsg.waterDecode.typeEightObj.rawWater + "m³";
+        this.pureWater =
+          this.translateMsg.waterDecode.typeEightObj.pureWater + "m³";
+        console.log(
+          this.translateMsg.waterDecode.typeEightObj.relay,
+          "这是继电器输出的数据"
+        );
         for (var i = 0; i < this.relayList.length; i++) {
           this.relayList[
             i
@@ -446,6 +466,8 @@ export default {
         }
       } else {
         this.signal = "222222";
+        this.rawWater = "";
+        this.pureWater = "";
         for (var i = 0; i < this.relayList.length; i++) {
           this.relayList[i].onOff = "2";
         }
@@ -567,21 +589,136 @@ export default {
       let CodAfterMsgArr = this.translateMsg.waterDecode.CodAfterMsgArr;
       //RCRR 历史 31 天水质数据(余氯去除率)
       let RcrrBeforeMsgArr = this.translateMsg.waterDecode.RcrrBeforeMsgArr;
-      waterCanvas("aaa", inflowMsgArr[30], 500,'#FFB400');
-      waterCanvas("bbb", pureMsgArr[30], 30,'#3DDA85');
-      waterCanvas("ccc", TocBeforeMsgArr[30], 10,'#FFB400');
-      waterCanvas("ddd", TocAfterMsgArr[30], 1,'#3DDA85');
-      waterCanvas("eee", NtuBeforeMsgArr[30], 5,'#FFB400');
-      waterCanvas("fff", NtuAfterMsgArr[30], 1.5,'#3DDA85');
-      waterCanvas("ggg", CodBeforeMsgArr[30], 10,'#FFB400');
-      waterCanvas("jjj", CodAfterMsgArr[30], 1,'#3DDA85');
-      waterCanvas("kkk", RcrrBeforeMsgArr[30], 500,'#FFB400');
+      waterCanvas("aaa", inflowMsgArr[30], 500, "#FFB400");
+      waterCanvas("bbb", pureMsgArr[30], 30, "#3DDA85");
+      waterCanvas("ccc", TocBeforeMsgArr[30], 10, "#FFB400");
+      waterCanvas("ddd", TocAfterMsgArr[30], 1, "#3DDA85");
+      waterCanvas("eee", NtuBeforeMsgArr[30], 5, "#FFB400");
+      waterCanvas("fff", NtuAfterMsgArr[30], 1.5, "#3DDA85");
+      waterCanvas("ggg", CodBeforeMsgArr[30], 10, "#FFB400");
+      waterCanvas("jjj", CodAfterMsgArr[30], 1, "#3DDA85");
+      waterCanvas("kkk", RcrrBeforeMsgArr[30], 500, "#FFB400");
+    },
+    //点击加月份
+    addMouth() {
+      this.time.mouth = this.time.mouth + 1;
+      if (this.time.mouth > 12) {
+        this.time.mouth = 1;
+      }
+      this.getLanOuWaterInfo();
+    },
+    //点击减月份
+    deleteMouth() {
+      this.time.mouth = this.time.mouth - 1;
+      if (this.time.mouth < 1) {
+        this.time.mouth = 12;
+      }
+      this.getLanOuWaterInfo();
+    },
+    //获取用水曲线的数据
+    getLanOuWaterInfo() {
+      let time = "";
+      let year = this.time.year;
+      let mouth = this.time.mouth;
+      let day = this.time.day;
+      console.log(year, mouth, day, "这是我的day");
+      time = year + "/" + mouth;
+      this.allWaterTime = year + "-" + mouth;
+
+      this.$post(this.$api.getLanOuWaterInfo, {
+        did: this.translateMsg.pdid,
+        time: time
+      }).then(res => {
+        console.log(res);
+        let msgList = res.data.data;
+        let newMsg = msgList.map(item => {
+          return (function(item) {
+            let obj = {};
+            let _time = Number(item.time.split("-")[2]);
+            let _mouth = Number(item.time.split("-")[1]);
+            let _year = Number(item.time.split("-")[0]);
+            let waterMsg = item.newWater - item.oldWater;
+            return {
+              year: _year,
+              mouth: _mouth,
+              time: _time,
+              waterMsg: waterMsg
+            };
+          })(item);
+        });
+        let newArr = [];
+        if (newMsg.length !== 0) {
+          for (var i = 0; i < newMsg[0].time - 1; i++) {
+            newArr.push("");
+          }
+          for (var j = 0; j < newMsg.length; j++) {
+            newArr.push(newMsg[j].waterMsg / 10);
+          }
+        }
+        //保存newArr的数组
+        let saveNewArr = [...newArr];
+        let _length = newArr.length - 1;
+        let minNum;
+        let maxNum;
+        newArr.sort();
+        if (newArr[0] === "") {
+          minNum = 0;
+          maxNum = newArr[_length];
+          //最大值的取整
+          let length2 = String(Math.ceil(maxNum)).length - 1;
+          let multiple = Math.pow(10, length2);
+          maxNum = Math.ceil(maxNum / multiple) * multiple;
+        } else {
+          console.log("是否进入了", newArr);
+          if (newArr.length === 0) {
+            minNum = 0;
+            maxNum = 500;
+          } else {
+            minNum = newArr[0];
+            maxNum = newArr[_length];
+            //最小值取整
+            if (String(Math.ceil(minNum)).length !== 1) {
+              let length = String(Math.floor(minNum)).length - 1;
+              let multiple = Math.pow(10, length);
+              minNum = Math.ceil(minNum / multiple) * multiple;
+              console.log(minNum, "是否进");
+            } else {
+              minNum = Math.floor(minNum);
+            }
+            //最大值的取整
+            let length2 = String(Math.ceil(maxNum)).length - 1;
+            let multiple = Math.pow(10, length2);
+            maxNum = Math.ceil(maxNum / multiple) * multiple;
+          }
+        }
+        this.$chart.line2("table-line2", saveNewArr, minNum, maxNum);
+      });
+    },
+    //初始化获取时间
+    getDate() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let mouth = date.getMonth() + 1;
+      if (mouth === 1) {
+        mouth = 1;
+      } else if (mouth === 12) {
+        mouth = 12;
+      } else {
+        mouth = mouth - 1;
+      }
+      let day = date.getDate();
+      this.time.year = year;
+      this.time.mouth = mouth;
+      this.time.day = day;
     }
   },
   created() {
+    this.dashBoardMsg();
+    this.getDate();
     this.WaterMsg();
     this.dataJudge();
     this.analogQuantity();
+    this.getLanOuWaterInfo();
   },
   mounted() {
     this.canvas();
@@ -628,7 +765,6 @@ export default {
       [],
       this.translateMsg.waterDecode.RcrrBeforeMsgArr
     );
-    this.$chart.line2("table-line2");
   }
 };
 </script>
@@ -720,10 +856,10 @@ export default {
               }
               .TDS-style {
                 position: absolute;
-                left: 42px;
+                left: 50%;
                 top: 40px;
                 color: #ffb400;
-                transform: translate(0, 0);
+                transform: translate(-50%, 0);
               }
               .TDS-color {
                 color: #3dda85;
@@ -751,8 +887,8 @@ export default {
             }
             .echarts {
               // display: none;
-              width: 280px;
-              height: 200px;
+              width: 240px;
+              height: 220px;
             }
             #table-echarts2 {
               position: absolute;
@@ -783,7 +919,6 @@ export default {
           padding-top: 6px;
           background: #053272;
           color: #ffffff;
-
           .title-left {
             float: left;
             margin-left: 1.5%;
@@ -796,14 +931,24 @@ export default {
           }
         }
         .right-table {
+          position: relative;
+          width: 100%;
+          height: 80%;
           .right-calendar {
             width: 106px;
             margin: 40px auto;
+            i {
+              cursor: pointer;
+            }
           }
         }
         .table-box {
+          overflow: hidden;
           #table-line2 {
-            margin: 0 auto;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
           }
         }
       }
@@ -839,6 +984,8 @@ export default {
             }
             .scope {
               position: absolute;
+              width: 41px;
+              height: 16px;
               left: 50%;
               bottom: 0;
               transform: translate(-50%);
@@ -978,7 +1125,7 @@ export default {
         .operation-right {
           width: 44.4%;
           height: 100%;
-          padding-bottom: 258px;
+          padding-bottom: 182px;
           background: #ffffff;
           float: right;
           margin-right: 4.8%;

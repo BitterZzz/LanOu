@@ -33,5 +33,7 @@ export default {
   //新增功能接口
   addLanOuAccountInfo:http + process.env.API_HOST + "/addLanOuAccountInfo",
   //获取菜单信息
-  getLanOuAuthority:http + process.env.API_HOST + "/getLanOuAuthority?levelId=0"
+  getLanOuAuthority:http + process.env.API_HOST + "/getLanOuAuthority?levelId=0",
+  //获取用水曲线
+  getLanOuWaterInfo:http + process.env.API_HOST + "/getLanOuWaterInfo",
 }

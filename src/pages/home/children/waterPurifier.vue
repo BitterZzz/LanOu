@@ -282,8 +282,6 @@ export default {
       let searchType = this.$refs.searchType.innerHTML;
       let inputValue = this.$refs.searchInput.value;
       let machineStatus = this.tdList[index].name;
-      console.log(machineStatus);
-      console.log(inputValue);
       if (searchType === "机器ID") {
         if (item.name === "在线") {
           this.getWaterMsg(1, { pdid: inputValue, machineStatus: "1" });
@@ -355,7 +353,6 @@ export default {
     getWatchDid() {},
     //点击分页器触发获取页面信息
     bindPage(val) {
-      console.log(val, "val");
       this.getWaterMsg(val, { accountId: 1 });
     },
     searchJudge(index) {
@@ -391,7 +388,6 @@ export default {
       };
       this.$postBody(this.$api.getLanOuProjectInfoSearch, body, data).then(
         res => {
-          console.log(res, "我我我我是resres");
           let resMsg = res.data.data;
           let resMsgList = resMsg.list;
           this.machineList = resMsg.list;
@@ -475,6 +471,7 @@ export default {
               typeEightObj: {}
             };
             if (item !== "") {
+              console.log(item,waterArrMsg,"item里面到底是什么")
               for (var i = 0; i < waterArrMsg.length - 1; i++) {
                 msg = decode(waterArrMsg[i], decodeMsg);
                 for (var key in msg) {
@@ -482,8 +479,7 @@ export default {
                     waterDecodeMsg[key] = msg[key];
                   }
                 }
-                obj = waterDecodeMsg;
-                let a = obj.typeEightObj;
+                obj = {...waterDecodeMsg};
               }
             } else {
               return {
@@ -501,12 +497,13 @@ export default {
                 typeEightObj: {}
               };
             }
-            return obj;
+            return {...obj};
           })(item.waterInfo)
         };
       });
+      console.log(a,"我是数据重组中的a")
       _this.nowArrMsg = [];
-      this.nowArrMsg.push(a);
+      _this.nowArrMsg.push({...a});
     }
   },
   //封装的组件
@@ -719,7 +716,7 @@ export default {
               width: 200px;
 
               .msg {
-                width: 196px;
+                width: 200px;
                 text-align: left;
 
                 div {
