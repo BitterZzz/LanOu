@@ -10,49 +10,66 @@
       <ul class="top">
         <li>
           <p @click="newAdd()">
-            <img src="../../../assets/img/start.png" alt />新增
+            <img src="../../../assets/img/start.png"
+                 alt />新增
           </p>
 
           <p @click="deleteAllInfo()">
-            <img src="../../../assets/img/forbid.png" alt />删除
+            <img src="../../../assets/img/forbid.png"
+                 alt />删除
           </p>
         </li>
       </ul>
 
       <ul class="nav-table">
-        <el-table
-          ref="multipleTable"
-          :data="tableData"
-          tooltip-effect="dark"
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
-          @select="handleSelectAlone"
-          @select-all="handleSelectAll"
-        >
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="userName" label="用户名" width="220"></el-table-column>
-          <el-table-column prop="role" label="角色名称" width="220"></el-table-column>
-          <el-table-column prop="authorityName" label="基本权限" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="description" label="操作权限" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+        <el-table ref="multipleTable"
+                  :data="tableData"
+                  tooltip-effect="dark"
+                  style="width: 100%"
+                  @selection-change="handleSelectionChange"
+                  @select="handleSelectAlone"
+                  @select-all="handleSelectAll">
+          <el-table-column type="selection"
+                           width="55"></el-table-column>
+          <el-table-column prop="userName"
+                           label="用户名"
+                           width="220"></el-table-column>
+          <el-table-column prop="role"
+                           label="角色名称"
+                           width="220"></el-table-column>
+          <el-table-column prop="authorityName"
+                           label="基本权限"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="description"
+                           label="操作权限"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="createTime"
+                           label="创建时间"
+                           show-overflow-tooltip></el-table-column>
 
-          <el-table-column label="操作项" show-overflow-tooltip class="delete">
+          <el-table-column label="操作项"
+                           show-overflow-tooltip
+                           class="delete">
             <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
-              <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
+              <el-button @click="handleEdit(scope.row)"
+                         type="text"
+                         size="small">编辑</el-button>
+              <el-button @click="handleClick(scope.row)"
+                         type="text"
+                         size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </ul>
     </div>
-    <transition
-      name="slide-fade"
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut"
-    >
-      <div id="popup" v-if="showPopup">
+    <transition name="slide-fade"
+                enter-active-class="animated fadeIn"
+                leave-active-class="animated fadeOut">
+      <div id="popup"
+           v-if="showPopup">
         <div class="hint">
-          <img src="../../../assets/img/card.png" alt /> 确认删除所选项目吗？
+          <img src="../../../assets/img/card.png"
+               alt /> 确认删除所选项目吗？
           <span>x</span>
         </div>
         <div class="buttons">
@@ -61,12 +78,11 @@
         </div>
       </div>
     </transition>
-    <transition
-      name="slide-fade"
-      enter-active-class=" animated fadeIn"
-      leave-active-class="animated fadeOut"
-    >
-      <div id="entire" v-if="showEntire">
+    <transition name="slide-fade"
+                enter-active-class=" animated fadeIn"
+                leave-active-class="animated fadeOut">
+      <div id="entire"
+           v-if="showEntire">
         <div class="hint">
           <img src="../../../assets/img/card.png" /> 确认删除所选项目吗？
           <span @click="entireSelect()">x</span>
@@ -77,146 +93,156 @@
         </div>
       </div>
     </transition>
-    <transition
-      name="slide-fade"
-      enter-active-class=" animated fadeIn"
-      leave-active-class="animated fadeOut"
-    >
-      <div id="shadow" v-if="showShadow"></div>
+    <transition name="slide-fade"
+                enter-active-class=" animated fadeIn"
+                leave-active-class="animated fadeOut">
+      <div id="shadow"
+           v-if="showShadow"></div>
     </transition>
-
-    <appendPage v-if="showPage"  @sonPage="accountPage" :sonData="sonData" />
-    <sorter :pageMsg="sortPage" />
+    <addPage v-if="addPage"
+             @addPage="addAcdPage"
+             :addData="addData" />
+    <appendPage v-if="showPage"
+                @sonPage="accountPage"
+                :sonData="sonData" />
+    <sorter :pageMsg="sortPage"
+            @Information="showAccountInfo" />
   </div>
 </template>
 
 <script>
-import appendPage from "../../addPage/addPage.vue";
-import Axios from "axios";
-import sorter from "../../../components/sorter";
+import appendPage from '../../compile/compile.vue'
+import addPage from '../../addPage/addPage.vue'
+import Axios from 'axios'
+import sorter from '../../../components/sorter'
 export default {
   components: {
     appendPage,
+    addPage,
     sorter
   },
   data() {
     return {
       tableData: [],
       multipleSelection: [],
-      isEnabled: "",
+      isEnabled: '',
       showEntire: false,
       showPopup: false,
       showShadow: false,
-      selectId: "",
-      valueId: "",
+      selectId: '',
+      valueId: '',
       showPage: false,
+      addPage: false,
       sortPage: {
         pages: 1,
         pageSize: 1,
         total: 1
       },
-      sonData:[
-        {relative:''}
-      ],
-    };
+      sonData: [{ relative: '' }],
+      addData: [{ relative: '' }]
+    }
   },
   methods: {
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
     handleSelectionChange(val) {
-      this.multipleSelection = val;
+      console.log(val, 'val')
+      this.multipleSelection = val
+      console.log(this.multipleSelection, 'multipleSelection')
     },
     // 选择单个账户Id
     handleSelectAlone(val) {
-      console.log(val);
-      let Alone = val;
-      var arr = [];
+      console.log(val)
+      let Alone = val
+      var arr = []
       for (var i = 0; i < Alone.length; i++) {
-        arr.push(Alone[i].id);
+        arr.push(Alone[i].id)
       }
-      this.selectId = arr.join(",");
+      this.selectId = arr.join(',')
       // console.log(this.selectId);
     },
     // 选择全部用户信息
     handleSelectAll(val) {
-      let handleId = val;
-      let arr = [];
+      let handleId = val
+      let arr = []
       for (var i = 0; i < handleId.length; i++) {
-        arr.push(handleId[i].id);
+        arr.push(handleId[i].id)
       }
-      this.selectId = arr.join(",");
+      this.selectId = arr.join(',')
     },
     // 获取所有账户信息
-    showAccountInfo() {
+    showAccountInfo(val = 1) {
       this.$get(this.$api.getLanOuAccountInfo, {
-        pageNum: 1,
+        pageNum: val,
         pageSize: 5
       }).then(res => {
-        this.tableData = res.data.data.list;
-        console.log(res,"获取所有账户信息");
-        this.sortPage.pageSize = res.data.data.pageSize;
-        this.sortPage.pages = res.data.data.pages;
-        this.sortPage.total = res.data.data.total;
+        console.log(res, 'res')
+        this.tableData = res.data.data.list
+        console.log(res, '获取所有账户信息')
+        this.sortPage.pageSize = res.data.data.pageSize
+        this.sortPage.pages = res.data.data.pages
+        this.sortPage.total = res.data.data.total
         for (var i = 0; i < this.tableData.length; i++) {
           this.tableData[i].createTime = this.tableData[i].createTime.substring(
             0,
             10
-          );
+          )
         }
-      });
+      })
     },
     // 编辑页面
     handleEdit(res) {
-      console.log(res.id);
-      this.$get(this.$api.getLanOuAccountInfoById + "?id="+ res.id , {
-      },
-     ).then(res=>{
-           this.sonData = res.data.data
-           this.showPage = true;
-      });
+      console.log(res.id)
+      this.$get(this.$api.getLanOuAccountInfoById + '?id=' + res.id, {}).then(
+        res => {
+          this.sonData = res.data.data
+          this.showPage = true
+          console.log(res.data.data, 'data')
+        }
+      )
     },
     // 判断是否删除单个信息
     handleClick(value) {
-      this.valueId = value.id;
-      this.showPopup = !this.showPopup;
-      this.showShadow = !this.showShadow;
+      this.valueId = value.id
+      this.showPopup = !this.showPopup
+      this.showShadow = !this.showShadow
     },
 
     // 删除单个账户信息
     deleteInfo() {
-      this.showPopup = false;
-      this.showShadow = false;
+      this.showPopup = false
+      this.showShadow = false
       this.$delete(this.$api.deleteLanOuAccountInfo, {
         id: this.valueId
       }).then(res => {
-        this.showAccountInfo();
-      });
+        this.showAccountInfo()
+      })
     },
     // 取消删除单个账户信息
     cancelSelect() {
-      this.showPopup = false;
-      this.showShadow = false;
+      this.showPopup = false
+      this.showShadow = false
     },
     // 判断是否删除选中的账户信息（可选择）
     deleteAllInfo() {
       // this.showEntire = true;
       // this.showShadow = true;
 
-      if (this.selectId === "") {
+      if (this.selectId === '') {
         this.$message({
-          message: "请勾选需要删除的账户"
-        });
-        return;
-      } else if (this.selectId !== "") {
-        this.showEntire = true;
-        this.showShadow = true;
+          message: '请勾选需要删除的账户'
+        })
+        return
+      } else if (this.selectId !== '') {
+        this.showEntire = true
+        this.showShadow = true
       }
     },
     // 确定删除选中的全部账户信息
@@ -224,34 +250,38 @@ export default {
       this.$delete(this.$api.deleteLanOuAccountInfo, {
         id: this.selectId
       }).then(res => {
-        this.showAccountInfo();
-      });
-      this.selectId = "";
-      this.showEntire = false;
-      this.showShadow = false;
-      this.showAccountInfo();
+        this.showAccountInfo()
+      })
+      this.selectId = ''
+      this.showEntire = false
+      this.showShadow = false
+      this.showAccountInfo()
     },
     // 取消选中的账户信息
     entireSelect() {
-      this.selectId = "";
-      this.showEntire = false;
-      this.showShadow = false;
-      this.showAccountInfo();
+      this.selectId = ''
+      this.showEntire = false
+      this.showShadow = false
+      this.showAccountInfo()
     },
     // 新增页面
     newAdd() {
-      this.showPage = true;
-
+      this.addPage = true
     },
     // 页面传值 显示子页面
     accountPage() {
-      this.showPage = false;
+      this.showPage = false
+      this.showAccountInfo(1)
+    },
+    addAcdPage() {
+      this.addPage = false
+      this.showAccountInfo(1)
     }
   },
   created() {
-    this.showAccountInfo();
+    this.showAccountInfo()
   }
-};
+}
 </script>
 
 <style lang="scss" >
