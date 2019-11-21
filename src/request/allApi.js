@@ -34,6 +34,8 @@ export default {
   addLanOuAccountInfo:http + process.env.API_HOST + "/addLanOuAccountInfo",
   //获取菜单信息
   getLanOuAuthority:http + process.env.API_HOST + "/getLanOuAuthority?levelId=0",
+  //获取编辑
+  updateLanOuAccountInfo : http + process.env.API_HOST + "/updateLanOuAccountInfo",
   //获取用水曲线
   getLanOuWaterInfo:http + process.env.API_HOST + "/getLanOuWaterInfo",
 }

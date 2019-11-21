@@ -12,7 +12,7 @@
         </div>
         <div class="popupBox">
           <span>型号:</span>
-          <span>LOSRO-500-S</span>
+          <span>{{this.translateMsg.puuid}}</span>
         </div>
       </div>
     </header>
@@ -772,7 +772,6 @@ export default {
 #particulars {
   position: absolute;
   width: 104%;
-  border: solid 1px red;
   background: #ffffff;
   left: -156px;
   top: -24px;

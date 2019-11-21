@@ -64,7 +64,6 @@
             >
               <td>{{item.pdid}}</td>
               <td>
-                <div>在线状态: 在线</div>
                 <div>故障状态: {{item.maintenanceState != "" ? "异常" : "正常"}}</div>
                 <div>保养状态: {{item.guaranteState != "" ? "异常" : "正常"}}</div>
               </td>
@@ -214,7 +213,10 @@ export default {
       typeFrist: {},
       transferMsg: {},
       baseMsg: {},
+      //蓝鸥的did
       localDid: "",
+      //蓝鸥用户的id
+      localId:"",
       //净水器管理展示所需数据
       waterShow: [],
       //当前数据
@@ -246,7 +248,6 @@ export default {
     //保存点击时获取到的index
     saveIndex(item) {
       this.test = item.ID;
-      console.log(this.test);
     },
     showMachine(index) {
       this.$emit("routerJudge");
@@ -360,8 +361,9 @@ export default {
     },
     //获取到进入净水器的第页面数据
     getWaterMsg(val = 1, obj) {
+      let _this = this;
       const custom = {
-        accountId: 1,
+        accountId: this.localId,
         pageSize: 4,
         guaranteState: "", //故障状态
         installationAdderss: "", //安装地址
@@ -388,13 +390,18 @@ export default {
       };
       this.$postBody(this.$api.getLanOuProjectInfoSearch, body, data).then(
         res => {
+          if(res.data.code === 0){
           let resMsg = res.data.data;
           let resMsgList = resMsg.list;
           this.machineList = resMsg.list;
           this.sortPage.pages = resMsg.pages;
           this.sortPage.total = resMsg.total;
           this.sortPage.pageSize = resMsg.pageSize;
-          this.showMsg(resMsg, resMsgList);
+          this.showMsg(resMsg, resMsgList);            
+          } else {
+            _this.getWaterMsg(1, { accountId: _this.localId });
+            return;
+          }
         }
       );
     },
@@ -416,7 +423,7 @@ export default {
         return;
       }
       if (searchType === "保养状态") {
-        this.maintenanceState(1, { maintenanceState: inputValue });
+        this.getWaterMsg(1, { maintenanceState: inputValue });
         return;
       }
     },
@@ -471,7 +478,6 @@ export default {
               typeEightObj: {}
             };
             if (item !== "") {
-              console.log(item,waterArrMsg,"item里面到底是什么")
               for (var i = 0; i < waterArrMsg.length - 1; i++) {
                 msg = decode(waterArrMsg[i], decodeMsg);
                 for (var key in msg) {
@@ -515,7 +521,8 @@ export default {
   },
   created() {
     this.localDid = localStorage.getItem("did");
-    this.getWaterMsg(1, { accountId: 1 });
+    this.localId = localStorage.getItem("id");
+    this.getWaterMsg(1, { accountId: this.localId });
   },
   mounted() {
     this.trDom = document.querySelectorAll(".el-icon-check");

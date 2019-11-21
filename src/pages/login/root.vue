@@ -110,7 +110,8 @@
               }
               _didStr = _didArr.join(',');
               localStorage.setItem("did", _didStr);
-              localStorage.setItem("level", res.data.data[0].level)
+              localStorage.setItem("level", res.data.data[0].level);
+              localStorage.setItem("id",res.data.data[0].id);
               console.log(res);
             } else {
               _this.$message({

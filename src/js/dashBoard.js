@@ -31,7 +31,7 @@ export function initCanvas(item = '', dosage = 0, gross = 0, color) {
     context.save();
     context.strokeStyle = color;
     context.font = "12px Arial";
-    context.strokeText(n.toFixed(0) + "%", centerX - 10, centerY - 10);
+    context.strokeText(n.toFixed(1) + "%", centerX - 14, centerY - 10);
     context.restore();
   }
   //动画循环

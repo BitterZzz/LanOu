@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div id="addPage">
+    <div id="addPage" v-for="item in sonData" :key="item.id">
       <div id="title">
         <p>您所在的位置 : 账号管理 > 账号列表 ></p>
-        <a>新增账户</a>
+        <a>编辑账户</a>
       </div>
       <div class="toBack">
         <div class="goHome">
@@ -18,46 +18,95 @@
               <i>*</i>
               用户名 :
             </span>
-            <input type="text" id="username" name="username" maxlength="11" />
+            <input type="text" id="username" name="username" maxlength="11" :value="item.userName" />
           </li>
           <li>
             <span>
               <i>*</i>
               密码 :
             </span>
-            <input type="password" id="password" name="password" placeholder="密码为8-16位的字母+数字组成" />
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="密码为8-16位的字母+数字组成"
+              :value="item.passWord"
+            />
           </li>
         </ul>
         <ul class="userPassword">
           <li>
-            <span class="upleft">手机 :</span>
-            <input id="phone" type="text" maxlength="11" />
+            <span class="upleft">
+              <i>*</i>
+              手机 :
+            </span>
+            <input id="phone" type="text" maxlength="11" :value="item.phone" />
           </li>
           <li>
-            <span>邮箱 :</span>
-            <input type="email" name="email" id="email" />
+            <span>
+              <i>*</i>
+              邮箱 :
+            </span>
+            <input type="email" name="email" id="email" :value="item.email" />
           </li>
         </ul>
         <ul class="userPassword">
           <li>
-            <span class="upleft">角色 :</span>
-            <input type="text" id="role" name="role" />
+            <span class="upleft">
+              <i>*</i>
+              角色 :
+            </span>
+            <input type="text" id="role" name="role" :value="item.role" />
           </li>
           <li>
-            <span>部门 :</span>
-            <input type="text" name="section" id="section" placeholder />
+            <span>
+              <i>*</i>
+              部门 :
+            </span>
+            <input type="text" name="section" id="section" placeholder :value="item.dept" />
           </li>
         </ul>
       </div>
       <div class="alt">
         <span>带 * 号为必填</span>
       </div>
+      <!-- <div class="restrict">
+        <h2>基本权限：</h2>
+        <div class="choice">
+          <el-checkbox-group v-model="checkedCities"
+                             v-for="city in cities"
+                             :key="city.id"
+                             @change="change">
+            <el-checkbox :label="city">{{city.split(',')[0]}}</el-checkbox>
+          </el-checkbox-group>
+        </div>
+      </div>-->
       <checkbox />
       <robot />
+      <!-- <div class="robot">
+        <h2>指定查看机器：</h2>
+        <div>
+          <button type="submit"
+                  class="submit"
+                  @click="SelectId()">全部机器</button>
+          <br />
+          <input type="text"
+                 name="text"
+                 id="rotID" />
+          <div class="append"
+               @click="appendFile()">+ 添加</div>
+          <div class="reveal"
+               v-if="showReveal">
+            <div class="botId"
+                 v-for="item in append"
+                 :key="item.id">{{item}}</div>
+          </div>
+        </div>
+      </div>-->
       <div class="buttom">
         <button type="submit" @click="submitAction()">
           <img src="../../assets/img/root.png" alt srcset />
-          新增提交
+          编辑提交
         </button>
       </div>
     </div>
@@ -66,12 +115,12 @@
 
 <script>
 import { format, relative } from "path";
-import robot from "../compile/robot";
-import checkbox from "./addCompile";
+import robot from "./robot";
+import checkbox from "./checkbox";
 import Axios from "axios";
 import { setTimeout } from "timers";
 export default {
-  name: "addPage",
+  name: "appendPage",
   components: {
     checkbox,
     robot
@@ -80,6 +129,10 @@ export default {
     return {
       robotId: [],
       check: [],
+      //   showReveal: false,
+      //   append: [],
+      //   DidInfo: [],
+      //   charaID: "",
       checkId: "",
       emailInfo: "",
       userInfo: "",
@@ -88,32 +141,69 @@ export default {
       roleInfo: "",
       sectionInfo: "",
       Data: "",
-      levelId: ""
+      levelId: "1,2"
     };
   },
   props: {
-    addData: {
+    sonData: {
       type: Array
     }
   },
   methods: {
     // 返回
     backHome() {
-      this.$emit("addPage");
-      console.log(1);
+      this.$emit("sonPage");
     },
+    // // 添加did
+    // appendFile() {
+    //   let botID = document.querySelector('#rotID')
+    //   console.log(botID,"botID")
+    //   if (botID.value === '') {
+    //     return
+    //   } else if (botID.value !== '') {
+    //     this.showReveal = true
+    //     this.DidInfo = botID.value
+    //     this.append.push(botID.value)
+    //   }
+    //   // 获取全部did
+    //   this.charaID = this.append.join(',')
+    //   console.log(this.charaID)
+    // },
+    // // 全部机器did
+    // SelectId() {
+    //   console.log(1)
+    //   this.$get(this.$api.getLanOuByDid, {
+    //     sak: 1
+    //   }).then(res => {
+    //     console.log(res.data)
+    //   })
+    // },
 
     // 提交新增页面
     submitAction() {
-      console.log(this.charaID, "charaID");
+      let did = this.sonData;
+      console.log(did[0].id, "sonData");
+      let id = did[0].id;
+      console.log(id, "id");
+      let lanOuDid = localStorage.getItem("lanOuDid");
+      console.log(lanOuDid, "charaID");
       let username = document.querySelector("#username");
+      console.log("1")
       let password = document.querySelector("#password");
+      console.log("1")
       let phone = document.querySelector("#phone");
+      console.log("1")
       let email = document.querySelector("#email");
+      console.log("1")
       let role = document.querySelector("#role");
+      console.log("1")
       let section = document.querySelector("#section");
+      console.log("1")
       let userNorm = /^[a-zA-Z0-9]{8,16}$/;
+      console.log("1")
       let phoneNorm = /^[1][3,4,5,6,7,8][0-9]{9}$/;
+      console.log("9")
+      debugger
       if (
         username.value === "" ||
         password.value === "" ||
@@ -123,7 +213,7 @@ export default {
         section.value === ""
       ) {
         this.$message({
-          message: "用户名,密码,手机号,角色,邮箱,部门不能为空",
+          message: "用户名,密码不能为空",
           type: "warning"
         });
         return;
@@ -142,29 +232,45 @@ export default {
         });
         return;
       }
-      this.levelId = localStorage.getItem('checkId');
-      console.log(localStorage.getItem('checkId'),"localStorage.getItem('checkId')")
-      Axios.post(this.$api.addLanOuAccountInfo, {
-        dept: section.value,
-        lanOuDid: this.charaID,
-        mail: email.value,
-        passWord: password.value,
-        phone: phone.value,
-        position: "",
-        relationId: this.levelId,
-        role: role.value,
-        userName: username.value,
-        workUnit: ""
-      })
-        .then(res => {
-          console.log(res);
-          this.$emit("addPage");
-        })
-        .catch(res => {
-          console.log(res, "失败");
-        });
+      Axios.post(
+        this.$api.updateLanOuAccountInfo,
+        {
+          dept: section.value,
+          lanOuDid: lanOuDid, //100016
+          mail: email.value,
+          passWord: password.value,
+          phone: phone.value,
+          position: " ",
+          relationId: this.levelId,
+          role: role.value,
+          userName: username.value,
+          workUnit: ""
+        },
+        {
+          params: {
+            id: id
+          }
+        }
+      ).then(res => {
+        console.log(res);
+        this.$emit("sonPage");
+      });
+    },
+
+    dataAction() {
+      let did = this.sonData;
+
+      this.checkedCities = this.sonData[0].relationId.split(",").map(item => {
+        return;
+        console.log(this.checkedCities, "基本权限");
+      });
     }
   },
+  mounted() {},
+  created() {
+    // this.checkAction()
+    this.dataAction();
+  }
 };
 </script>
 
@@ -180,12 +286,11 @@ export default {
   background: #ffffff;
   z-index: 8;
   #title {
-    width: 100%;
     display: flex;
+    width: 100%;
     height: 22px;
     background: #f7f7f7;
     position: absolute;
-
     top: -38px;
     p {
       font-family: PingFangSC-Regular;
@@ -193,6 +298,7 @@ export default {
       color: #999999;
     }
     a {
+      float: left;
       font-size: 16px;
       color: #3999f9;
     }
@@ -237,8 +343,8 @@ export default {
 
         span {
           display: flex;
-          align-items: center;
           justify-content: center;
+          align-items: center;
           width: 80px;
           height: 50px;
           line-height: 50px;
@@ -250,7 +356,8 @@ export default {
           i {
             display: inline-block;
             color: #fe3824;
-            // font-size: 18px;
+            font-size: 18px;
+            padding-top: 5px;
           }
         }
         .upleft {
@@ -264,8 +371,9 @@ export default {
           padding-left: 16px;
           box-sizing: border-box;
           color: #999;
+          background: #fff;
         }
-        #username{
+        #username {
           width: 374px;
         }
       }

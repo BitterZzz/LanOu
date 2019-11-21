@@ -12,7 +12,7 @@
         </div>
         <div class="popupBox">
           <span>型号:</span>
-          <span>LOSRO-500-S</span>
+          <span>{{this.allocationMsg.puuid}}</span>
         </div>
         <div class="save-set clearfix">
           <img src="../../assets/img/save.png" />
@@ -33,28 +33,32 @@
                   <div class="pressure-content clearfix">
                     <span class="content-title">取水压力上限:</span>
                     <div class="content-box">
-                      <span @click="subtract()">-</span>
+                      <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
+                        @input="changeInput(0,0.35)"
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
                         ref="intakingMax"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.intakingMax : 0"
                       />
-                      <span @click="add()">+</span>
+                      <span @click="add(0.01,0.35)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
                   <div class="pressure-content clearfix">
                     <span class="content-title">取水压力下限:</span>
                     <div class="content-box">
-                      <span @click="subtract()">-</span>
+                      <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="changeInput(0,0.35)"
                         ref="intakingMin"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.intakingMin : 0"
                       />
-                      <span @click="add()">+</span>
+                      <span @click="add(0.01,0.35)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
@@ -68,36 +72,42 @@
                   <span class="content-title">日期:</span>
                   <div class="data-set">
                     <div class="data-year">
-                      <p @click="dayAdd()">+</p>
+                      <p @click="dayAdd(10000000)" onselectstart="return false">+</p>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="dayChange(0,10000000)"
                         ref="year"
                         type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj.SublayMax ? '20' + this.allocationMsg.waterDecode.typeEightObj.year : ''"
                       />
-                      <p @click="daySubtract()">-</p>
+                      <p @click="daySubtract(0)" onselectstart="return false">-</p>
                     </div>
                     <span>年</span>
                     <div class="data-year">
-                      <p @click="dayAdd()">+</p>
+                      <p @click="dayAdd(12,2)" onselectstart="return false">+</p>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="dayChange(1,12,2)"
                         ref="month"
                         type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.month : 0"
                       />
-                      <p @click="daySubtract()">-</p>
+                      <p @click="daySubtract(1 , 2)" onselectstart="return false">-</p>
                     </div>
                     <span>月</span>
                     <div class="data-year">
-                      <p @click="dayAdd()">+</p>
+                      <p @click="dayAdd(31,0)" onselectstart="return false">+</p>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="dayChange(1,31,0)"
                         ref="day"
                         type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.day : 0"
                       />
-                      <p @click="daySubtract()">-</p>
+                      <p @click="daySubtract(1)" onselectstart="return false">-</p>
                     </div>
                     <span>日</span>
                   </div>
@@ -120,28 +130,32 @@
                   <div class="pressure-content clearfix">
                     <span class="content-title">膜前压力上限:</span>
                     <div class="content-box">
-                      <span @click="subtract()">-</span>
+                      <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="changeInput(0,1.2)"
                         ref="SublayMax"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.SublayMax : 0"
                       />
-                      <span @click="add()">+</span>
+                      <span @click="add(0.01,1.2)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
                   <div class="pressure-content clearfix">
                     <span class="content-title">膜前压力下限:</span>
                     <div class="content-box">
-                      <span @click="subtract()">-</span>
+                      <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="changeInput(0,1.2)"
                         ref="SublayMin"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.SublayMin : 0"
                       />
-                      <span @click="add()">+</span>
+                      <span @click="add(0.01,1.2)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
@@ -155,36 +169,42 @@
                   <span class="content-title">时间:</span>
                   <div class="data-set">
                     <div class="data-year">
-                      <p @click="dayAdd()">+</p>
+                      <p @click="dayAdd(23)" onselectstart="return false">+</p>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="dayChange(0,23)"
                         ref="hour"
                         type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.hour : 0"
                       />
-                      <p @click="daySubtract()">-</p>
+                      <p @click="daySubtract(0)" onselectstart="return false">-</p>
                     </div>
                     <span>:</span>
                     <div class="data-year">
-                      <p @click="dayAdd()">+</p>
+                      <p @click="dayAdd(59)" onselectstart="return false">+</p>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="dayChange(0,59)"
                         ref="minute"
                         type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.minute : 0"
                       />
-                      <p @click="daySubtract()">-</p>
+                      <p @click="daySubtract(0)" onselectstart="return false">-</p>
                     </div>
                     <span>:</span>
                     <div class="data-year">
-                      <p @click="dayAdd()">+</p>
+                      <p @click="dayAdd(59)" onselectstart="return false">+</p>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="dayChange(0,59)"
                         ref="second"
                         type="number"
                         class="year"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.second : 0"
                       />
-                      <p @click="daySubtract()">-</p>
+                      <p @click="daySubtract(0)">-</p>
                     </div>
                     <span style="width:4px"></span>
                   </div>
@@ -207,28 +227,32 @@
                   <div class="pressure-content clearfix">
                     <span class="content-title">进水压力上限:</span>
                     <div class="content-box">
-                      <span @click="subtract()">-</span>
+                      <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="changeInput(0,0.5)"
                         ref="inflowMax"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.inflowMax : 0"
                       />
-                      <span @click="add()">+</span>
+                      <span @click="add(0.01,0.5)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
                   <div class="pressure-content clearfix">
                     <span class="content-title">进水压力下限:</span>
                     <div class="content-box">
-                      <span @click="subtract()">-</span>
+                      <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="changeInput(0,0.5)"
                         ref="inflowMin"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.inflowMin : 0"
                       />
-                      <span @click="add()">+</span>
+                      <span @click="add(0.01,0.5)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
@@ -240,14 +264,16 @@
               <div class="hydraumatic-content hydraumaticTop clearfix">
                 <span class="content-title">进水流量:</span>
                 <div class="content-box">
-                  <span @click="subtract()">-</span>
+                  <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                   <input
+                    onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                    @input="changeInput(0,2)"
                     ref="rawWater"
                     type="number"
                     class="num"
                     :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.rawWater : 0"
                   />
-                  <span @click="add()">+</span>
+                  <span @click="add(0.01,2)" onselectstart="return false">+</span>
                   <b>MPa</b>
                 </div>
                 <div class="space"></div>
@@ -255,14 +281,16 @@
               <div class="hydraumatic-content clearfix">
                 <span class="content-title">纯水流量:</span>
                 <div class="content-box">
-                  <span @click="subtract()">-</span>
+                  <span @click="subtract(0.01,0)">-</span>
                   <input
+                    onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                    @input="changeInput(0,2)"
                     ref="pureWater"
                     type="number"
                     class="num"
                     :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.pureWater : 0"
                   />
-                  <span @click="add()">+</span>
+                  <span @click="add(0.01,2)">+</span>
                   <b>MPa</b>
                 </div>
                 <div class="space"></div>
@@ -282,14 +310,28 @@
               <div class="content-frist">
                 <span>净水流量:</span>
                 <div class="frist-input">
-                  <input type="number" class="number" :ref="item.ref" :value="item.filterInflow" />
+                  <input
+                    onkeyup="value=value.replace(/[^\d]/g,'')"
+                    @input="lifeChange(0,99999)"
+                    type="number"
+                    class="number"
+                    :ref="item.ref"
+                    :value="item.filterInflow"
+                  />
                   <b>m³</b>
                 </div>
               </div>
               <div class="content-frist">
                 <span>时间:</span>
                 <div class="frist-input second-input">
-                  <input type="number" class="number" :ref="item.refDay" :value="item.clearDays" />
+                  <input
+                    onkeyup="value=value.replace(/[^\d]/g,'')"
+                    @input="lifeChange(0,999)"
+                    type="number"
+                    class="number"
+                    :ref="item.refDay"
+                    :value="item.clearDays"
+                  />
                   <b>D</b>
                 </div>
               </div>
@@ -304,6 +346,7 @@
 import bus from "../../js/bus";
 import Axois from "axios";
 import Qs from "qs";
+import { hexToString } from "../../js/hexToString";
 export default {
   name: "parameter",
   data() {
@@ -393,57 +436,127 @@ export default {
       this.$emit("hiddenSecond");
     },
     //压力设置加减数值变化
-    add(e) {
-      e = event || event.target;
-      console.log(e.currentTarget.previousElementSibling.value, "e");
+    add(addNum, max) {
+      let e = event || event.target;
       let valueMsg = e.currentTarget.previousElementSibling.value;
       let value;
       if (valueMsg === "") {
         value = 0;
-        value++;
-        e.currentTarget.previousElementSibling.value = value;
+        value = Number(value) + Number(addNum);
+        console.log(e.currentTarget.previousElementSibling.value, "e");
       } else {
         value = valueMsg;
-        value++;
-        e.currentTarget.previousElementSibling.value = value;
+        value = Number(value) + Number(addNum);
+        if (value >= max) {
+          e.currentTarget.previousElementSibling.value = max;
+        } else {
+          e.currentTarget.previousElementSibling.value = value.toFixed(2);
+        }
+        console.log(e.currentTarget.previousElementSibling.value, "e");
       }
     },
-    subtract(e) {
-      e = event || event.target;
-      console.log(e.currentTarget.nextElementSibling.value, "e");
+    subtract(subtractNum, min) {
+      let e = event || event.target;
       let valueMsg = e.currentTarget.nextElementSibling.value;
       let value;
       if (valueMsg === "") {
         value = 0;
         e.currentTarget.nextElementSibling.value = value;
+        console.log(e.currentTarget.nextElementSibling.value, "e");
       } else {
         value = valueMsg;
-        if (value < 1 || value === 0) {
+        console.log(value);
+        value = Number(value) - Number(subtractNum);
+        if (value <= min) {
           e.currentTarget.nextElementSibling.value = 0;
         } else {
-          value--;
-          e.currentTarget.nextElementSibling.value = value;
+          e.currentTarget.nextElementSibling.value = value.toFixed(2);
+          console.log(e.currentTarget.nextElementSibling.value, "e");
         }
       }
     },
-    //日期设置加减数值变化
-    dayAdd(e) {
-      e = event || event.target;
+    //input内容改变的监听
+    changeInput(min, max) {
+      let e = event || event.target;
+      let _value = e.currentTarget.value;
+      if (_value < min) {
+        e.currentTarget.value = min;
+      } else if (_value > max) {
+        e.currentTarget.value = max;
+      } else {
+        e.currentTarget.value;
+      }
+      console.log(e.currentTarget.value, "changeInput");
+    },
+    //滤芯滤料寿命的input框监听
+    lifeChange(min,max){
+      let e = event || event.target;
+      let _value = e.currentTarget.value;
+      if (_value < min) {
+        e.currentTarget.value = min;
+      } else if (_value > max) {
+        e.currentTarget.value = max;
+      } else {
+        e.currentTarget.value;
+      }
+    },
+    //日期设置的input框的内容
+    dayChange(min, max, judge = 1) {
+      let e = event || event.target;
+      let _value = e.currentTarget.value;
+      if (judge === 0) {
+        max = this.getDaysOfEveryMonth();
+      }
+      if (_value < min) {
+        e.currentTarget.value = min;
+      } else if (_value > max) {
+        e.currentTarget.value = max;
+      } else {
+        e.currentTarget.value;
+      }
+      if (judge === 2) {
+        this.dayJudge();
+      }
+    },
+    //判断是否超出本月的最大日期
+    dayJudge() {
+      let $month = this.$refs.month.value;
+      let $day = this.$refs.day.value;
+      console.log(this.getDaysOfEveryMonth(), "this.getDaysOfEveryMonth()");
+      if ($day >= 30 || ($month === 2 && $day >= 28)) {
+        this.$refs.day.value = this.getDaysOfEveryMonth();
+      }
+    },
+    //日期设置加减数值变化,judge用来区分是不是“日”的input框（1不是，0是,2是用来判断是否是月的input框）
+    dayAdd(max, judge = 1) {
+      let e = event || event.target;
       console.log(e.currentTarget.nextElementSibling.value, "e");
       let valueMsg = e.currentTarget.nextElementSibling.value;
       let value;
       if (valueMsg === "") {
         value = 0;
-        value++;
         e.currentTarget.nextElementSibling.value = value;
       } else {
         value = valueMsg;
-        value++;
-        e.currentTarget.nextElementSibling.value = value;
+        value = Number(value) + 1;
+        if (judge === 0) {
+          max = this.getDaysOfEveryMonth();
+        }
+        if (value > max) {
+          e.currentTarget.nextElementSibling.value = max;
+          if (judge === 2) {
+            this.dayJudge();
+          }
+        } else {
+          e.currentTarget.nextElementSibling.value = value;
+          if (judge === 2) {
+            this.dayJudge();
+          }
+        }
       }
     },
-    daySubtract(e) {
-      e = event || event.target;
+    daySubtract(min, judge = 1) {
+      let e = event || event.target;
       console.log(e.currentTarget.previousElementSibling.value, "e");
       let valueMsg = e.currentTarget.previousElementSibling.value;
       let value;
@@ -452,13 +565,39 @@ export default {
         e.currentTarget.previousElementSibling.value = value;
       } else {
         value = valueMsg;
-        if (value < 1 || value === 0) {
-          e.currentTarget.previousElementSibling.value = 0;
+        value = value - 1;
+        if (value <= min) {
+          e.currentTarget.previousElementSibling.value = min;
+          if (judge === 2) {
+            this.dayJudge();
+          }
         } else {
-          value--;
           e.currentTarget.previousElementSibling.value = value;
+          if (judge === 2) {
+            this.dayJudge();
+          }
         }
       }
+    },
+    //判断某年某月有多少天
+    getDaysOfEveryMonth() {
+      var baseMonthsDay = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      let thisYear = this.$refs.year.value;
+      let thisMonth = this.$refs.month.value;
+      console.log(thisMonth, "thisMonth");
+      let thisMonthDays = 0;
+      console.log(thisYear, thisMonth, "thisYear");
+      function isRunYear(fullYear) {
+        return (
+          fullYear % 4 == 0 && (fullYear % 100 != 0 || fullYear % 400 == 0)
+        );
+      }
+      if (isRunYear(thisYear) && thisMonth == 2) {
+        thisMonthDays = baseMonthsDay[thisMonth] + 1;
+      } else {
+        thisMonthDays = baseMonthsDay[thisMonth];
+      }
+      return thisMonthDays;
     },
     //滤芯滤料数据
     CoreMaterial() {
@@ -475,11 +614,79 @@ export default {
     },
     emptying() {
       this.empty = "01";
+      let _this = this;
+      let _token = "";
+      for (var i = 0; i < 16; i++) {
+        let _number = Math.ceil(Math.random() * 10) - 1;
+        _token += _number;
+      }
+      console.log(_token, "这是token");
+      let data = {
+        token: _token,
+        ack: 0,
+        did: this.allocationMsg.pdid,
+        dataType: 0,
+        key: this.systemState()
+      };
+      Axois({
+        url: _this.$api.issuedData,
+        method: "POST",
+        data: data,
+        headers: { sak: "444" }
+      }).then(res => {
+        console.log(res, "我是res");
+        let _code = JSON.parse(res.data).code;
+        if (_code === "0") {
+          this.$message({
+            message: JSON.parse(res.data).descript,
+            type: "success"
+          });
+        } else {
+          this.$message({
+            message: JSON.parse(res.data).descript,
+            type: "error"
+          });
+        }
+      });
       console.log("自动排空");
     },
     reset() {
       this.rest = "01";
       console.log("恢复出厂设置");
+      let _this = this;
+      let _token = "";
+      for (var i = 0; i < 16; i++) {
+        let _number = Math.ceil(Math.random() * 10) - 1;
+        _token += _number;
+      }
+      console.log(_token, "这是token");
+      let data = {
+        token: _token,
+        ack: 0,
+        did: this.allocationMsg.pdid,
+        dataType: 0,
+        key: this.systemState()
+      };
+      Axois({
+        url: _this.$api.issuedData,
+        method: "POST",
+        data: data,
+        headers: { sak: "444" }
+      }).then(res => {
+        console.log(res, "我是res");
+        let _code = JSON.parse(res.data).code;
+        if (_code === "0") {
+          this.$message({
+            message: JSON.parse(res.data).descript,
+            type: "success"
+          });
+        } else {
+          this.$message({
+            message: JSON.parse(res.data).descript,
+            type: "error"
+          });
+        }
+      });
     },
     //10进制转16进制(value内容，multiple乘以的倍数，numberOfBytes字节数)
     TenToSixteen(value, multiple = 1, numberOfBytes = 2) {
@@ -510,7 +717,7 @@ export default {
       str = str.replace(/([a-z]+)(.*?)/g, function(m, m1, m2) {
         return m1.toUpperCase() + m2;
       });
-      return str
+      return str;
     },
     //系统状态数据转为16进制
     systemState() {
@@ -539,6 +746,7 @@ export default {
       );
       //取水压力下限值
       let intakingMin = this.TenToSixteen(this.$refs.intakingMin.value, 100);
+      console.log(intakingMin, "我是intakingMin");
       //取水压力上限值
       let intakingMax = this.TenToSixteen(this.$refs.intakingMax.value, 100);
       //取水压力当前值
@@ -577,7 +785,7 @@ export default {
       //恢复出厂设置
       let rest = this.rest;
       result =
-        "5A5A08" +
+        "08" +
         inflowMin +
         inflowMax +
         inflowNow +
@@ -599,10 +807,13 @@ export default {
         relay +
         evacuation +
         rest +
-        this.allocationMsg.waterDecode.typeEightObj.rubbish;
-      result = this.toggleCase(result)
+        this.allocationMsg.waterDecode.typeEightObj.rubbish +
+        123456;
+      result = this.toggleCase(result);
       console.log(result, "我是result");
-      return result;
+      let $result = hexToString(result);
+      console.log($result, "这是低八种");
+      return $result;
     },
     materialsLifetime() {
       let _msg = this.allocationMsg.waterDecode.typeSeventArr;
@@ -704,7 +915,7 @@ export default {
         this.TenToSixteen(_msg[6].usageDays).substr(2, 2) +
         this.TenToSixteen(_msg[6].usageDays).substr(0, 2);
       result =
-        "07|07" +
+        "09" +
         AllsilicaSand +
         silicaSand +
         AllsilicaSandDay +
@@ -732,39 +943,46 @@ export default {
         AlluvUse +
         uvUse +
         AlluvUseDay +
-        uvUseDay +
-        this.allocationMsg.waterDecode.typeSeventArr[0].rubbish;
-    result = this.toggleCase(result)
+        uvUseDay;
+      result = this.toggleCase(result);
       console.log(
         result,
         this.$refs.activeCarbon[0].value,
         this.filterMsg,
         "我是silicaSand"
       );
-      return result;
+      let $result = hexToString(result);
+      console.log($result, "这是我的");
+      return $result;
     },
     //保存设置
     saveSetting() {
       let _this = this;
-      let _msg = "";
-      _msg = this.materialsLifetime() + "|-|" + this.systemState();
-      console.log(_msg, "我是我是");
-      let _key = "UP/" + this.allocationMsg.puuid +"/" + this.allocationMsg.pdid + "/Data";
+      let _token = "";
+      for (var i = 0; i < 16; i++) {
+        let _number = Math.ceil(Math.random() * 10) - 1;
+        _token += _number;
+      }
+      console.log(_token, "这是token");
       let data = {
-        value:"/UP/e0Wa974Y/100045/Data",
-        key:this.materialsLifetime()
+        token: _token,
+        ack: 0,
+        did: this.allocationMsg.pdid,
+        dataType: 0,
+        key: this.materialsLifetime()
       };
       let data2 = {
-        token: "4",
+        token: _token,
         ack: 0,
         did: this.allocationMsg.pdid,
         dataType: 0,
         dataLoad: this.systemState()
       };
       Axois({
-        url: "http://192.168.1.52:18556/test/sendMq",
-        method: "GET",
-        params: data,
+        url: _this.$api.issuedData,
+        method: "POST",
+        data: data,
+        headers: { sak: "444" }
       }).then(res => {
         console.log(res, "我是res");
       });
@@ -774,14 +992,25 @@ export default {
         data: data2,
         headers: { sak: "444" }
       }).then(res => {
-        console.log(res, "我是res");
+        let _code = JSON.parse(res.data).code;
+        if (_code === "0") {
+          this.$message({
+            message: JSON.parse(res.data).descript,
+            type: "success"
+          });
+        } else {
+          this.$message({
+            message: JSON.parse(res.data).descript,
+            type: "error"
+          });
+        }
       });
     }
   },
   mounted() {
     console.log(this.allocationMsg, "我是typeSeventArr");
     this.CoreMaterial();
-    this.systemState();
+    this.getDaysOfEveryMonth();
   }
 };
 </script>
@@ -795,7 +1024,7 @@ $height: 200px;
   background: #ffffff;
   left: -156px;
   top: -24px;
-  z-index: 10000;
+  z-index: 10;
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none !important;
@@ -833,6 +1062,7 @@ $height: 200px;
         background: #3a9ef4;
         float: right;
         margin-right: 50px;
+        cursor: pointer;
         img {
           vertical-align: middle;
           margin-left: 25px;

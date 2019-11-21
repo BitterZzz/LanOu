@@ -211,7 +211,6 @@ export function decodeMsg(decode16) {
     let typeSeventArr = [];
     let typeBranch;
     let rubbish = decode16.substr(114);
-    console.log(decode16,"我是decode16");
     for (var i = 0; i < typeSevent.length; i++) {
       if (i % 16 === 0) {
         typeBranch = typeSevent.substr(i, 16);
@@ -220,20 +219,18 @@ export function decodeMsg(decode16) {
     }
     let arr = []
     let a = typeSeventArr.map((item, index) => {
-      console.log(item,"我是第四种数据类型的item");
       return {
         //进水量
-        inflow: parseInt(item.substr(2, 2) + item.substr(0, 2), 16),
+        inflow: parseInt(item.substr(2, 2) + item.substr(0, 2), 16).toFixed(0),
         //已滤进水量(实际已用水量)
-        filterInflow: parseInt(item.substr(6, 2) + item.substr(4, 2), 16) / 10,
+        filterInflow: (parseInt(item.substr(6, 2) + item.substr(4, 2), 16) / 10).toFixed(0),
         //使用天数
-        usageDays: parseInt(item.substr(10, 2) + item.substr(8, 2), 16),
+        usageDays: parseInt(item.substr(10, 2) + item.substr(8, 2), 16).toFixed(0),
         //实际使用天数
-        clearDays: parseInt(item.substr(14, 2) + item.substr(12, 2), 16),
+        clearDays: parseInt(item.substr(14, 2) + item.substr(12, 2), 16).toFixed(0),
         rubbish: rubbish
       };
     })
-    console.log(a, "我是第七种数据类型的数据");
     return {
       typeSeventArr: a
     };
@@ -293,9 +290,7 @@ export function decodeMsg(decode16) {
       relayThereNum += 0;
     }
     relayThere = relayThereNum + relayThere
-    console.log(relayThere, "我是解析数据里面的relaythere");
-    typeEightObj.relay = relayThere.substr(4).split('').reverse().join('');
-    console.log(typeEightObj.relay, "我是typeEightObj.relay")
+    typeEightObj.relay = relayThere.substr(5);
     // 排空命令
     typeEightObj.evacuation = parseInt(typeEight.substr(50, 2), 16);
     // 恢复出厂设置

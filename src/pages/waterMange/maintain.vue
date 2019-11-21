@@ -395,9 +395,7 @@ export default {
         console.log(res);
       });
       console.log(this.lanOuProjectInfo);
-      setTimeout(() => {
         this.$emit("maintain");
-      }, 1000);
     },
     getMsg() {
       //设备ID

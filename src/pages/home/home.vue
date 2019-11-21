@@ -136,7 +136,7 @@ export default {
     background: #000000;
     left: 0;
     top: 0;
-    z-index: 1000;
+    z-index: 9;
     opacity: 0.3;
   }
   .header {
