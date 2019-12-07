@@ -292,9 +292,9 @@ export default {
     z-index: 0;
   }
   #title {
-    width: 293px;
-    height: 22px;
     position: absolute;
+    width: 400px;
+    height: 22px;
     top: -38px;
     left: -4px;
     p {

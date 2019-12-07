@@ -14,3 +14,15 @@ export function hexToString(hex) {
   }
     return resultStr.join("");
   }
+
+  export function str2hex(str){
+    if(str === ""){
+      return "";
+    }
+    var arr = [];
+    // arr.push("0x");
+    for(var i=0;i<str.length;i++){
+      arr.push(str.charCodeAt(i).toString(16));
+    }
+    return arr.join('');
+  }

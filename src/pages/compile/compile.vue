@@ -2,8 +2,10 @@
   <div>
     <div id="addPage" v-for="item in sonData" :key="item.id">
       <div id="title">
-        <p>您所在的位置 : 账号管理 > 账号列表 ></p>
-        <a>编辑账户</a>
+        <p>
+          您所在的位置 : 账号管理 > 账号列表 >
+          <a>编辑账户</a>
+        </p>
       </div>
       <div class="toBack">
         <div class="goHome">
@@ -36,33 +38,21 @@
         </ul>
         <ul class="userPassword">
           <li>
-            <span class="upleft">
-              <i>*</i>
-              手机 :
-            </span>
+            <span class="upleft">手机 :</span>
             <input id="phone" type="text" maxlength="11" :value="item.phone" />
           </li>
           <li>
-            <span>
-              <i>*</i>
-              邮箱 :
-            </span>
+            <span>邮箱 :</span>
             <input type="email" name="email" id="email" :value="item.email" />
           </li>
         </ul>
         <ul class="userPassword">
           <li>
-            <span class="upleft">
-              <i>*</i>
-              角色 :
-            </span>
+            <span class="upleft">角色 :</span>
             <input type="text" id="role" name="role" :value="item.role" />
           </li>
           <li>
-            <span>
-              <i>*</i>
-              部门 :
-            </span>
+            <span>部门 :</span>
             <input type="text" name="section" id="section" placeholder :value="item.dept" />
           </li>
         </ul>
@@ -70,39 +60,8 @@
       <div class="alt">
         <span>带 * 号为必填</span>
       </div>
-      <!-- <div class="restrict">
-        <h2>基本权限：</h2>
-        <div class="choice">
-          <el-checkbox-group v-model="checkedCities"
-                             v-for="city in cities"
-                             :key="city.id"
-                             @change="change">
-            <el-checkbox :label="city">{{city.split(',')[0]}}</el-checkbox>
-          </el-checkbox-group>
-        </div>
-      </div>-->
       <checkbox />
       <robot />
-      <!-- <div class="robot">
-        <h2>指定查看机器：</h2>
-        <div>
-          <button type="submit"
-                  class="submit"
-                  @click="SelectId()">全部机器</button>
-          <br />
-          <input type="text"
-                 name="text"
-                 id="rotID" />
-          <div class="append"
-               @click="appendFile()">+ 添加</div>
-          <div class="reveal"
-               v-if="showReveal">
-            <div class="botId"
-                 v-for="item in append"
-                 :key="item.id">{{item}}</div>
-          </div>
-        </div>
-      </div>-->
       <div class="buttom">
         <button type="submit" @click="submitAction()">
           <img src="../../assets/img/root.png" alt srcset />
@@ -129,10 +88,6 @@ export default {
     return {
       robotId: [],
       check: [],
-      //   showReveal: false,
-      //   append: [],
-      //   DidInfo: [],
-      //   charaID: "",
       checkId: "",
       emailInfo: "",
       userInfo: "",
@@ -141,7 +96,7 @@ export default {
       roleInfo: "",
       sectionInfo: "",
       Data: "",
-      levelId: "1,2"
+      levelId: ""
     };
   },
   props: {
@@ -154,30 +109,6 @@ export default {
     backHome() {
       this.$emit("sonPage");
     },
-    // // 添加did
-    // appendFile() {
-    //   let botID = document.querySelector('#rotID')
-    //   console.log(botID,"botID")
-    //   if (botID.value === '') {
-    //     return
-    //   } else if (botID.value !== '') {
-    //     this.showReveal = true
-    //     this.DidInfo = botID.value
-    //     this.append.push(botID.value)
-    //   }
-    //   // 获取全部did
-    //   this.charaID = this.append.join(',')
-    //   console.log(this.charaID)
-    // },
-    // // 全部机器did
-    // SelectId() {
-    //   console.log(1)
-    //   this.$get(this.$api.getLanOuByDid, {
-    //     sak: 1
-    //   }).then(res => {
-    //     console.log(res.data)
-    //   })
-    // },
 
     // 提交新增页面
     submitAction() {
@@ -188,22 +119,21 @@ export default {
       let lanOuDid = localStorage.getItem("lanOuDid");
       console.log(lanOuDid, "charaID");
       let username = document.querySelector("#username");
-      console.log("1")
+      console.log("1");
       let password = document.querySelector("#password");
-      console.log("1")
+      console.log("1");
       let phone = document.querySelector("#phone");
-      console.log("1")
+      console.log("1");
       let email = document.querySelector("#email");
-      console.log("1")
+      console.log("1");
       let role = document.querySelector("#role");
-      console.log("1")
+      console.log("1");
       let section = document.querySelector("#section");
-      console.log("1")
+      console.log("1");
       let userNorm = /^[a-zA-Z0-9]{8,16}$/;
-      console.log("1")
+      console.log("1");
       let phoneNorm = /^[1][3,4,5,6,7,8][0-9]{9}$/;
-      console.log("9")
-      debugger
+      console.log("9");
       if (
         username.value === "" ||
         password.value === "" ||
@@ -232,7 +162,9 @@ export default {
         });
         return;
       }
-      Axios.post(
+      this.levelId = localStorage.getItem("checkId");
+      console.log(this.levelId, "levelId");
+      this.$postBody(
         this.$api.updateLanOuAccountInfo,
         {
           dept: section.value,
@@ -247,9 +179,7 @@ export default {
           workUnit: ""
         },
         {
-          params: {
-            id: id
-          }
+          id: id
         }
       ).then(res => {
         console.log(res);
@@ -259,7 +189,6 @@ export default {
 
     dataAction() {
       let did = this.sonData;
-
       this.checkedCities = this.sonData[0].relationId.split(",").map(item => {
         return;
         console.log(this.checkedCities, "基本权限");
@@ -286,21 +215,19 @@ export default {
   background: #ffffff;
   z-index: 8;
   #title {
-    display: flex;
     width: 100%;
     height: 22px;
     background: #f7f7f7;
-    position: absolute;
-    top: -38px;
     p {
+      display: inline-block;
       font-family: PingFangSC-Regular;
       font-size: 16px;
       color: #999999;
-    }
-    a {
-      float: left;
-      font-size: 16px;
-      color: #3999f9;
+      a {
+        display: inline-block;
+        font-size: 16px;
+        color: #3999f9;
+      }
     }
   }
   .toBack {
@@ -338,17 +265,16 @@ export default {
         box-sizing: border-box;
         position: relative;
         display: flex;
-        justify-content: space-around;
         align-items: center;
 
         span {
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 80px;
+          width: 160px;
           height: 50px;
           line-height: 50px;
-          text-align: center;
+          // text-align: center;
           font-size: 18px;
           color: #333333;
           font-weight: 500;
@@ -374,7 +300,7 @@ export default {
           background: #fff;
         }
         #username {
-          width: 374px;
+          width: 386px;
         }
       }
     }

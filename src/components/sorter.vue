@@ -37,6 +37,7 @@ export default {
       //带有分页器的页面都是通过Information来触发父组件的函数
       this.$emit('Information',val)
       this.nowPage = val;
+      localStorage.setItem('paging',val);
     }
   },
   mounted(){

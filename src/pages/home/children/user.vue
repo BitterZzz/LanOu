@@ -274,7 +274,8 @@ export default {
           isEnabled: 1,
           userId: this.checkEnabled[i].userId
         }).then(res => {
-          this.showUserInfo()
+          let value = localStorage.getItem('paging')
+          this.showUserInfo(value)
           this.checkEnabled = []
         })
       }
@@ -289,6 +290,7 @@ export default {
           userId: this.checkEnabled[i].userId
         }).then(res => {
           console.log(res)
+          let value = localStorage.getItem('paging')
           this.checkEnabled = []
           this.showUserInfo()
         })
@@ -431,7 +433,7 @@ export default {
   }
 
   #title {
-    width: 293px;
+    width: 400px;
     height: 22px;
     position: absolute;
     top: -38px;

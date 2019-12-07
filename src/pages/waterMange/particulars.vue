@@ -18,13 +18,13 @@
     </header>
     <section id="main">
       <!-- 水质曲线与用水曲线 -->
-      <div class="waterQuality">
+      <div class="waterQuality clearfix">
         <div class="waterQuality-left">
           <div class="left-title">
             <span>水质曲线</span>
             <img src="../../assets/img/water.png" alt />
           </div>
-          <div class="data-table">
+          <div class="data-table" v-if="waterQualitySee">
             <div class="table-box">
               <div class="table-TDS">
                 <img src="../../assets/img/ppm.png" alt />
@@ -80,7 +80,7 @@
               <div id="table-echarts3" class="echarts"></div>
             </div>
           </div>
-          <div class="data-table data-table2">
+          <div class="data-table data-table2" v-if="waterQualitySee">
             <div class="table-box">
               <div class="table-TDS">
                 <img src="../../assets/img/TOC_1.png" alt />
@@ -101,15 +101,18 @@
             </div>
             <div class="table-box chlorine">
               <div class="table-TDS">
-                <img src="../../assets/img/ppm.png" alt />
+                <img src="../../assets/img/residualChlorine.png" alt />
                 <span class="TDS-num TDS-style">{{this.chartHeader.RcrrBeforeMsgArr}}</span>
                 <div class="waterCavas">
                   <canvas id="kkk" width="102" height="102"></canvas>
                 </div>
               </div>
               <span>余氯</span>
-              <div id="table-echarts5" class="echarts" style="width:240px;height:220px"></div>
+              <div id="table-echarts5" class="echarts" style="width:320px;height:260px"></div>
             </div>
+          </div>
+          <div class="left-jurisdiction" v-if="!waterQualitySee">
+            访问权限受限！
           </div>
         </div>
         <!-- 用水曲线 -->
@@ -127,7 +130,7 @@
               </p>
             </div>
           </div>
-          <div class="right-table">
+          <div class="right-table" v-if="useWaterSee">
             <div class="right-calendar">
               <i class="el-icon-caret-left" style="color:#333" @click="deleteMouth()"></i>
               <span>{{this.allWaterTime}}</span>
@@ -137,12 +140,15 @@
               <div id="table-line2" style="width:320px;height:400px"></div>
             </div>
           </div>
+          <div class="right-jurisdiction" v-if="!useWaterSee">
+            访问权限受限！
+          </div>
         </div>
       </div>
       <!-- 滤芯寿命 -->
       <div class="Cartridge">
         <div class="Cartridge-title">滤芯寿命</div>
-        <div class="Cartridge-content">
+        <div class="Cartridge-content" v-if="filterElementSee">
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/Hasthefilter.png" alt />
@@ -220,7 +226,7 @@
             <strong class="content-title">再生盐</strong>
           </div>
         </div>
-        <div class="Cartridge-content">
+        <div class="Cartridge-content" v-if="filterElementSee">
           <div class="content-meter">
             <div class="inflow-box">
               <img src="../../assets/img/Hasthefilter.png" alt />
@@ -280,11 +286,12 @@
           </div>
           <div class="content-meter" style="width:224px;"></div>
         </div>
+        <div class="Cartridge-jurisdiction" v-if="!filterElementSee">访问权限受限！</div>
       </div>
       <!-- 机器状态 -->
       <div class="State">
         <div class="State-header">机器状态</div>
-        <div class="State-main clearfix">
+        <div class="State-main clearfix" v-if="machineSee">
           <div class="operation-left">
             <div class="switch">
               <div class="switch-title">开关信号量输出</div>
@@ -353,6 +360,9 @@
             </div>
           </div>
         </div>
+        <div class="State-jurisdiction" v-if="!machineSee">
+          访问权限受限！
+        </div>
       </div>
     </section>
   </div>
@@ -411,16 +421,38 @@ export default {
       //rawWater原水进水总量
       rawWater: "",
       //pureWater纯水进水总量
-      pureWater: ""
+      pureWater: "",
+      //水质曲线查看
+      waterQualitySee:true,
+      //用水曲线查看
+      useWaterSee: true,
+      //滤芯寿命查看
+       filterElementSee:true,
+      //机器状态查看
+      machineSee:true
     };
   },
   props: {
     translateMsg: {
       type: Object,
       default: "未获取到数据"
-    }
+    },
+    relation:{
+      type: Array,
+      value:"未接收到参数"
+    }    
   },
   methods: {
+    //判断是否有权限查看数据
+    relationCheck(value){
+      let _relation = localStorage.getItem("relation");
+      let _arr = _relation.split(',');
+      for(var item in _arr){
+        if(_arr[item] == value){
+          return true;
+        }
+      }
+    },
     hidden() {
       //触发home中的getParam使其改变home中的Judge的值
       bus.$emit("getParam");
@@ -436,12 +468,11 @@ export default {
       for (var key in _msg) {
         if (key in this.chartHeader) {
           if (_msg[key].length !== 0) {
-            this.chartHeader[key] = _msg[key][30];
+            this.chartHeader[key] =
+              _msg[key][30] === "NaN" ? _msg[key][29] : _msg[key][30];
           }
         }
       }
-
-      console.log(this.chartHeader, "this.chartHeader");
     },
     //进入数据判断是否存在
     dataJudge() {
@@ -452,10 +483,6 @@ export default {
           this.translateMsg.waterDecode.typeEightObj.rawWater + "m³";
         this.pureWater =
           this.translateMsg.waterDecode.typeEightObj.pureWater + "m³";
-        console.log(
-          this.translateMsg.waterDecode.typeEightObj.relay,
-          "这是继电器输出的数据"
-        );
         for (var i = 0; i < this.relayList.length; i++) {
           this.relayList[
             i
@@ -474,9 +501,7 @@ export default {
       }
       if (this.translateMsg.waterDecode.typeSeventArr[0] !== undefined) {
         this.typeSeventArr = this.translateMsg.waterDecode.typeSeventArr;
-        console.log("获取到了this.translateMsg.waterDecode的数据");
       } else {
-        console.log("获取到自定义的数据");
         this.typeSeventArr = [
           { inflow: "", filterInflow: "", usageDays: "", clearDays: "" },
           { inflow: "", filterInflow: "", usageDays: "", clearDays: "" },
@@ -502,7 +527,6 @@ export default {
     //仪表盘显示
     canvas() {
       let _msg = this.typeSeventArr;
-      console.log(_msg, "这是canvas的——msg");
       initCanvas(
         "sand-canvas",
         _msg[0].filterInflow,
@@ -589,15 +613,68 @@ export default {
       let CodAfterMsgArr = this.translateMsg.waterDecode.CodAfterMsgArr;
       //RCRR 历史 31 天水质数据(余氯去除率)
       let RcrrBeforeMsgArr = this.translateMsg.waterDecode.RcrrBeforeMsgArr;
-      waterCanvas("aaa", inflowMsgArr[30], 500, "#FFB400");
-      waterCanvas("bbb", pureMsgArr[30], 30, "#3DDA85");
-      waterCanvas("ccc", TocBeforeMsgArr[30], 10, "#FFB400");
-      waterCanvas("ddd", TocAfterMsgArr[30], 1, "#3DDA85");
-      waterCanvas("eee", NtuBeforeMsgArr[30], 5, "#FFB400");
-      waterCanvas("fff", NtuAfterMsgArr[30], 1.5, "#3DDA85");
-      waterCanvas("ggg", CodBeforeMsgArr[30], 10, "#FFB400");
-      waterCanvas("jjj", CodAfterMsgArr[30], 1, "#3DDA85");
-      waterCanvas("kkk", RcrrBeforeMsgArr[30], 500, "#FFB400");
+      waterCanvas(
+        "aaa",
+        inflowMsgArr[30] === "NaN" ? inflowMsgArr[29] : inflowMsgArr[30],
+        500,
+        "#FFB400"
+      );
+      waterCanvas(
+        "bbb",
+        pureMsgArr[30] === "NaN" ? pureMsgArr[29] : pureMsgArr[30],
+        30,
+        "#3DDA85"
+      );
+      waterCanvas(
+        "ccc",
+        TocBeforeMsgArr[30] === "NaN"
+          ? TocBeforeMsgArr[29]
+          : TocBeforeMsgArr[30],
+        10,
+        "#FFB400"
+      );
+      waterCanvas(
+        "ddd",
+        TocAfterMsgArr[30] === "NaN" ? TocAfterMsgArr[29] : TocAfterMsgArr[30],
+        1,
+        "#3DDA85"
+      );
+      waterCanvas(
+        "eee",
+        NtuBeforeMsgArr[30] === "NaN"
+          ? NtuBeforeMsgArr[29]
+          : NtuBeforeMsgArr[30],
+        5,
+        "#FFB400"
+      );
+      waterCanvas(
+        "fff",
+        NtuAfterMsgArr[30] === "NaN" ? NtuAfterMsgArr[29] : NtuAfterMsgArr[30],
+        1.5,
+        "#3DDA85"
+      );
+      waterCanvas(
+        "ggg",
+        CodBeforeMsgArr[30] === "NaN"
+          ? CodBeforeMsgArr[29]
+          : CodBeforeMsgArr[30],
+        10,
+        "#FFB400"
+      );
+      waterCanvas(
+        "jjj",
+        CodAfterMsgArr[30] === "NaN" ? CodAfterMsgArr[29] : CodAfterMsgArr[30],
+        1,
+        "#3DDA85"
+      );
+      waterCanvas(
+        "kkk",
+        RcrrBeforeMsgArr[30] === "NaN"
+          ? RcrrBeforeMsgArr[29]
+          : RcrrBeforeMsgArr[30],
+        100,
+        "#FFB400"
+      );
     },
     //点击加月份
     addMouth() {
@@ -621,7 +698,6 @@ export default {
       let year = this.time.year;
       let mouth = this.time.mouth;
       let day = this.time.day;
-      console.log(year, mouth, day, "这是我的day");
       time = year + "/" + mouth;
       this.allWaterTime = year + "-" + mouth;
 
@@ -629,7 +705,6 @@ export default {
         did: this.translateMsg.pdid,
         time: time
       }).then(res => {
-        console.log(res);
         let msgList = res.data.data;
         let newMsg = msgList.map(item => {
           return (function(item) {
@@ -669,7 +744,6 @@ export default {
           let multiple = Math.pow(10, length2);
           maxNum = Math.ceil(maxNum / multiple) * multiple;
         } else {
-          console.log("是否进入了", newArr);
           if (newArr.length === 0) {
             minNum = 0;
             maxNum = 500;
@@ -681,7 +755,6 @@ export default {
               let length = String(Math.floor(minNum)).length - 1;
               let multiple = Math.pow(10, length);
               minNum = Math.ceil(minNum / multiple) * multiple;
-              console.log(minNum, "是否进");
             } else {
               minNum = Math.floor(minNum);
             }
@@ -723,7 +796,6 @@ export default {
   mounted() {
     this.canvas();
     this.WaterDashBoard();
-    console.log(this.translateMsg, "translateMsg");
     //进水标准
     this.$chart.line1(
       "table-echarts",
@@ -731,7 +803,9 @@ export default {
       0,
       500,
       this.translateMsg.waterDecode.inflowMsgArr,
-      this.translateMsg.waterDecode.pureMsgArr
+      this.translateMsg.waterDecode.pureMsgArr,
+      15,
+      105
     );
     this.$chart.line1(
       "table-echarts2",
@@ -739,7 +813,9 @@ export default {
       0,
       5.0,
       this.translateMsg.waterDecode.TocBeforeMsgArr,
-      this.translateMsg.waterDecode.TocAfterMsgArr
+      this.translateMsg.waterDecode.TocAfterMsgArr,
+      1,
+      3
     );
     this.$chart.line1(
       "table-echarts3",
@@ -747,7 +823,9 @@ export default {
       0,
       5.0,
       this.translateMsg.waterDecode.NtuBeforeMsgArr,
-      this.translateMsg.waterDecode.NtuAfterMsgArr
+      this.translateMsg.waterDecode.NtuAfterMsgArr,
+      0.5,
+      1
     );
     this.$chart.line1(
       "table-echarts4",
@@ -755,16 +833,24 @@ export default {
       0,
       5.0,
       this.translateMsg.waterDecode.CodBeforeMsgArr,
-      this.translateMsg.waterDecode.CodAfterMsgArr
+      this.translateMsg.waterDecode.CodAfterMsgArr,
+      1,
+      1.5
     );
     this.$chart.line1(
       "table-echarts5",
       "ppm",
       50,
       100,
-      [],
-      this.translateMsg.waterDecode.RcrrBeforeMsgArr
+      [''],
+      this.translateMsg.waterDecode.RcrrBeforeMsgArr,
+      85,
+      -1
     );
+    // this.waterQualitySee = this.relationCheck(5);
+    // this.useWaterSee = this.relationCheck(6);
+    // this.filterElementSee = this.relationCheck(7);
+    // this.machineSee = this.relationCheck(8);    
   }
 };
 </script>
@@ -809,7 +895,7 @@ export default {
     margin-top: 10px;
     .waterQuality {
       width: 100%;
-      height: 640px;
+      min-height: 740px;
       .waterQuality-left {
         float: left;
         width: 62.4%;
@@ -831,6 +917,7 @@ export default {
         .data-table {
           margin-top: 50px;
           display: flex;
+          flex-wrap:wrap; 
           justify-content: space-around;
           .chlorine {
             width: 230px;
@@ -842,6 +929,7 @@ export default {
             box-sizing: border-box;
             width: 280px;
             height: 276px;
+            margin-bottom: 40px;
             // float: left;
             .table-TDS {
               display: inline-block;
@@ -886,8 +974,8 @@ export default {
             }
             .echarts {
               // display: none;
-              width: 240px;
-              height: 220px;
+              width: 320px;
+              height: 260px;
             }
             #table-echarts2 {
               position: absolute;
@@ -904,13 +992,20 @@ export default {
           }
         }
         .data-table2 {
-          margin-top: 0;
+          margin-top: 40px;
+          margin-bottom: 58px;
+        }
+        .left-jurisdiction{
+          width: 100%;
+          height: 700px;
+          text-align: center;
+          line-height: 700px;
         }
       }
       .waterQuality-right {
         float: right;
         width: 35.2%;
-        height: 100%;
+        height: 740px;
         margin-right: 0.6%;
         border: solid 1px #053272;
         .right-title {
@@ -940,6 +1035,12 @@ export default {
               cursor: pointer;
             }
           }
+        }
+        .right-jurisdiction{
+          width: 100%;
+          height: 600px;
+          text-align: center;
+          line-height: 600px;
         }
         .table-box {
           overflow: hidden;
@@ -983,13 +1084,11 @@ export default {
             }
             .scope {
               position: absolute;
-              width: 41px;
-              height: 16px;
-              left: 50%;
+              left: 28%;
               bottom: 0;
-              transform: translate(-50%);
               color: #3dda85;
-              font-size: 2px;
+              font-size: 12px;
+              transform: scale(0.75);
             }
             .dashBoard {
               position: absolute;
@@ -1010,10 +1109,10 @@ export default {
             }
             .day {
               position: absolute;
-              left: 50%;
+              left: 28%;
               bottom: 0;
-              transform: translate(-50%);
-              font-size: 8px;
+              font-size: 12px;
+              transform: scale(0.75);
             }
             .dashBoard {
               position: absolute;
@@ -1027,6 +1126,12 @@ export default {
             top: -34px;
           }
         }
+      }
+      .Cartridge-jurisdiction{
+        width: 100%;
+        height: 340px;
+        text-align: center;
+        line-height: 340px;
       }
     }
     .State {
@@ -1124,7 +1229,7 @@ export default {
         .operation-right {
           width: 44.4%;
           height: 100%;
-          padding-bottom: 182px;
+          padding-bottom: 260px;
           background: #ffffff;
           float: right;
           margin-right: 4.8%;
@@ -1186,6 +1291,12 @@ export default {
             }
           }
         }
+      }
+      .State-jurisdiction{
+        width: 100%;
+        height: 120px;
+        text-align: center;
+        line-height: 120px;
       }
     }
   }

@@ -30,7 +30,6 @@
                 <template slot="title">
                   <i class="el-icon-s-unfold"></i>系统菜单
                 </template>
-
                 <el-menu-item v-for="item in list" :key="item.id" @click="homeAction(item.name)">
                   <router-link :to="item.path">
                     <img :src="isSelect === item.name ? item.require : item.url" alt="item.title" />
@@ -52,7 +51,7 @@
   </div>
 </template>
 <script>
-import bus from '../../js/bus'
+import bus from "../../js/bus";
 export default {
   name: "home",
   data() {
@@ -95,32 +94,93 @@ export default {
           require: require("../../assets/img/icon8.png")
         }
       ],
-    Judge:false
+      Judge: false
     };
   },
   methods: {
+    //判断是否含有某一权限
+    relationCheck(value) {
+      let _relation = localStorage.getItem("relation");
+      let _arr = _relation.split(",");
+      console.log(_relation, "relation");
+      for (var item in _arr) {
+        if (_arr[item] == value) {
+          return true;
+        }
+      }
+    },
+    //判断要隐藏哪个权限
+    hiddenRelation(value) {
+      const _this = this;
+      if (value == 3) {
+        if (this.relationCheck(value)) {
+        } else {
+          _this.list = _this.list.filter(item => {
+            return item.id != 2;
+          });
+        }
+      }
+      if (value == 14) {
+        if (this.relationCheck(value)) {
+        } else {
+          _this.list = _this.list.filter(item => {
+            return item.id != 4;
+          });
+        }
+      }
+      if (value == 15) {
+        if (this.relationCheck(value)) {
+        } else {
+            _this.list = _this.list.filter(item => {
+            return item.id != 5;
+          });
+        }
+      }
+    },
     homeAction(name) {
       this.isSelect = name;
     },
     quit() {
+      const _this = this;
+      let _value = localStorage.getItem("phone");
       this.event.clearCookie();
-      this.$router.replace("/login");
-      localStorage.clear();
+      this.$post(this.$api.logout, {
+        phone: _value
+      }).then(res => {
+        console.log(res);
+        if (res.data.code === 0) {
+          _this.$message({
+            message: "注销成功",
+            type: "success"
+          });
+          this.$router.replace("/login");
+          localStorage.clear();
+        } else {
+          _this.$message({
+            message: res.data.msg,
+            type: "error"
+          });
+        }
+      });
     },
-    routerJudge(){
+    routerJudge() {
       this.Judge = true;
     }
   },
-  created(){
-    bus.$on('getParam',() => {
-      this.Judge = false
-    })
+  created() {
+    bus.$on("getParam", () => {
+      this.Judge = false;
+    });
   },
   mounted() {
     this.isSelect = this.$route.name;
+    //权限判断
+    this.hiddenRelation(3);
+    this.hiddenRelation(14);
+    this.hiddenRelation(15);
   },
-  beforeDestroy(){
-    bus.$off('getParam')
+  beforeDestroy() {
+    bus.$off("getParam");
   }
 };
 </script>
@@ -129,7 +189,7 @@ export default {
 #home {
   position: relative;
   //  margin: auto;
-  .curtain{
+  .curtain {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -144,7 +204,7 @@ export default {
     background: #2488dd;
     color: #fff;
     padding-top: 22px;
-    padding-bottom:20px;
+    padding-bottom: 20px;
     box-sizing: border-box;
 
     .logo {

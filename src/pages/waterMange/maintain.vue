@@ -97,7 +97,12 @@
                   </div>
                 </td>
                 <td>
-                  <input type="text" style="width:100%;height:35px;border:0;text-align:center" />
+                  <textarea
+                    ref="waterMsg"
+                    autocomplete="off"
+                    class="el-textarea__inner"
+                    style="min-height:35px"
+                  ></textarea>
                 </td>
               </tr>
               <tr>
@@ -112,7 +117,14 @@
                     <span>MPa(公斤力)</span>
                   </div>
                 </td>
-                <td></td>
+                <td>
+                  <textarea
+                    ref="pressureWaterMsg"
+                    autocomplete="off"
+                    class="el-textarea__inner"
+                    style="min-height:35px"
+                  ></textarea>
+                </td>
               </tr>
               <tr>
                 <td>1</td>
@@ -123,7 +135,14 @@
                     <span>L/天(可按照2L/人·天计算)</span>
                   </div>
                 </td>
-                <td></td>
+                <td>
+                  <textarea
+                    ref="dayDrinkingMsg"
+                    autocomplete="off"
+                    class="el-textarea__inner"
+                    style="min-height:35px"
+                  ></textarea>
+                </td>
               </tr>
               <tr>
                 <td>1</td>
@@ -173,7 +192,12 @@
                   </div>
                 </td>
                 <td>
-                  <input type="text" style="width:100%;height:35px;border:0;text-align:center" />
+                  <textarea
+                    ref="positionMsg"
+                    autocomplete="off"
+                    class="el-textarea__inner"
+                    style="min-height:54px"
+                  ></textarea>
                 </td>
               </tr>
               <tr>
@@ -194,11 +218,12 @@
                   </div>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    value="可多选"
-                    style="width:100%;height:35px;border:0;text-align:center"
-                  />
+                  <textarea
+                    ref="architecturalTypeMsg"
+                    autocomplete="off"
+                    class="el-textarea__inner"
+                    style="min-height:35px"
+                  ></textarea>
                 </td>
               </tr>
               <tr>
@@ -225,17 +250,32 @@
                   </div>
                 </td>
                 <td>
-                  <input type="text" style="width:100%;height:35px;border:0;text-align:center" />
+                  <textarea
+                    ref="architeMsg"
+                    autocomplete="off"
+                    class="el-textarea__inner"
+                    style="min-height:35px"
+                  ></textarea>
                 </td>
               </tr>
               <tr style="height:80px">
                 <td>1</td>
                 <td>其他</td>
                 <td>
-                  <input type="text" style="width:100%;height:80px;border:0;text-align:center" />
+                  <textarea
+                    ref="orther"
+                    autocomplete="off"
+                    class="el-textarea__inner"
+                    style="min-height:100px"
+                  ></textarea>
                 </td>
                 <td>
-                  <input type="text" style="width:100%;height:80px;border:0;text-align:center" />
+                  <textarea
+                    ref="ortherMsg"
+                    autocomplete="off"
+                    class="el-textarea__inner"
+                    style="min-height:100px"
+                  ></textarea>
                 </td>
               </tr>
             </tbody>
@@ -250,6 +290,31 @@ export default {
   name: "maintain",
   data() {
     return {
+      lanOuProjectInfo: {
+        oderTime: "", //订单时间
+        produceTime: "", //生产时间
+        installTime: "", //安装时间
+        clientName: "", //客户名称
+        installationAdderss: "", //安装地址
+        clientType: "", //客户性质,
+        leadingCard: "", //负责人
+        defender: "", //维护人
+        sales: "", //销售
+        water: "", //水源
+        waterMsg: "", //水源备注(现在没有给参数)
+        pressureWater: "", //水源压力
+        pressureWaterMsg: "", //水源压力备注
+        dayDrinking: "", //日饮量估计
+        dayDrinkingMsg: "", //日饮量估算配置
+        position: "", //摆放位置,
+        positionMsg: "", //摆放位置备注(现在没有参数)
+        architecturalType: "", //建筑性质
+        architecturalTypeMsg: "", //建筑性质备注(现在没有参数)
+        architecturalCondition: "", //建筑情况(现在没有参数)
+        architeMsg: "", //建筑情况备注(现在没有参数)
+        orther: "", //其他
+        ortherMsg: "" //其她备注
+      },
       checkList: [
         { id: 10, name: "工厂企业" },
         { id: 11, name: "事业单位" },
@@ -343,36 +408,10 @@ export default {
         { id: 53, name: "食堂" },
         { id: 54, name: "其它" }
       ],
-      lanOuProjectInfo: {
-        pdid: "", //设备id
-        puuid: "", //产品型号id
-        pOderId: "", //订单号
-        oderTime: "", //订单时间
-        produceTime: "", //生产时间
-        installTime: "", //安装时间
-        clientName: "", //客户名称
-        installationAdderss: "", //安装地址
-        clientType: "", //客户性质,
-        leadingCard: "", //负责人
-        leadingPhone: "", //负责人手机号
-        defender: "", //维护人
-        defenderPhone: "", //维护人手机号
-        sales: "", //销售
-        salesPhone: "", //销售手机号
-        water: "", //水源
-        waterMsg: "", //水源备注
-        pressureWater: "", //水源压力
-        pressureWaterMsg: "", //水源压力备注
-        dayDrinking: "", //日饮量估计
-        dayDrinkingMsg: "", //日饮量估算配置
-        position: "", //摆放位置,
-        positionMsg: "", //摆放位置备注
-        architecturalType: "", //建筑性质
-        architecturalCondition: "", //建筑情况
-        orther: "", //其他
-        id: "",
-        userIds: ""
-      }
+      id: "", //设备的id
+      leadingPhone: "", //负责人手机号
+      defenderPhone: "", //维护人手机号
+      salesPhone: "" //销售手机号
     };
   },
   props: {
@@ -382,29 +421,43 @@ export default {
     }
   },
   methods: {
+    //获取进入
     hidden() {
-      console.log(this.lanOuProjectInfo, "我是this.lanOuProjectInfo");
+      var userVerity = /^[1][3,4,5,6,7,8][0-9]{9}$/;
       this.getMsg();
-      this.$postBody(
-        this.$api.updateLanOuProjectInfo,
-        {
-          lanOuProjectInfo: this.lanOuProjectInfo
-        },
-        {}
-      ).then(res => {
-        console.log(res);
-      });
-      console.log(this.lanOuProjectInfo);
+      console.log(this.lanOuProjectInfo,"this.lanOuProjectInfo")
+      if (
+        !userVerity.test(this.leadingPhone) ||
+        !userVerity.test(this.defenderPhone) ||
+        !userVerity.test(this.salesPhone)
+      ) {
+        this.$message({
+          message: "手机号格式不正确",
+          type: "warning"
+        });
         this.$emit("maintain");
+        return;
+      } else {
+        this.$postBody(
+          this.$api.updateLanOuProjectInfo,
+          {
+            lanOuProjectInfo: this.lanOuProjectInfo
+          },
+          {
+            id: this.id,
+            leadingPhone: this.leadingPhone,
+            defenderPhone: this.defenderPhone,
+            salesPhone: this.salesPhone
+          }
+        ).then(res => {
+          console.log(res);
+        });
+        console.log(this.lanOuProjectInfo);
+        this.$emit("maintain");
+      }
     },
     getMsg() {
-      //设备ID
-      let robotId = this.$refs.robotId[0].value;
-      // //机器型号
-      let machineModel = this.$refs.machineModel[0].value;
-      // //订单号
-      let orderNumber = this.$refs.orderNumber[0].value;
-      // //订单日期
+      //订单日期
       let orderDate = this.$refs.orderDate[0].value;
       //生产日期
       let productionDate = this.$refs.productionDate[0].value;
@@ -420,6 +473,7 @@ export default {
       let district = this.$refs.district.value;
       //项目试用方负责人
       let leadingCard = this.$refs.leadingCard[0].value;
+      console.log(leadingCard, "leadingCard");
       //项目方负责人手机号
       let leadingPhone = this.$refs.leadingPhone[0].value;
       //项目方维护人
@@ -436,36 +490,47 @@ export default {
         "~" +
         this.$refs.maxPressureLine.value;
       //水源压力备注
-      let pressureWaterMsg = "";
+      let pressureWaterMsg = this.$refs.pressureWaterMsg.value;
       //日饮水量估计
       let dayDrinking = this.$refs.dayDrinking.value;
       //日饮水量估计备注
-      let dayDrinkingMsg = "";
+      let dayDrinkingMsg = this.$refs.dayDrinkingMsg.value;
       // 饮水末端建筑情况
       let architecturalCondition =
         this.$refs.buildHeight.value + "," + this.$refs.maxWater.value;
-      this.lanOuProjectInfo.pdid = robotId; //robotId;
-      this.lanOuProjectInfo.puuid = machineModel; //machineModel;
-      this.lanOuProjectInfo.pOderId = orderNumber;
-      this.lanOuProjectInfo.orderTime = orderDate;
+      // //位置摆放备注
+      let positionMsg = this.$refs.positionMsg.value;
+      //建筑性质备注
+      let architecturalTypeMsg = this.$refs.architecturalTypeMsg.value;
+      //建筑情况备注
+      let architeMsg = this.$refs.architeMsg.value;
+      //其它
+      let orther = this.$refs.orther.value;
+      //其它备注
+      let ortherMsg = this.$refs.ortherMsg.value;
+
+      this.lanOuProjectInfo.oderTime = orderDate;
       this.lanOuProjectInfo.produceTime = productionDate;
       this.lanOuProjectInfo.installTime = installDate;
       this.lanOuProjectInfo.clientName = customerName;
       this.lanOuProjectInfo.installationAdderss =
-        provoice + "省" + city + "市" + district + "区";
+        provoice + "省," + city + "市," + district + "区";
       this.lanOuProjectInfo.leadingCard = leadingCard;
-      this.lanOuProjectInfo.leadingPhone = leadingPhone;
+      this.leadingPhone = leadingPhone;
       this.lanOuProjectInfo.defender = defender;
-      this.lanOuProjectInfo.defenderPhone = defenderPhone;
+      this.defenderPhone = defenderPhone;
       this.lanOuProjectInfo.sales = sales;
-      this.lanOuProjectInfo.salesPhone = salesPhone;
+      this.salesPhone = salesPhone;
       this.lanOuProjectInfo.pressureWater = pressureWater;
       this.lanOuProjectInfo.pressureWaterMsg = pressureWaterMsg;
       this.lanOuProjectInfo.dayDrinking = dayDrinking;
       this.lanOuProjectInfo.dayDrinkingMsg = dayDrinkingMsg;
       this.lanOuProjectInfo.architecturalCondition = architecturalCondition;
-      this.lanOuProjectInfo.orther = "";
-      console.log(this.lanOuProjectInfo.orderTime, "我是orderdate");
+      this.lanOuProjectInfo.orther = orther;
+      this.lanOuProjectInfo.ortherMsg = ortherMsg;
+      this.lanOuProjectInfo.positionMsg = positionMsg;
+      this.lanOuProjectInfo.architecturalTypeMsg = architecturalTypeMsg;
+      this.lanOuProjectInfo.architeMsg = architeMsg;
     },
     //客户性质判断
     checkMsg(index) {
@@ -502,14 +567,11 @@ export default {
     },
     //摆放位置
     positionPut(number) {
-      this.lanOuProjectInfo.id = "";
-      this.lanOuProjectInfo.userIds = "";
       if (number === 1) {
         if (this.$refs.position.checked === true) {
           this.$refs.position2.checked = false;
           this.lanOuProjectInfo.position =
             "1+" + this.$refs.positionDescription.value;
-          this.lanOuProjectInfo.positionMsg = "";
           console.log(
             this.lanOuProjectInfo.position,
             "我是this.lanOuProjectInfo.position"
@@ -517,7 +579,6 @@ export default {
         } else {
           this.$refs.position2.checked = false;
           this.lanOuProjectInfo.position = "";
-          this.lanOuProjectInfo.positionMsg = "";
         }
       } else if (number === 2) {
         if (this.$refs.position2.checked === true) {
@@ -529,7 +590,6 @@ export default {
             this.$refs.positionDescription3.value +
             "," +
             this.$refs.positionDescription3.value;
-          this.lanOuProjectInfo.positionMsg = "";
           console.log(
             this.lanOuProjectInfo.position,
             "我是positionDescription2"
@@ -537,7 +597,6 @@ export default {
         } else {
           this.$refs.position.checked = false;
           this.lanOuProjectInfo.position = "";
-          this.lanOuProjectInfo.positionMsg = "";
         }
       }
     },
@@ -565,11 +624,99 @@ export default {
           }
         }
       }
+    },
+    //进入信息维护时获取数据
+    EnterGet() {
+      this.$post(this.$api.getLanOuProjectInfoByDidAndUuid, {
+        did: this.item.pdid,
+        uuid: this.item.puuid
+      }).then(res => {
+        console.log(res, "res");
+        let _this = this;
+        let $data = res.data.data[0];
+        console.log($data, "res");
+        if (res.data.code === 0) {
+          let provoice = $data.installationAdderss.split(",");
+          this.id = $data.id;
+          console.log(this.id, "this.id");
+          this.baseList[2].value = $data.pOderId;
+          this.baseList[3].value = $data.oderTime;
+          this.baseList[4].value = $data.produceTime;
+          this.baseList[5].value = $data.installTime;
+          this.baseList[6].value = $data.clientName;
+          this.$refs.provoice.value = provoice[0];
+          this.$refs.city.value = provoice[1];
+          this.$refs.district.value = provoice[2];
+          this.$refs.leadingCard[0].value = $data.leadingCadre;
+          this.$refs.leadingPhone[0].value = $data.leadingPhone;
+          this.$refs.defender[0].value = $data.defender;
+          this.$refs.defenderPhone[0].value = $data.defenderPhone;
+          console.log(this.$refs.defenderPhone);
+          this.$refs.sales[0].value = $data.sales;
+          this.$refs.salesPhone[0].value = $data.salesPhone;
+          this.$refs.waterMsg.value = $data.waterMsg;
+          this.$refs.minPressureLine.value =
+            $data.pressureWater.split("~")[0] == "undefined"
+              ? $data.pressureWater.split("~")[0]
+              : "";
+          this.$refs.maxPressureLine.value =
+            $data.pressureWater.split("~")[1] == "undefined"
+              ? $data.pressureWater.split("~")[1]
+              : "";
+          this.$refs.pressureWaterMsg.value = $data.pressureWaterMsg;
+          this.$refs.dayDrinking.value = $data.dayDrinking;
+          this.$refs.dayDrinkingMsg.value = $data.dayDrinkingMsg;
+          this.$refs.positionMsg.value = $data.positionMsg;
+          this.$refs.architecturalTypeMsg.value = $data.architecturalTypeMsg;
+          this.$refs.architeMsg.value = $data.architeMsg;
+          this.$refs.buildHeight.value =
+            $data.architecturalCondition == ""
+              ? ""
+              : $data.architecturalCondition.split(",")[0];
+          this.$refs.maxWater.value =
+            $data.architecturalCondition == ""
+              ? ""
+              : $data.architecturalCondition.split(",")[1];
+          this.$refs.orther.value = $data.orther;
+          this.$refs.ortherMsg.value = $data.ortherMsg;
+          if ($data.clientType !== "") {
+            let index = Number($data.clientType) - 1
+            console.log($data.clientType,"index")
+            let checkDom3 = this.$refs.clientNature.getElementsByClassName(
+              "check"
+            );
+            let representative = this.checkJudge(index, _this.checkList, checkDom3);
+          }
+          if ($data.water !== "") {
+            let index2 = $data.water - 1
+            console.log(index2,"index2")
+            let checkDom2 = this.$refs.headwaters.getElementsByClassName(
+              "headwaters-check"
+            );
+            this.checkJudge(index2, _this.headwatersList, checkDom2);
+          }
+          if ($data.architecturalType !== "") {
+            let index3 = $data.architecturalType - 1
+            let checkDom = this.$refs.buildingProperty.getElementsByClassName(
+              "headwaters-check"
+            );
+            this.checkJudge(index3, _this.natureList, checkDom);
+          }
+        } else {
+          this.$message({
+            message: "暂无该设备数据",
+            type: "warning"
+          });
+        }
+      });
     }
   },
+  created() {},
   mounted() {
+    let _this = this;
     // this.getMsg();
     // this.checkJudge();
+    this.EnterGet();
   }
 };
 </script>
@@ -581,7 +728,7 @@ export default {
   top: 0;
   left: 50%;
   transform: translate(-50%);
-  z-index: 10000;
+  z-index: 10;
   #maintain-header {
     width: 100%;
     height: 60px;
@@ -694,6 +841,25 @@ export default {
           }
           tbody {
             tr {
+              td {
+                .el-textarea__inner {
+                  display: block;
+                  resize: vertical;
+                  padding: 5px 15px;
+                  line-height: 1.5;
+                  box-sizing: border-box;
+                  width: 100%;
+                  font-size: inherit;
+                  color: #606266;
+                  background-color: #fff;
+                  background-image: none;
+                  // border: 1px solid #dcdfe6;
+                  border: 0;
+                  border-radius: 4px;
+                  // transition: border-color 0.2s
+                  //   cubic-bezier(0.645, 0.045, 0.355, 1);
+                }
+              }
               td:nth-child(3) {
                 padding: 6px 0;
                 .headwaters {

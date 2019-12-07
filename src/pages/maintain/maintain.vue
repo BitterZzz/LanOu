@@ -30,7 +30,7 @@
           </td>
           <td>{{item.produceTime.split(' ')[0]}}</td>
           <td>{{item.pdid}}</td>
-          <td>{{item.guranteState}}</td>
+          <td>{{item.guaranteState.split(',').join('、')}}</td>
         </tr>
       </table>
     </div>
@@ -65,7 +65,7 @@ export default {
     },
     getMaintainMsg(val = "1", pageSize = "8") {
       let data = {
-        typeVo: 1,
+        typeVo: 2,
         pageNum: val,
         pageSize: pageSize
       };

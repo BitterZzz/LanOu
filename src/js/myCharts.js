@@ -5,17 +5,17 @@ const install = function (Vue) {
       get() {
         return {
           // 双曲线表
-          line1: function (id, name, minNum, maxNum, data, data2) {
+          line1: function (id, name, minNum, maxNum, data, data2, inflowValue,clearwaterValue) {
             this.chart = echarts.init(document.getElementById(id))
             this.chart.clear()
             var colors = ['#FFB402', '#3ADA85', '#675bba']
             const optionData = {
               color: colors,
               grid: {
-                x: 40,
-                y: 80,
-                x1: 40,
-                y1: 30
+                left: 40,
+                top: 70,
+                right: 80,
+                bottom: 60
               },
               tooltip: {
                 show: true,
@@ -71,6 +71,7 @@ const install = function (Vue) {
                 name: name,
                 type: 'value',
                 boundaryGap: [0, '100%'],
+                splitNumber:11,
                 splitLine: {
                   show: false
                 },
@@ -96,13 +97,43 @@ const install = function (Vue) {
                   type: 'line',
                   // xAxisIndex: 1,
                   smooth: true,
-                  data: data
+                  data: data,
+                  markLine: {
+                    symbol: ['none','none'],
+                    data:[{
+                      silent:true,
+                      lineStyle:{
+                        type:"solid",
+                        color:"rgba(238,99,99)"
+                      },
+                      label:{
+                        position:'end',
+                        formatter:'纯净水指标'
+                      },
+                      yAxis:inflowValue
+                    }]
+                  }
                 },
                 {
                   name: '2016 降水量',
                   type: 'line',
                   smooth: true,
-                  data: data2
+                  data: data2,
+                  markLine: {
+                    symbol: ['none','none'],
+                    label:{
+                      position:"end",
+                      formatter:"进水指标"
+                    },
+                    data:[{
+                      silent:false,
+                      lineStyle:{
+                        type:"solid",
+                        color:"rgba(238,99,99)"
+                      },
+                      yAxis:clearwaterValue
+                    }]
+                  }                  
                 }
               ]
             }
@@ -164,7 +195,6 @@ const install = function (Vue) {
                 smooth: true
               }]
             }
-
             this.chart.setOption(optionData)
           }
         }

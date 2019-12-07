@@ -60,7 +60,7 @@
               </td>
               <td>{{item.produceTime.split(' ')[0]}}</td>
               <td>{{item.pdid}}</td>
-              <td>{{item.guaranteState}}</td>
+              <td>{{item.guaranteState.split(',').join('、')}}</td>
             </tr>
           </table>
         </div>
@@ -99,7 +99,7 @@
               </td>
               <td>{{item.produceTime.split(' ')[0]}}</td>
               <td>{{item.pdid}}</td>
-              <td>{{item.maintenanceState}}</td>
+              <td>{{item.maintenanceState.split(',').join('、')}}</td>
             </tr>
           </table>
         </div>

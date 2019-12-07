@@ -71,32 +71,32 @@
                 <div class="msg">
                   <div>水温 X℃</div>
                   <div>
-                    TDS(ppm)原水:{{item.waterDecode.inflowMsgArr.length === 0 ? "" : item.waterDecode.inflowMsgArr[30]}}
+                    TDS(ppm)原水:{{item.waterDecode.inflowMsgArr.length === 0 ? "" : item.waterDecode.inflowMsgArr[30] === "NaN" ? item.waterDecode.inflowMsgArr[29] : item.waterDecode.inflowMsgArr[30]}}
                     <span
                       class="bar"
                     ></span>
-                    纯水:{{item.waterDecode.pureMsgArr.length === 0 ? "" : item.waterDecode.pureMsgArr[30]}}
+                    纯水:{{item.waterDecode.pureMsgArr.length === 0 ? "" : item.waterDecode.pureMsgArr[30] === "NaN" ? item.waterDecode.pureMsgArr[29] : item.waterDecode.pureMsgArr[30]}}
                   </div>
                   <div>
-                    TOC(mg/l)原水:{{item.waterDecode.TocBeforeMsgArr.length === 0 ? "" : item.waterDecode.TocBeforeMsgArr[30]}}
+                    TOC(mg/l)原水:{{item.waterDecode.TocBeforeMsgArr.length === 0 ? "" : item.waterDecode.TocBeforeMsgArr[30] === "NaN" ? item.waterDecode.TocBeforeMsgArr[29] : item.waterDecode.TocBeforeMsgArr[30]}}
                     <span
                       class="bar"
                     ></span>
-                    纯水:{{item.waterDecode.TocAfterMsgArr.length === 0 ? "" : item.waterDecode.TocAfterMsgArr[30]}}
+                    纯水:{{item.waterDecode.TocAfterMsgArr.length === 0 ? "" : item.waterDecode.TocAfterMsgArr[30] === "NaN" ? item.waterDecode.TocAfterMsgArr[29] : item.waterDecode.TocAfterMsgArr[30]}}
                   </div>
                   <div>
-                    浊度(NTU)原水:{{item.waterDecode.NtuBeforeMsgArr.length === 0 ? "" : item.waterDecode.NtuBeforeMsgArr[30]}}
+                    浊度(NTU)原水:{{item.waterDecode.NtuBeforeMsgArr.length === 0 ? "" : item.waterDecode.NtuBeforeMsgArr[30] === "NaN" ? item.waterDecode.NtuBeforeMsgArr[29] : item.waterDecode.NtuBeforeMsgArr[30]}}
                     <span
                       class="bar"
                     ></span>
-                    纯水:{{item.waterDecode.NtuAfterMsgArr.length === 0 ? "" : item.waterDecode.NtuAfterMsgArr[30]}}
+                    纯水:{{item.waterDecode.NtuAfterMsgArr.length === 0 ? "" : item.waterDecode.NtuAfterMsgArr[30] === "NaN" ? item.waterDecode.NtuBeforeMsgArr[29] : item.waterDecode.NtuBeforeMsgArr[30]}}
                   </div>
                   <div>
-                    COD(mg/l)原水:{{item.waterDecode.CodBeforeMsgArr.length === 0 ? "" : item.waterDecode.CodBeforeMsgArr[30]}}
+                    COD(mg/l)原水:{{item.waterDecode.CodBeforeMsgArr.length === 0 ? "" : item.waterDecode.CodBeforeMsgArr[30] === "NaN" ? item.waterDecode.CodBeforeMsgArr[29] : item.waterDecode.CodBeforeMsgArr[30]}}
                     <span
                       class="bar"
                     ></span>
-                    纯水:{{item.waterDecode.CodAfterMsgArr.length === 0 ? "" : item.waterDecode.CodAfterMsgArr[30]}}
+                    纯水:{{item.waterDecode.CodAfterMsgArr.length === 0 ? "" : item.waterDecode.CodAfterMsgArr[30] === "NaN" ? item.waterDecode.CodAfterMsgArr[29] : item.waterDecode.CodAfterMsgArr[30]}}
                   </div>
                   <div>余氧(mg/l)去除率:{{item.waterDecode.RcrrBeforeMsgArr.length === 0 ? "" : item.waterDecode.RcrrBeforeMsgArr[30]}}%</div>
                 </div>
@@ -125,9 +125,9 @@
               <td>{{item.bindUser[0]}}</td>
               <td>
                 <div class="operation" @click="saveIndex(item)">
-                  <p @click="showMachine(index)">查看</p>
-                  <p @click="detailsShow(index)">参数配置</p>
-                  <p @click="maintainShow(item)">信息维护</p>
+                  <p @click="showMachine(index)" v-if="examineSee">查看</p>
+                  <p @click="detailsShow(index)" v-if="configurationSee">参数配置</p>
+                  <p @click="maintainShow(item)" v-if="informationSee">信息维护</p>
                   <p>日志</p>
                 </div>
               </td>
@@ -139,11 +139,11 @@
     </div>
     <!-- 查看组件 -->
     <div v-if="checkJudge">
-      <particulars @hidden="hiddenMachine()" :translateMsg="this.bindArrMsg"></particulars>
+      <particulars @hidden="hiddenMachine()" :translateMsg="this.bindArrMsg" :relation="this.relation"></particulars>
     </div>
     <!-- 参数配置组件 -->
     <div v-if="detailsJudge">
-      <parameter @hiddenSecond="detailshidden()" :allocationMsg="this.bindArrMsg"></parameter>
+      <parameter @hiddenSecond="detailshidden()" :allocationMsg="this.bindArrMsg" ></parameter>
     </div>
     <div v-if="maintainJudge">
       <maintain @maintain="maintainHidden()" :item="this.baseMsg"></maintain>
@@ -213,8 +213,6 @@ export default {
       typeFrist: {},
       transferMsg: {},
       baseMsg: {},
-      //蓝鸥的did
-      localDid: "",
       //蓝鸥用户的id
       localId:"",
       //净水器管理展示所需数据
@@ -233,17 +231,38 @@ export default {
       //存放当前数据的数组
       nowArrMsg: [],
       //点击获取到的数据
-      bindArrMsg: {}
+      bindArrMsg: {},
+      //该用户所有权限
+      relation:[],
+      //参数配置数据查看
+      configurationSee:"",
+      //信息维护数据查看
+      informationSee:"",
+      //查看
+      examineSee:""
     };
   },
   methods: {
+    //判断是否有权限查看数据
+    relationCheck(value){
+      let _relation = localStorage.getItem("relation");
+      let _arr = _relation.split(',');
+      for(var item in _arr){
+        if(_arr[item] == value){
+          return true;
+        }
+      }     
+    },    
     installation() {
-      console.log("installation");
     },
     uploadtime() {
-      console.log("uploadtime");
     },
-
+    //用户权限处理
+    RloadOperation() {
+      let _relation = localStorage.getItem('relation');
+      let _arr = _relation.split(',');
+      this.relation = _arr;
+    },
     show() {},
     //保存点击时获取到的index
     saveIndex(item) {
@@ -263,6 +282,7 @@ export default {
       this.bindArrMsg = this.nowArrMsg[0][index];
     },
     detailshidden() {
+      this.getWaterMsg(1, { accountId: this.localId });      
       this.detailsJudge = false;
     },
     maintainShow(item) {
@@ -507,7 +527,6 @@ export default {
           })(item.waterInfo)
         };
       });
-      console.log(a,"我是数据重组中的a")
       _this.nowArrMsg = [];
       _this.nowArrMsg.push({...a});
     }
@@ -520,15 +539,20 @@ export default {
     maintain
   },
   created() {
-    this.localDid = localStorage.getItem("did");
     this.localId = localStorage.getItem("id");
     this.getWaterMsg(1, { accountId: this.localId });
+    this.configurationSee = this.relationCheck(10)
+    this.informationSee = this.relationCheck(13)
   },
   mounted() {
     this.trDom = document.querySelectorAll(".el-icon-check");
     for (var i = 0; i < this.trDom.length; i++) {
       this.trDom[i].classList.remove("el-icon-check");
     }
+    this.RloadOperation();    
+    this.configurationSee = this.relationCheck(10);
+    this.informationSee = this.relationCheck(13);
+    this.examineSee = this.relationCheck(4);
   }
 };
 </script>

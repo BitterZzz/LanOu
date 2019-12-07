@@ -35,14 +35,14 @@
                     <div class="content-box">
                       <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
-                        @input="changeInput(0,0.35)"
+                        @input="changeInput(0,0.25)"
                         onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
                         ref="intakingMax"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.intakingMax : 0"
                       />
-                      <span @click="add(0.01,0.35)" onselectstart="return false">+</span>
+                      <span @click="add(0.01,0.25)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
@@ -52,13 +52,13 @@
                       <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
                         onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
-                        @input="changeInput(0,0.35)"
+                        @input="changeInput(0,0.25)"
                         ref="intakingMin"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.intakingMin : 0"
                       />
-                      <span @click="add(0.01,0.35)" onselectstart="return false">+</span>
+                      <span @click="add(0.01,0.25)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
@@ -114,7 +114,7 @@
                 </div>
               </div>
             </div>
-            <div class="cistern">
+            <div class="cistern" style="background:#fff">
               <div class="cistern-header">无菌水箱排空</div>
               <div class="cistern-content">
                 <p @click="emptying()">自动排空</p>
@@ -211,7 +211,7 @@
                 </div>
               </div>
             </div>
-            <div class="cistern">
+            <div class="cistern" style="background:#fff">
               <div class="cistern-header">恢复出产设置</div>
               <div class="cistern-content">
                 <p @click="reset()">恢复</p>
@@ -222,7 +222,7 @@
           <div class="content-frist clearfix">
             <div class="pressure">
               <div class="pressure-title">进水压力设置</div>
-              <div class="pressure-BorderBox">
+              <div class="pressure-BorderBox pressure-set">
                 <div class="pressure-Box">
                   <div class="pressure-content clearfix">
                     <span class="content-title">进水压力上限:</span>
@@ -230,13 +230,13 @@
                       <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
                       <input
                         onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
-                        @input="changeInput(0,0.5)"
+                        @input="changeInput(0,0.8)"
                         ref="inflowMax"
                         type="number"
                         class="num"
                         :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.inflowMax : 0"
                       />
-                      <span @click="add(0.01,0.5)" onselectstart="return false">+</span>
+                      <span @click="add(0.01,0.8)" onselectstart="return false">+</span>
                       <b>MPa</b>
                     </div>
                   </div>
@@ -256,44 +256,98 @@
                       <b>MPa</b>
                     </div>
                   </div>
+                  <div class="pressure-content clearfix">
+                    <span class="content-title">软水压力上限:</span>
+                    <div class="content-box">
+                      <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
+                      <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="changeInput(0,0.8)"
+                        ref="softWaterMax"
+                        type="number"
+                        class="num"
+                        :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.softWaterPressureMax : 0"
+                      />
+                      <span @click="add(0.01,0.8)" onselectstart="return false">+</span>
+                      <b>MPa</b>
+                    </div>
+                  </div>
+                  <div class="pressure-content clearfix">
+                    <span class="content-title">软水压力下限:</span>
+                    <div class="content-box">
+                      <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
+                      <input
+                        onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                        @input="changeInput(0,0.5)"
+                        ref="softWaterMin"
+                        type="number"
+                        class="num"
+                        :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.softWaterPressureMin : 0"
+                      />
+                      <span @click="add(0.01,0.5)" onselectstart="return false">+</span>
+                      <b>MPa</b>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="cistern hydraumatic">
-              <div class="cistern-header hydraumatic-header">液压传感器系数设置</div>
-              <div class="hydraumatic-content hydraumaticTop clearfix">
-                <span class="content-title">进水流量:</span>
-                <div class="content-box">
-                  <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
-                  <input
-                    onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
-                    @input="changeInput(0,2)"
-                    ref="rawWater"
-                    type="number"
-                    class="num"
-                    :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.rawWater : 0"
-                  />
-                  <span @click="add(0.01,2)" onselectstart="return false">+</span>
-                  <b>MPa</b>
+              <div class="cistern-set">
+                <div class="cistern-header hydraumatic-header">液压传感器系数设置</div>
+                <div class="hydraumatic-content hydraumaticTop clearfix">
+                  <span class="content-title">进水流量:</span>
+                  <div class="content-box">
+                    <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
+                    <input
+                      onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                      @input="changeInput(0,5)"
+                      ref="feddFlow"
+                      type="number"
+                      class="num"
+                      :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.feedWaterFlow : 0"
+                    />
+                    <span @click="add(0.01,5)" onselectstart="return false">+</span>
+                    <b>MPa</b>
+                  </div>
+                  <div class="space"></div>
                 </div>
-                <div class="space"></div>
+                <div class="hydraumatic-content clearfix">
+                  <span class="content-title">纯水流量:</span>
+                  <div class="content-box">
+                    <span @click="subtract(0.01,0)">-</span>
+                    <input
+                      onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                      @input="changeInput(0,5)"
+                      ref="pureFlow"
+                      type="number"
+                      class="num"
+                      :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.pureWaterFlow : 0"
+                    />
+                    <span @click="add(0.01,5)">+</span>
+                    <b>MPa</b>
+                  </div>
+                  <div class="space"></div>
+                </div>
               </div>
-              <div class="hydraumatic-content clearfix">
-                <span class="content-title">纯水流量:</span>
-                <div class="content-box">
-                  <span @click="subtract(0.01,0)">-</span>
-                  <input
-                    onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
-                    @input="changeInput(0,2)"
-                    ref="pureWater"
-                    type="number"
-                    class="num"
-                    :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.pureWater : 0"
-                  />
-                  <span @click="add(0.01,2)">+</span>
-                  <b>MPa</b>
+              <div class="cistern-set2">
+                <div class="cistern-header hydraumatic-header">软水k值设置</div>
+                <div class="hydraumatic-content hydraumaticTop clearfix">
+                  <span class="content-title">软水流量:</span>
+                  <div class="content-box">
+                    <span @click="subtract(0.01,0)" onselectstart="return false">-</span>
+                    <input
+                      onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+                      @input="changeInput(0,5)"
+                      ref="softFlow"
+                      type="number"
+                      class="num"
+                      :value="this.allocationMsg.waterDecode.typeEightObj ? this.allocationMsg.waterDecode.typeEightObj.softWaterPressureK : 0"
+                    />
+                    <span @click="add(0.01,5)" onselectstart="return false">+</span>
+                    <b>MPa</b>
+                  </div>
+                  <div class="space"></div>
                 </div>
-                <div class="space"></div>
               </div>
             </div>
           </div>
@@ -316,7 +370,7 @@
                     type="number"
                     class="number"
                     :ref="item.ref"
-                    :value="item.filterInflow"
+                    :value="item.inflow"
                   />
                   <b>m³</b>
                 </div>
@@ -330,7 +384,7 @@
                     type="number"
                     class="number"
                     :ref="item.refDay"
-                    :value="item.clearDays"
+                    :value="item.usageDays"
                   />
                   <b>D</b>
                 </div>
@@ -346,7 +400,7 @@
 import bus from "../../js/bus";
 import Axois from "axios";
 import Qs from "qs";
-import { hexToString } from "../../js/hexToString";
+import { hexToString, str2hex } from "../../js/hexToString";
 export default {
   name: "parameter",
   data() {
@@ -489,7 +543,7 @@ export default {
       console.log(e.currentTarget.value, "changeInput");
     },
     //滤芯滤料寿命的input框监听
-    lifeChange(min,max){
+    lifeChange(min, max) {
       let e = event || event.target;
       let _value = e.currentTarget.value;
       if (_value < min) {
@@ -728,6 +782,7 @@ export default {
       let inflowMin = this.TenToSixteen(this.$refs.inflowMin.value, 100);
       //进水压力设置上限
       let inflowMax = this.TenToSixteen(this.$refs.inflowMax.value, 100);
+      console.log(this.$refs.inflowMax.value, "this.$refs.inflowMax.value");
       //进水压力当前值
       let inflowNow = this.TenToSixteen(
         this.allocationMsg.waterDecode.typeEightObj.inflowNow,
@@ -756,9 +811,17 @@ export default {
         4
       );
       //原水进水总量
-      let rawWater = this.TenToSixteen(this.$refs.rawWater.value, 10, 4);
+      let rawWater = this.TenToSixteen(
+        this.allocationMsg.waterDecode.typeEightObj.rawWater,
+        10,
+        8
+      );
       //纯水进水总量
-      let pureWater = this.TenToSixteen(this.$refs.pureWater.value, 10, 4);
+      let pureWater = this.TenToSixteen(
+        this.allocationMsg.waterDecode.typeEightObj.pureWater,
+        10,
+        8
+      );
       //年
       let year = this.TenToSixteen(this.$refs.year.value.substr(2));
       //月
@@ -784,6 +847,23 @@ export default {
       let evacuation = this.empty;
       //恢复出厂设置
       let rest = this.rest;
+      //进水流量
+      let feedWaterFlow = this.TenToSixteen(this.$refs.feddFlow.value, 100, 8);
+      //纯水流量
+      let pureWaterFlow = this.TenToSixteen(this.$refs.pureFlow.value, 100, 8);
+      console.log(pureWaterFlow,"纯水流量pureWaterFlow")
+      debugger
+      //软水压力上限
+      let softWaterPressureMax = this.TenToSixteen(
+        this.$refs.softWaterMax.value,100
+      );
+      console.log(softWaterPressureMax,"softWaterMax");
+      //软水压力下限
+      let softWaterPressureMin = this.TenToSixteen(
+        this.$refs.softWaterMin.value,100
+      );
+      //软水k值设置
+      let softWaterPressureK = this.TenToSixteen(this.$refs.softFlow.value,100,4);
       result =
         "08" +
         inflowMin +
@@ -807,142 +887,127 @@ export default {
         relay +
         evacuation +
         rest +
-        this.allocationMsg.waterDecode.typeEightObj.rubbish +
-        123456;
+        feedWaterFlow +
+        pureWaterFlow +
+        softWaterPressureMax +
+        softWaterPressureMin +
+        softWaterPressureK +
+        this.allocationMsg.waterDecode.typeEightObj.rubbish;
       result = this.toggleCase(result);
       console.log(result, "我是result");
       let $result = hexToString(result);
-      console.log($result, "这是低八种");
-      return $result;
+      console.log($result, result, "这是低八种");
+      return result;
     },
     materialsLifetime() {
       let _msg = this.allocationMsg.waterDecode.typeSeventArr;
       let result = "";
+      //表示取值进水流量范围和时间范围
       let silicaSand =
-        this.TenToSixteen(this.$refs.silicaSand[0].value, 10).substr(2, 2) +
-        this.TenToSixteen(this.$refs.silicaSand[0].value, 10).substr(0, 2);
+        this.TenToSixteen(this.$refs.silicaSand[0].value, 1, 4).substr(2, 2) +
+        this.TenToSixteen(this.$refs.silicaSand[0].value, 1, 4).substr(0, 2);
       let silicaSandDay =
-        this.TenToSixteen(this.$refs.silicaSandDay[0].value).substr(2, 2) +
-        this.TenToSixteen(this.$refs.silicaSandDay[0].value).substr(0, 2);
-      let AllsilicaSand =
-        this.TenToSixteen(_msg[0].inflow).substr(2, 2) +
-        this.TenToSixteen(_msg[0].inflow).substr(0, 2);
-      let AllsilicaSandDay =
-        this.TenToSixteen(_msg[0].usageDays).substr(2, 2) +
-        this.TenToSixteen(_msg[0].usageDays).substr(0, 2);
-
+        this.TenToSixteen(this.$refs.silicaSandDay[0].value, 1, 4).substr(
+          2,
+          2
+        ) +
+        this.TenToSixteen(this.$refs.silicaSandDay[0].value, 1, 4).substr(0, 2);
       let activeCarbon =
-        this.TenToSixteen(this.$refs.activeCarbon[0].value, 10).substr(2, 2) +
-        this.TenToSixteen(this.$refs.activeCarbon[0].value, 10).substr(0, 2);
+        this.TenToSixteen(this.$refs.activeCarbon[0].value, 1, 4).substr(2, 2) +
+        this.TenToSixteen(this.$refs.activeCarbon[0].value, 1, 4).substr(0, 2);
       let activeCarbonDay =
-        this.TenToSixteen(this.$refs.activeCarbonDay[0].value).substr(2, 2) +
-        this.TenToSixteen(this.$refs.activeCarbonDay[0].value).substr(0, 2);
-      let AllactiveCarbon =
-        this.TenToSixteen(_msg[1].inflow).substr(2, 2) +
-        this.TenToSixteen(_msg[1].inflow).substr(0, 2);
-      let AllactiveCarbonDay =
-        this.TenToSixteen(_msg[1].usageDays).substr(2, 2) +
-        this.TenToSixteen(_msg[1].usageDays).substr(0, 2);
-
+        this.TenToSixteen(this.$refs.activeCarbonDay[0].value, 1, 4).substr(
+          2,
+          2
+        ) +
+        this.TenToSixteen(this.$refs.activeCarbonDay[0].value, 1, 4).substr(
+          0,
+          2
+        );
       let softenTheResin =
-        this.TenToSixteen(this.$refs.softenTheResin[0].value, 10).substr(2, 2) +
-        this.TenToSixteen(this.$refs.softenTheResin[0].value, 10).substr(0, 2);
+        this.TenToSixteen(this.$refs.softenTheResin[0].value, 1, 4).substr(
+          2,
+          2
+        ) +
+        this.TenToSixteen(this.$refs.softenTheResin[0].value, 1, 4).substr(
+          0,
+          2
+        );
       let softenTheResinDay =
-        this.TenToSixteen(this.$refs.softenTheResinDay[0].value).substr(2, 2) +
-        this.TenToSixteen(this.$refs.softenTheResinDay[0].value).substr(0, 2);
-      let AllsoftenTheResin =
-        this.TenToSixteen(_msg[2].inflow).substr(2, 2) +
-        this.TenToSixteen(_msg[2].inflow).substr(0, 2);
-      let AllsoftenTheResinDay =
-        this.TenToSixteen(_msg[2].usageDays).substr(2, 2) +
-        this.TenToSixteen(_msg[2].usageDays).substr(0, 2);
-
+        this.TenToSixteen(this.$refs.softenTheResinDay[0].value, 1, 4).substr(
+          2,
+          2
+        ) +
+        this.TenToSixteen(this.$refs.softenTheResinDay[0].value, 1, 4).substr(
+          0,
+          2
+        );
       let regeneratedSalt =
-        this.TenToSixteen(this.$refs.regeneratedSalt[0].value, 10).substr(
+        this.TenToSixteen(this.$refs.regeneratedSalt[0].value, 1, 4).substr(
           2,
           2
         ) +
-        this.TenToSixteen(this.$refs.regeneratedSalt[0].value, 10).substr(0, 2);
+        this.TenToSixteen(this.$refs.regeneratedSalt[0].value, 1, 4).substr(
+          0,
+          2
+        );
       let regeneratedSaltDay =
-        this.TenToSixteen(this.$refs.regeneratedSaltDay[0].value).substr(2, 2) +
-        this.TenToSixteen(this.$refs.regeneratedSaltDay[0].value).substr(0, 2);
-      let AllregeneratedSalt =
-        this.TenToSixteen(_msg[3].inflow).substr(2, 2) +
-        this.TenToSixteen(_msg[3].inflow).substr(0, 2);
-      let AllregeneratedSaltDay =
-        this.TenToSixteen(_msg[3].usageDays).substr(2, 2) +
-        this.TenToSixteen(_msg[3].usageDays).substr(0, 2);
-
-      let precisionFilter =
-        this.TenToSixteen(this.$refs.precisionFilter[0].value, 10).substr(
+        this.TenToSixteen(this.$refs.regeneratedSaltDay[0].value, 1, 4).substr(
           2,
           2
         ) +
-        this.TenToSixteen(this.$refs.precisionFilter[0].value, 10).substr(0, 2);
+        this.TenToSixteen(this.$refs.regeneratedSaltDay[0].value, 1, 4).substr(
+          0,
+          2
+        );
+      let precisionFilter =
+        this.TenToSixteen(this.$refs.precisionFilter[0].value, 1, 4).substr(
+          2,
+          2
+        ) +
+        this.TenToSixteen(this.$refs.precisionFilter[0].value, 1, 4).substr(
+          0,
+          2
+        );
       let precisionFilterDay =
-        this.TenToSixteen(this.$refs.precisionFilterDay[0].value).substr(2, 2) +
-        this.TenToSixteen(this.$refs.precisionFilterDay[0].value).substr(0, 2);
-      let AllprecisionFilter =
-        this.TenToSixteen(_msg[4].inflow).substr(2, 2) +
-        this.TenToSixteen(_msg[4].inflow).substr(0, 2);
-      let AllprecisionFilterDay =
-        this.TenToSixteen(_msg[4].usageDays).substr(2, 2) +
-        this.TenToSixteen(_msg[4].usageDays).substr(0, 2);
-
+        this.TenToSixteen(this.$refs.precisionFilterDay[0].value, 1, 4).substr(
+          2,
+          2
+        ) +
+        this.TenToSixteen(this.$refs.precisionFilterDay[0].value, 1, 4).substr(
+          0,
+          2
+        );
       let roMembrane =
-        this.TenToSixteen(this.$refs.roMembrane[0].value, 10).substr(2, 2) +
-        this.TenToSixteen(this.$refs.roMembrane[0].value, 10).substr(0, 2);
+        this.TenToSixteen(this.$refs.roMembrane[0].value, 1, 4).substr(2, 2) +
+        this.TenToSixteen(this.$refs.roMembrane[0].value, 1, 4).substr(0, 2);
       let roMembraneDay =
-        this.TenToSixteen(this.$refs.roMembraneDay[0].value).substr(2, 2) +
-        this.TenToSixteen(this.$refs.roMembraneDay[0].value).substr(0, 2);
-      let AllroMembrane =
-        this.TenToSixteen(_msg[5].inflow).substr(2, 2) +
-        this.TenToSixteen(_msg[5].inflow).substr(0, 2);
-      let AllroMembraneDay =
-        this.TenToSixteen(_msg[5].usageDays).substr(2, 2) +
-        this.TenToSixteen(_msg[5].usageDays).substr(0, 2);
-
+        this.TenToSixteen(this.$refs.roMembraneDay[0].value, 1, 4).substr(
+          2,
+          2
+        ) +
+        this.TenToSixteen(this.$refs.roMembraneDay[0].value, 1, 4).substr(0, 2);
       let uvUse =
-        this.TenToSixteen(this.$refs.uvUse[0].value, 10).substr(2, 2) +
-        this.TenToSixteen(this.$refs.uvUse[0].value, 10).substr(0, 2);
+        this.TenToSixteen(this.$refs.uvUse[0].value, 1, 4).substr(2, 2) +
+        this.TenToSixteen(this.$refs.uvUse[0].value, 1, 4).substr(0, 2);
       let uvUseDay =
-        this.TenToSixteen(this.$refs.uvUseDay[0].value).substr(2, 2) +
-        this.TenToSixteen(this.$refs.uvUseDay[0].value).substr(0, 2);
-      let AlluvUse =
-        this.TenToSixteen(_msg[6].inflow).substr(2, 2) +
-        this.TenToSixteen(_msg[6].inflow).substr(0, 2);
-      let AlluvUseDay =
-        this.TenToSixteen(_msg[6].usageDays).substr(2, 2) +
-        this.TenToSixteen(_msg[6].usageDays).substr(0, 2);
+        this.TenToSixteen(this.$refs.uvUseDay[0].value, 1, 4).substr(2, 2) +
+        this.TenToSixteen(this.$refs.uvUseDay[0].value, 1, 4).substr(0, 2);
       result =
         "09" +
-        AllsilicaSand +
         silicaSand +
-        AllsilicaSandDay +
         silicaSandDay +
-        AllactiveCarbon +
         activeCarbon +
-        AllactiveCarbonDay +
         activeCarbonDay +
-        AllsoftenTheResin +
         softenTheResin +
-        AllsoftenTheResinDay +
         softenTheResinDay +
-        AllregeneratedSalt +
         regeneratedSalt +
-        AllregeneratedSaltDay +
         regeneratedSaltDay +
-        AllprecisionFilter +
         precisionFilter +
-        AllprecisionFilterDay +
         precisionFilterDay +
-        AllroMembrane +
         roMembrane +
-        AllroMembraneDay +
         roMembraneDay +
-        AlluvUse +
         uvUse +
-        AlluvUseDay +
         uvUseDay;
       result = this.toggleCase(result);
       console.log(
@@ -952,55 +1017,47 @@ export default {
         "我是silicaSand"
       );
       let $result = hexToString(result);
-      console.log($result, "这是我的");
-      return $result;
+      console.log($result, result, "这是我的");
+      return result;
     },
     //保存设置
     saveSetting() {
       let _this = this;
       let _token = "";
+      let _token2 = "";
       for (var i = 0; i < 16; i++) {
         let _number = Math.ceil(Math.random() * 10) - 1;
         _token += _number;
       }
+      for (var i = 0; i < 16; i++) {
+        let _number2 = Math.ceil(Math.random() * 10) - 1;
+        _token2 += _number2;
+      }
       console.log(_token, "这是token");
       let data = {
-        token: _token,
-        ack: 0,
         did: this.allocationMsg.pdid,
-        dataType: 0,
-        key: this.materialsLifetime()
+        data: this.materialsLifetime(),
+        type: "9"
       };
       let data2 = {
-        token: _token,
-        ack: 0,
         did: this.allocationMsg.pdid,
-        dataType: 0,
-        dataLoad: this.systemState()
+        data: this.systemState(),
+        type: "8"
       };
-      Axois({
-        url: _this.$api.issuedData,
-        method: "POST",
-        data: data,
-        headers: { sak: "444" }
-      }).then(res => {
-        console.log(res, "我是res");
-      });
-      Axois({
-        url: _this.$api.issuedData,
-        method: "POST",
-        data: data2,
-        headers: { sak: "444" }
-      }).then(res => {
-        let _code = JSON.parse(res.data).code;
-        if (_code === "0") {
-          this.$message({
-            message: JSON.parse(res.data).descript,
-            type: "success"
-          });
+      this.$post(this.$api.issuedData, data).then(res => {
+        console.log(res, "这是我的res");
+        if (res.data === "成功") {
+          setTimeout(() => {
+            this.$post(this.$api.issuedData, data2).then(res => {
+              _this.$message({
+                message: "保存成功",
+                type: "success"
+              });
+            });
+          },1000);
         } else {
-          this.$message({
-            message: JSON.parse(res.data).descript,
+          _this.$message({
+            message: "保存失败",
             type: "error"
           });
         }
@@ -1016,11 +1073,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 $height: 200px;
+$height2: 280px;
 #parameter {
   position: absolute;
   width: 104%;
   // height: 1182px;
-  border: solid 1px red;
   background: #ffffff;
   left: -156px;
   top: -24px;
@@ -1168,6 +1225,9 @@ $height: 200px;
                 }
               }
             }
+            .pressure-set {
+              height: $height2;
+            }
           }
           .data {
             width: 31.7%;
@@ -1244,7 +1304,6 @@ $height: 200px;
             width: 18.8%;
             float: left;
             margin-left: 0.7%;
-            background: #fff;
             border-radius: 10px;
             .cistern-header {
               height: 70px;
@@ -1266,11 +1325,20 @@ $height: 200px;
                 cursor: pointer;
               }
             }
+            .cistern-set {
+              background: #fff;
+              border-radius: 10px 10px 10px 10px;
+            }
+            .cistern-set2 {
+              background: #fff;
+              border-radius: 10px 10px 10px 10px;
+              margin-top: 40px;
+            }
           }
           .hydraumatic {
             width: 53%;
             .hydraumatic-content {
-              margin: 16px 0 0 0;
+              padding-bottom: 16px;
               display: flex;
               justify-content: space-around;
               .content-title {
@@ -1317,8 +1385,8 @@ $height: 200px;
               }
             }
             .hydraumaticTop {
-              padding-top: 40px;
               box-sizing: border-box;
+              margin: 16px 0 0 0;
             }
           }
         }

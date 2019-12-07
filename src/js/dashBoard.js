@@ -74,7 +74,7 @@ export function waterCanvas(item = '',number = 0,maximum = 0,color) {
       centerX,
       centerY,
       36,
-      -Math.PI * 1.28,
+      -Math.PI * 1.26,
       -Math.PI * 1.28 + n * rad ,
       false
     ); //用于绘制圆弧context.arc(x坐标，y坐标，半径，起始角度，终止角度，顺时针/逆时针)
@@ -88,7 +88,7 @@ export function waterCanvas(item = '',number = 0,maximum = 0,color) {
     context.beginPath();
     context.lineWidth = 10; //设置线宽
     context.strokeStyle = "#000";
-    context.arc(centerX, centerY, 36, -Math.PI * 1.28, Math.PI / 4, false);
+    context.arc(centerX, centerY, 36, -Math.PI * 1.26, Math.PI / 4, false);
     context.stroke();
     context.closePath();
     context.restore();

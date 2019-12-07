@@ -127,7 +127,7 @@ export function decodeMsg(decode16) {
       if (i % 2 === 0) {
         inflow = parseInt(inflowMsg.substr(i, 2), 16) * 2;
         pure = parseInt(pureMsg.substr(i, 2), 16) * 2;
-        inflowMsgArr.push(inflow.toFixed(1));
+        inflowMsgArr.push(inflow);
         pureMsgArr.push(pure.toFixed(1));
       }
     }
@@ -198,7 +198,7 @@ export function decodeMsg(decode16) {
     for (var i = 0; i < RcrrBeforeMsg.length; i++) {
       if (i % 2 === 0) {
         rerrBefor = parseInt(RcrrBeforeMsg.substr(i, 2), 16);
-        RcrrBeforeMsgArr.push(rerrBefor.toFixed(1));
+        RcrrBeforeMsgArr.push(rerrBefor);
       }
     }
     return {
@@ -207,6 +207,7 @@ export function decodeMsg(decode16) {
   }
   //第七种数据类型(滤芯滤料)
   if (typeJudge === "07") {
+    console.log(decode16, "decode16");
     let typeSevent = decode16.substr(2, 112);
     let typeSeventArr = [];
     let typeBranch;
@@ -235,10 +236,12 @@ export function decodeMsg(decode16) {
       typeSeventArr: a
     };
   }
+
   //第八种数据类型
   if (typeJudge === "08") {
-    typeEight = decode16.substr(2, 54);
-    let rubbish = decode16.substr(56);
+    console.log(decode16, "decode16");
+    typeEight = decode16.substr(2, 78);
+    let rubbish = decode16.substr(80);
     // 进水压力设置下限
     typeEightObj.inflowMin = parseInt(typeEight.substr(0, 2), 16) / 100;
     // 进水压力设置上限
@@ -258,25 +261,25 @@ export function decodeMsg(decode16) {
     // 取水压力当前值
     typeEightObj.intakingNow = parseInt(typeEight.substr(20, 4), 16) / 100;
     // 原水进水总量
-    typeEightObj.rawWater = parseInt(typeEight.substr(24, 4), 16) / 10;
+    typeEightObj.rawWater = parseInt(typeEight.substr(24, 8), 16) / 10;
     // 纯水进水总量
-    typeEightObj.pureWater = parseInt(typeEight.substr(28, 4), 16) / 10;
+    typeEightObj.pureWater = parseInt(typeEight.substr(32, 8), 16) / 10;
     // 年
-    typeEightObj.year = parseInt(typeEight.substr(32, 2), 16);
+    typeEightObj.year = parseInt(typeEight.substr(40, 2), 16);
     // 月
-    typeEightObj.month = parseInt(typeEight.substr(34, 2), 16);
+    typeEightObj.month = parseInt(typeEight.substr(42, 2), 16);
     // 日
-    typeEightObj.day = parseInt(typeEight.substr(36, 2), 16);
+    typeEightObj.day = parseInt(typeEight.substr(44, 2), 16);
     // 时
-    typeEightObj.hour = parseInt(typeEight.substr(38, 2), 16);
+    typeEightObj.hour = parseInt(typeEight.substr(46, 2), 16);
     // 分
-    typeEightObj.minute = parseInt(typeEight.substr(40, 2), 16);
+    typeEightObj.minute = parseInt(typeEight.substr(48, 2), 16);
     // 秒
-    typeEightObj.second = parseInt(typeEight.substr(42, 2), 16);
+    typeEightObj.second = parseInt(typeEight.substr(50, 2), 16);
     // 开关信号输入量
     let switchThere = "";
     let switchThereNum = "";
-    switchThere = parseInt(typeEight.substr(44, 2), 16).toString(2);
+    switchThere = parseInt(typeEight.substr(52, 2), 16).toString(2);
     for (var i = 0; i < 8 - switchThere.length; i++) {
       switchThereNum += 0;
     }
@@ -285,16 +288,26 @@ export function decodeMsg(decode16) {
     // 继电器输出
     let relayThere = "";
     let relayThereNum = "";
-    relayThere = parseInt(typeEight.substr(46, 4), 16).toString(2);
+    relayThere = parseInt(typeEight.substr(54, 4), 16).toString(2);
     for (var i = 0; i < 16 - relayThere.length; i++) {
       relayThereNum += 0;
     }
     relayThere = relayThereNum + relayThere
     typeEightObj.relay = relayThere.substr(5);
     // 排空命令
-    typeEightObj.evacuation = parseInt(typeEight.substr(50, 2), 16);
+    typeEightObj.evacuation = parseInt(typeEight.substr(58, 2), 16);
     // 恢复出厂设置
-    typeEightObj.rest = parseInt(typeEight.substr(52, 2), 16);
+    typeEightObj.rest = parseInt(typeEight.substr(60, 2), 16);
+    // 进水流量
+    typeEightObj.feedWaterFlow = (parseInt(typeEight.substr(62, 4), 16) / 100).toFixed(2);
+    //纯水流量
+    typeEightObj.pureWaterFlow = (parseInt(typeEight.substr(66, 4), 16) / 100).toFixed(2);
+    //软水压力上限
+    typeEightObj.softWaterPressureMax = (parseInt(typeEight.substr(70, 2), 16) / 100).toFixed(2);
+    //软水压力下限
+    typeEightObj.softWaterPressureMin = (parseInt(typeEight.substr(72, 2), 16) / 100).toFixed(2);
+    //软水k值设置
+    typeEightObj.softWaterPressureK = (parseInt(typeEight.substr(74, 4), 16) / 100).toFixed(2);
     typeEightObj.rubbish = rubbish;
     return {
       typeEightObj: typeEightObj

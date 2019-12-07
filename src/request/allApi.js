@@ -38,4 +38,12 @@ export default {
   updateLanOuAccountInfo : http + process.env.API_HOST + "/updateLanOuAccountInfo",
   //获取用水曲线
   getLanOuWaterInfo:http + process.env.API_HOST + "/getLanOuWaterInfo",
+  //发送短信
+  sendPhoneCode: http + process.env.API_HOST + "/sendPhoneCode",
+  //忘记密码
+  updatePasswordByCode: http + process.env.API_HOST + "/updatePasswordByCode",
+  //注销
+  logout: http + process.env.API_HOST + "/logout",
+  //根据id查询信息维护
+  getLanOuProjectInfoByDidAndUuid:http + process.env.API_HOST + "/getLanOuProjectInfoByDidAndUuid"
 }

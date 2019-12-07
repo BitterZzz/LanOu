@@ -2,8 +2,10 @@
   <div>
     <div id="addPage">
       <div id="title">
-        <p>您所在的位置 : 账号管理 > 账号列表 ></p>
-        <a>新增账户</a>
+        <p>
+          您所在的位置 : 账号管理 > 账号列表 >
+          <a>新增账户</a>
+        </p>
       </div>
       <div class="toBack">
         <div class="goHome">
@@ -88,7 +90,8 @@ export default {
       roleInfo: "",
       sectionInfo: "",
       Data: "",
-      levelId: ""
+      levelId: "",
+      charaID: ""
     };
   },
   props: {
@@ -106,6 +109,7 @@ export default {
     // 提交新增页面
     submitAction() {
       console.log(this.charaID, "charaID");
+      this.charaID = localStorage.getItem("lanOuDid");
       let username = document.querySelector("#username");
       let password = document.querySelector("#password");
       let phone = document.querySelector("#phone");
@@ -142,20 +146,27 @@ export default {
         });
         return;
       }
-      this.levelId = localStorage.getItem('checkId');
-      console.log(localStorage.getItem('checkId'),"localStorage.getItem('checkId')")
-      Axios.post(this.$api.addLanOuAccountInfo, {
-        dept: section.value,
-        lanOuDid: this.charaID,
-        mail: email.value,
-        passWord: password.value,
-        phone: phone.value,
-        position: "",
-        relationId: this.levelId,
-        role: role.value,
-        userName: username.value,
-        workUnit: ""
-      })
+      this.levelId = localStorage.getItem("checkId");
+      console.log(
+        localStorage.getItem("checkId"),
+        "localStorage.getItem('checkId')"
+      );
+      this.$postBody(
+        this.$api.addLanOuAccountInfo,
+        {
+          dept: section.value,
+          lanOuDid: this.charaID,
+          mail: email.value,
+          passWord: password.value,
+          phone: phone.value,
+          position: "",
+          relationId: this.levelId,
+          role: role.value,
+          userName: username.value,
+          workUnit: ""
+        },
+        {}
+      )
         .then(res => {
           console.log(res);
           this.$emit("addPage");
@@ -164,7 +175,7 @@ export default {
           console.log(res, "失败");
         });
     }
-  },
+  }
 };
 </script>
 
@@ -181,20 +192,18 @@ export default {
   z-index: 8;
   #title {
     width: 100%;
-    display: flex;
     height: 22px;
     background: #f7f7f7;
-    position: absolute;
-
-    top: -38px;
     p {
+      display: inline-block;
       font-family: PingFangSC-Regular;
       font-size: 16px;
       color: #999999;
-    }
-    a {
-      font-size: 16px;
-      color: #3999f9;
+      a {
+        display: inline-block;
+        font-size: 16px;
+        color: #3999f9;
+      }
     }
   }
   .toBack {
@@ -212,7 +221,6 @@ export default {
       padding-left: 18px;
       padding-top: 5px;
       box-sizing: border-box;
-
       img {
         width: 43px;
         height: 43px;
@@ -239,7 +247,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 80px;
+          width: 160px;
           height: 50px;
           line-height: 50px;
           text-align: center;
@@ -265,8 +273,8 @@ export default {
           box-sizing: border-box;
           color: #999;
         }
-        #username{
-          width: 374px;
+        #username {
+          width: 386px;
         }
       }
     }

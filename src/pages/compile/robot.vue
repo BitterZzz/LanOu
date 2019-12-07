@@ -7,6 +7,7 @@
               @click="SelectId()">全部机器</button>
       <br />
       <input type="text"
+             placeholder="请输入机器ID"
              name="text"
              id="rotID" />
       <div class="append"

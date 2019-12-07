@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <div id="login-box">
+    <div id="login-box" v-if="show">
       <div class="contenr">
         <div class="logo">
           <div class="logo-box">
@@ -12,235 +12,257 @@
             <p>欢迎登陆蓝鸥后台管理系统</p>
           </div>
           <div class="body-user">
-            <input type="text" placeholder="账号" class="userInfo input-style" />
+            <input
+              onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"
+              ref="user"
+              type="text"
+              placeholder="账号"
+              class="userInfo input-style"
+            />
             <img src="../../assets/img/userInfo.png" alt class="userImg" />
           </div>
           <div class="body-password">
-            <input type="password" class="password input-style" placeholder="密码" />
+            <input
+              οnkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+              ref="pwd"
+              type="password"
+              class="password input-style"
+              placeholder="密码"
+            />
             <img src="../../assets/img/pwd.png" alt class="pwdImg" />
           </div>
           <div class="body-button">
             <button type="submit" class="logoBtn" @click="login()">登录</button>
           </div>
           <div class="forget-password clearfix">
-            <span class="forget-title">忘记密码?</span>
+            <span class="forget-title" @click="Forget">忘记密码?</span>
           </div>
         </div>
       </div>
     </div>
+    <div v-if="!show">
+      <password @cancel="cancel()"></password>
+    </div>
   </div>
 </template>
 <script>
-  import Axios from "axios";
-  import QS from "qs";
-  import install from "../../js/cookie";
-  export default {
-    name: "login",
-    data() {
-      return {
-        dom: {
-          userDom: "",
-          pwdDom: ""
-        },
-        userMsg: {
-          phone: "",
-          pwd: ""
-        }
-      };
+import Axios from "axios";
+import QS from "qs";
+import install from "../../js/cookie";
+import password from "../password/root.vue";
+export default {
+  name: "login",
+  data() {
+    return {
+      dom: {
+        userDom: "",
+        pwdDom: ""
+      },
+      userMsg: {
+        phone: "",
+        pwd: ""
+      },
+      show:true
+    };
+  },
+  components:{
+    password
+  },
+  methods: {
+    //子组件触发点击隐藏忘记密码页面
+    cancel(){
+      this.show = true;
     },
-    methods: {
-      //登录判断
-      login() {
-        var userVerity = /^[1][3,4,5,6,7,8][0-9]{9}$/;
-        var pwdVerity = /^[\w_-]{6,16}$/;
-        if (this.dom.userDom.value === "") {
-          this.$message({
-            message: "用户名不能为空",
-            type: "warning"
-          });
-          return;
-        }
-        if (this.dom.pwdDom.value === "") {
-          this.$message({
-            message: "密码不能为空",
-            type: "warning"
-          });
-          return;
-        }
-        if (userVerity.test(this.dom.userDom.value)) {
-          if (pwdVerity.test(this.dom.userDom.value)) {
-            this.RequestLogin();
-          } else {
-            this.$message({
-              message: "密码不正确",
-              type: "error"
-            });
-            return;
-          }
+    //登录判断
+    login() {
+      var userVerity = /^[1][3,4,5,6,7,8][0-9]{9}$/;
+      var pwdVerity = /^[\w_-]{6,16}$/;
+      console.log(this.$refs.user,this.$refs.user.value,"this.$refs.user")
+      if (this.$refs.user.value === "") {
+        this.$message({
+          message: "用户名不能为空",
+          type: "warning"
+        });
+        return;
+      }
+      if (this.$refs.pwd.value === "") {
+        this.$message({
+          message: "密码不能为空",
+          type: "warning"
+        });
+        return;
+      }
+      if (userVerity.test(this.$refs.user.value)) {
+        if (pwdVerity.test(this.$refs.pwd.value)) {
+          this.RequestLogin();
         } else {
           this.$message({
-            message: "请输入正确手机号",
+            message: "密码不正确",
             type: "error"
           });
           return;
         }
-      },
-      //请求登录
-      RequestLogin() {
-        var _this = this;
-        this.$post(this.$api.login, {
-          phone: this.dom.userDom.value,
-          passWord: this.dom.pwdDom.value
-        }).then(res => {
-          // setTimeout(() => {
-            console.log(res.data,"res.data");
-            if (res.data.code === 0) {
-              _this.$message({
-                message: "密码正确",
-                type: "success"
-              });
-              this.event.setCookie(res.data.code, 7);
-              this.$router.replace("/homepage");
-              let _data = res.data.data;
-              let _dataArr = [];
-              let _didArr = [];
-              let _didStr = "";
-              for(var i =0;i < _data.length; i++){
-                _didArr.push(_data[i].id);
-              }
-              _didStr = _didArr.join(',');
-              localStorage.setItem("did", _didStr);
-              localStorage.setItem("level", res.data.data[0].level);
-              localStorage.setItem("id",res.data.data[0].id);
-              console.log(res);
-            } else {
-              _this.$message({
-                message: "账号或密码错误",
-                type: "error"
-              });
-            }
-          // }, 2000);
+      } else {
+        this.$message({
+          message: "请输入正确手机号",
+          type: "error"
         });
+        return;
       }
     },
-    mounted() {
-      this.dom.userDom = document.querySelector(".userInfo");
-      this.dom.pwdDom = document.querySelector(".password");
+    //请求登录
+    RequestLogin() {
+      var _this = this;
+      this.$post(this.$api.login, {
+        phone: this.$refs.user.value,
+        passWord: this.$refs.pwd.value
+      }).then(res => {
+        console.log(res.data, "res.data");
+        if (res.data.code === 0) {
+          _this.$message({
+            message: "密码正确",
+            type: "success"
+          });
+          this.event.setCookie(res.data.code, 7);
+          this.$router.replace("/homepage");
+          let _data = res.data.data;
+          let _dataArr = [];
+          let _didArr = [];
+          let _didStr = "";
+          localStorage.setItem("relation",res.data.data[0].relationId);
+          localStorage.setItem("level", res.data.data[0].level);
+          localStorage.setItem("id", res.data.data[0].id);
+          localStorage.setItem("phone",this.$refs.user.value);
+        } else {
+          _this.$message({
+            message: "账号或密码错误",
+            type: "error"
+          });
+        }
+      });
+    },
+    //点击忘记密码显示
+    Forget(){
+      this.show = false;
     }
-  };
-
+  },
+  mounted() {
+    this.dom.userDom = document.querySelector(".userInfo");
+    this.dom.pwdDom = document.querySelector(".password");
+  }
+};
 </script>
 <style lang="scss" scoped>
-  #login {
-    width: 100%;
-    height: 100%;
-    background: url("../../assets/img/bg.png") no-repeat;
-    overflow: hidden;
-    background-size: cover;
+#login {
+  width: 100%;
+  height: 100%;
+  background: url("../../assets/img/bg.png") no-repeat;
+  overflow: hidden;
+  background-size: cover;
 
-    #login-box {
+  #login-box {
+    // background: url("../../assets/img/bg.png") center;
+    .contenr {
+      position: absolute;
+      width: 500px;
+      height: 400px;
+      background: #ffffff;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
 
-      // background: url("../../assets/img/bg.png") center;
-      .contenr {
-        position: absolute;
-        width: 500px;
-        height: 400px;
-        background: #ffffff;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+      .logo {
+        margin-top: 31px;
 
-        .logo {
-          margin-top: 31px;
+        .logo-box {
+          width: 130px;
+          height: 67px;
+          margin: 0 auto;
+        }
+      }
 
-          .logo-box {
-            width: 130px;
-            height: 67px;
-            margin: 0 auto;
+      .body {
+        width: 400px;
+        margin: 0 auto;
+        margin-top: 34px;
+
+        .body-title {
+          p {
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: #666666;
+            letter-spacing: 0;
           }
         }
 
-        .body {
+        .input-style {
           width: 400px;
-          margin: 0 auto;
-          margin-top: 34px;
+          height: 40px;
+          border: 1px solid #3b7bcb;
+          border-radius: 5px;
+          border-radius: 5px;
+          padding-left: 40px;
+          box-sizing: border-box;
+        }
 
-          .body-title {
-            p {
-              font-family: PingFangSC-Regular;
-              font-size: 14px;
-              color: #666666;
-              letter-spacing: 0;
-            }
+        .body-user {
+          position: relative;
+          margin-top: 10px;
+
+          .userImg {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 12px;
+            top: 10px;
           }
+        }
 
-          .input-style {
+        .body-password {
+          position: relative;
+          margin-top: 20px;
+
+          .pwdImg {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 12px;
+            top: 10px;
+          }
+        }
+
+        .body-button {
+          margin-top: 20px;
+
+          .logoBtn {
             width: 400px;
             height: 40px;
-            border: 1px solid #3b7bcb;
+            border: 0;
+            background: #3b7bcb;
             border-radius: 5px;
             border-radius: 5px;
-            padding-left: 40px;
-            box-sizing: border-box;
+            font-family: PingFangSC-Regular;
+            font-size: 15px;
+            color: #ffffff;
+            letter-spacing: 0;
+            cursor: pointer;
           }
+        }
 
-          .body-user {
-            position: relative;
-            margin-top: 10px;
+        .forget-password {
+          margin-top: 14px;
 
-            .userImg {
-              position: absolute;
-              width: 20px;
-              height: 20px;
-              left: 12px;
-              top: 10px;
-            }
-          }
-
-          .body-password {
-            position: relative;
-            margin-top: 20px;
-
-            .pwdImg {
-              position: absolute;
-              width: 20px;
-              height: 20px;
-              left: 12px;
-              top: 10px;
-            }
-          }
-
-          .body-button {
-            margin-top: 20px;
-
-            .logoBtn {
-              width: 400px;
-              height: 40px;
-              border: 0;
-              background: #3b7bcb;
-              border-radius: 5px;
-              border-radius: 5px;
-              font-family: PingFangSC-Regular;
-              font-size: 15px;
-              color: #ffffff;
-              letter-spacing: 0;
-            }
-          }
-
-          .forget-password {
-            margin-top: 14px;
-
-            .forget-title {
-              float: right;
-              font-family: PingFangSC-Regular;
-              font-size: 15px;
-              color: #999999;
-              letter-spacing: 0;
-            }
+          .forget-title {
+            float: right;
+            font-family: PingFangSC-Regular;
+            font-size: 15px;
+            color: #999999;
+            letter-spacing: 0;
+            cursor: pointer;
           }
         }
       }
     }
   }
-
+}
 </style>

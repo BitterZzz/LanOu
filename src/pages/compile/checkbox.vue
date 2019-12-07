@@ -28,7 +28,7 @@ export default {
       }).then(res => {
         console.log(res.data.data)
         let data = res.data.data
-        this.cities = data.slice(4, 15)
+        this.cities = data.slice(2, 15)
         this.cities = this.cities.map(item => {
           return {
             name: item.authorityName,
@@ -51,8 +51,8 @@ export default {
         relative.push(res[i].id)
         console.log(relative, '22222333')
       }
-      //  arr = relative.join(",")
-      this.checkId = relative.join(',')
+      this.checkId = '1,2' + ',' + relative.join(',')
+      localStorage.setItem('checkId',this.checkId);
       console.log(this.checkId, '44')
     }
   },
